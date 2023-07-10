@@ -1,0 +1,20 @@
+{
+  "firstname": "Dulan",
+  "lastname": "Chathuranga",
+  "tel": "0768080352",
+  "User": {
+    "email": "dulan@example.com",
+    "password": "dior1",
+    "usertype": "admin"
+  }
+}
+
+{
+  "firstname": "Cujo",
+  "tel": "0768080352",
+  "User": {
+    "email": "dulan@example.com",
+    "password": "dior1",
+    "usertype": "admin"
+  }
+}

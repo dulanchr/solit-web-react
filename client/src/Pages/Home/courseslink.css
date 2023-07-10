@@ -1,0 +1,44 @@
+.tp-courses__section {
+    background-color: #ffffff;
+    margin-top: -30vh;
+    padding-top: 120px;
+    padding-bottom: 90px;
+  }
+  
+.btncr2 a{
+    margin-left: 65vw;
+}
+.containercr2 {
+  width: 100%;
+  min-height: 30vh;
+  max-height: 70vh;
+  overflow: hidden;
+  margin-bottom: 4vh;
+  margin-left: 5vh;
+  display: flex;
+  justify-content: center;
+
+}
+
+.courselink{
+  margin-top: -15vh;
+  margin-bottom: 20vh;
+}
+
+
+  .tp-section__title {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+  
+  .tp-section__title-wrapper p {
+    font-size: 16px;
+    color: #666;
+  }
+
+  .tp-courses__tab-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  

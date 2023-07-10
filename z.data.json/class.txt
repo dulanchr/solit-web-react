@@ -1,0 +1,48 @@
+{
+  "className": "Mathematics",
+  "Grade": "10",
+  "Location": "Marandaghamula",
+  "Date": "Sunday",
+  "Time": "Morning"
+}
+
+{
+  "className": "Mathematics",
+  "Grade": "11",
+  "Location": "Marandaghamula",
+  "Date": "Sunday",
+  "Time": "Evening"
+}
+
+{
+  "className": "Mathematics",
+  "Grade": "10",
+  "Location": "Hunumulla",
+  "Date": "Saturday",
+  "Time": "Morning"
+}
+
+{
+  "className": "Mathematics",
+  "Grade": "11",
+  "Location": "Hunumulla",
+  "Date": "Saturday",
+  "Time": "Evening"
+}
+
+
+{
+  "className": "Combined-Mathematics",
+  "Grade": "10",
+  "Location": "Marandaghamula",
+  "Date": "Sunday",
+  "Time": "Morning"
+}
+
+{
+  "className": "Combined-Mathematics",
+  "Grade": "10",
+  "Location": "Hunumulla",
+  "Date": "Sunday",
+  "Time": "Morning"
+}

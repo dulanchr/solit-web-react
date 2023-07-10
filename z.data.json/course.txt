@@ -1,0 +1,72 @@
+ {
+    "category": "Mathematics",
+    "title": "Equations and Inequalities.",
+    "rating": "4.5 (100)",
+    "likes": "1800",
+    "instructor": "Prabhath Chathuranga",
+    "episodes": "16",
+    "price": "2000.00"
+  }
+  {
+    "category": "Mathematics",
+    "title": "Algebra Fundamentals",
+    "rating": "4.2 (80)",
+    "likes": "1500",
+    "instructor": "Prabhath Chathuranga",
+    "episodes": "12",
+    "price": "1800.00"
+  }
+  {
+    "category": "Combined Mathematics",
+    "title": "Trigonometry Basics",
+    "rating": "4.0 (70)",
+    "likes": "1200",
+    "instructor": "Chathurika Ranathunga",
+    "episodes": "10",
+    "price": "1500.00"
+  }
+  {
+    "category": "Combined Mathematics",
+    "title": "Vectors and Matrices",
+    "rating": "4.3 (85)",
+    "likes": "1600",
+    "instructor": "Chathurika Ranathunga",
+    "episodes": "14",
+    "price": "1900.00"
+  }
+  {
+    "category": "O/L Science",
+    "title": "Physics for O/L",
+    "rating": "4.4 (90)",
+    "likes": "1700",
+    "instructor": "Chamodi Dissanayake",
+    "episodes": "15",
+    "price": "1800.00"
+  }
+  {
+    "category": "O/L Science",
+    "title": "Chemistry for O/L",
+    "rating": "4.1 (75)",
+    "likes": "1400",
+    "instructor": "Chamodi Dissanayake",
+    "episodes": "13",
+    "price": "1700.00"
+  }
+  {
+    "category": "ICT",
+    "title": "Introduction to Programming",
+    "rating": "4.6 (95)",
+    "likes": "1900",
+    "instructor": "Dulan Chathuranga",
+    "episodes": "18",
+    "price": "2200.00"
+  }
+  {
+    "category": "ICT",
+    "title": "Web Development Basics",
+    "rating": "4.3 (85)",
+    "likes": "1600",
+    "instructor": "Dulan Chathuranga",
+    "episodes": "14",
+    "price": "1900.00"
+  }

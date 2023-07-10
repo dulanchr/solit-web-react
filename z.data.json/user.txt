@@ -1,0 +1,34 @@
+{
+  "email": "dulan@example.com",
+  "password": "dior1",
+  "usertype": "admin"
+}
+{
+  "email": "cujo@example.com",
+  "password": "dior2",
+  "usertype": "admin"
+}
+
+{
+  "email": "prabhath@example.com",
+  "password": "dior3",
+  "usertype": "tutor"
+}
+
+{
+  "email": "chathurika@example.com",
+  "password": "dior4",
+  "usertype": "tutor"
+}
+
+{
+  "email": "chamodi@example.com",
+  "password": "dior5",
+  "usertype": "student"
+}
+
+{
+  "email": "sandeep@example.com",
+  "password": "dior6",
+  "usertype": "student"
+}

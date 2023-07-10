@@ -1,0 +1,163 @@
+create server folder
+cd server npm init
+npm install express cors mysql2
+
+cd server create index.js
+
+type in the basic index.js >>
+		
+		
+	const express = require ("express");
+	const app = express();
+
+	app.listen(3001, ()=>{
+    		console.log("Server port - 3001");
+	});	
+
+npm install nodemon
+
+update the package.js >>
+
+ "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+    ,"start" : "nodemon index.js"
+  },
+
+
+
+install sequelize >>
+
+npm i sequelize sequelize-cli
+
+npx sequelize init
+
+config.json
+  "development": {
+    "username": "root",
+    "password": "Dior844@mysql",
+    "database": "solitwebdb",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+
+
+(dlt migrations and seeders )
+
+
+
+create Posts.js (cd models) 
+
+
+update index.js >>
+
+const express = require ("express");
+const app = express();
+const db = require("./models");
+
+    db.sequelize.sync().then(()=>{
+        app.listen(3001, ()=>{
+            console.log("Sesrvser posrt - 3001");
+        });
+    })
+    
+
+
+update models/Course.js
+
+const { Sequelize, DataTypes } = require("sequelize");
+
+module.exports = (Sequelize, DataTypes) => {
+  const Course = Sequelize.define("Course", {
+    courseid: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    teacher: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    episodes: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  });
+  return Course;
+};
+
+
+
+update routes/Courses.js
+
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res)=>{
+    res.json("Hellw world");
+});
+
+module.exports = router;
+
+
+update index.js
+
+const express = require("express");
+const app = express();
+const db = require("./models");
+
+const postRouter = require("./routes/Courses");
+app.use("/courses", postRouter);
+
+db.sequelize.sync().then(() => {
+  app.listen(3001, () => {
+    console.log("Server port - 3001");
+  });
+});
+
+
+routes/ Courses.js >>
+
+
+const express = require('express');
+const router = express.Router();
+const { Offer } = require("../models")
+
+router.get("/", async (req,res) =>{
+    const listOfOffers = await Course.findAll();
+    console.log(listOfOffers);
+    res.json(listOfOffers);
+});  
+
+router.post("/", async (req, res) =>{
+    const OfferData = req.body;
+    const createOffer = await Offer.create(OfferData); 
+    res.json(createOffer); 
+});
+
+ 
+module.exports = router;
+
+
+install axios in the front end
+
+npm i axios
+
+import axios from "axios";
+import { useEffect } from 'react';
+  useEffect(() =>{
+    axios.get("http://localhost:3001/course").then((response)=>{
+      console.log(response);
+    });
+
+

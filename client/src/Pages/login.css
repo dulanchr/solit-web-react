@@ -1,0 +1,350 @@
+@keyframes slideInBackground {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.Lp-hero__section {
+  position: relative;
+  padding-top: 130px;
+  margin-top: -10vh; /* Adjust the margin-top value to match the height of your navbar */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.659), rgba(0, 0, 0, 0.664)),
+              url('./images/banner-core.jpg') center/cover no-repeat;
+  height: 65vh;
+  font-family: 'UN-Ganganee', 'Varela Round', sans-serif;
+  overflow: hidden; /* Clip the main image inside the container */
+  background-position: center top; /* Change the background position */
+  
+  /* Add animation properties */
+  animation-name: slideInBackground, fadeIn;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: backwards;
+}
+
+.containerL {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  z-index: 15;
+  position: relative; /* Add position relative to create a stacking context */
+}
+
+
+  .containerL img {
+    margin-left: 38vw;
+    margin-top:15vh;
+    z-index: 15;
+    position: relative; /* Add position relative to create a stacking context */
+    
+  }
+
+  .containerL p {
+    color: aliceblue;
+    margin-top: 2vh;
+    margin-left: 35.5vw;
+    padding:  15px;
+    z-index: 15;
+    position: relative; /* Add position relative to create a stacking context */
+  }
+
+
+.para img{
+  margin-top: -2vh;
+  margin-left: 31vw;
+  }
+
+  .para p{
+    font-size: 0.7rem;
+    margin-left: 36.6vw;
+    }
+
+
+
+
+
+
+
+    
+
+
+    .blokkencore {
+  
+      position: relative;
+      top: -13vh;
+      left: 6.5%;
+      color: #1b1b1b;
+      background-color: #ffffff;
+      width: calc(100vw - 14rem);
+      min-height: calc(100vh - 50rem);
+      box-shadow: 0rem 0.5rem 3rem rgba(39, 39, 39, 0.1);
+      margin: 0rem;
+      z-index: 40; /* Set a higher z-index value */
+      
+    }
+    .blokkencore h1{
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top:30px;
+      font-size: 2rem;
+    }
+    
+    .blokkencore p {
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-bottom: 40px;
+      font-size: 1.2rem;
+
+    }
+    
+
+
+
+
+
+.logincore{
+      width: 30vw;
+}
+
+    /* CSS for the form */
+.form {
+  max-width: 200px;
+  margin: 10px auto;
+}
+
+/* Styles for form groups */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Styles for form labels */
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+
+}
+
+/* Styles for form inputs */
+.form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Styles for form text */
+.form-text {
+  font-size: 12px;
+  color: #777;
+}
+
+/* Styles for form checkbox */
+.form-check-label {
+  margin-left: 5px;
+}
+
+/* Styles for submit button */
+.btn-primary {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #81b0e1;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+}
+
+
+.error-message {
+  color: red;
+}
+
+
+.logincore{
+  margin-top: 3vh;
+  margin-bottom: 20vh;
+}
+
+
+.signup__area {
+  position: relative;
+  margin-top: 10vh;
+  z-index: 1;
+  opacity: 0;
+}
+
+
+.sign__shape .man-1,
+.sign__shape .man-2,
+.sign__shape .circle,
+.sign__shape .zigzag {
+  position: absolute;
+}
+
+.containerS {
+  background-color: #0069d900;
+  margin-right: -100vw ;
+  margin-left: 35.5vw;
+  margin-top: -7vh;
+}
+
+.tp-section__title-wrapper {
+  margin-bottom: 20px;
+  margin-left:6.2vw;
+}
+
+
+.sign__wrapper {
+
+  width: 25vw;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.sign__header {
+
+  margin-bottom: 35px;
+}
+
+.sign__header p {
+  margin: 0;
+  font-size: 18px;
+
+}
+
+.sign__header p span {
+  color: #fff;
+}
+
+.sign__header p a {
+  color: #8a72fe;
+  text-decoration: none;
+}
+
+.sign__header p a:hover {
+  text-decoration: underline;
+}
+
+.sign__form {
+  margin-bottom: 30px;
+}
+
+.sign__input-wrapper {
+  margin-bottom: 25px;
+}
+
+.sign__input-wrapper h5 {
+  margin-bottom: 10px;
+  font-size: 16px;
+
+}
+
+.sign__input {
+  position: relative;
+}
+
+.sign__input input[type="text"],
+.sign__input input[type="password"] {
+  width: 85%;
+  padding: 10px 40px 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.sign__input i {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #ccc;
+}
+
+.sign__action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.sign__agree {
+  display: flex;
+  align-items: center;
+}
+
+.m-check-input {
+  margin-right: 5px;
+}
+
+.m-check-label {
+  font-size: 14px;
+  color: #333;
+}
+
+.sign__forgot a {
+  font-size: 14px;
+  color: #8a72fe;
+  text-decoration: none;
+  margin-left: -25vw;
+}
+
+.sign__forgot a:hover {
+  text-decoration: underline;
+}
+
+.e-btn {
+  display: block;
+  width: 100%;
+  padding: 15px 0;
+  background-color: #8a72fe;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+.e-btn:hover {
+
+  background-color: #533bc2;
+
+}
+
+
+.sign__new {
+  margin-top: 20px;
+}
+
+.sign__new p {
+  font-size: 16px;
+}
+
+.sign__new p a {
+  color: #8a72fe;
+  text-decoration: none;
+}
+
+.sign__new p a:hover {
+  text-decoration: underline;
+}
+
+
+
+

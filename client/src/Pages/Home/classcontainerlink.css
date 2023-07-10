@@ -1,0 +1,17 @@
+.containercr3 {
+  width: 100%;
+  min-height: 30vh;
+  max-height: 43vh;
+  overflow: hidden;
+  margin-bottom: 4vh;
+}
+
+.btncr3 a{
+
+  margin-left: 80vw;
+}
+
+.classlink{
+
+  margin-bottom: 10vh;
+}
