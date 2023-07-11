@@ -1,0 +1,17 @@
+{
+  "fether": "John Doe",
+  "rating": "4.5",
+  "gender": "Male",
+  "tel": "1234567890",
+  "telparent": "0987654321",
+  "address": "456 Elm Street",
+  "school": "ABC High School",
+  "grade": "10",
+  "User": {
+    "email": "student@example.com",
+    "password": "studentpassword",
+    "firstname": "John",
+    "lastname": "Doe",
+    "profilepicture": "profile.jpg"
+  }
+}

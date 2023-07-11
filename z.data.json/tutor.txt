@@ -1,0 +1,30 @@
+
+{
+  "tel": "0768080802",
+  "address": "123 Main Street",
+  "description": "Bsc.in Physics",
+  "User": {
+    "userid": 1
+  }
+}
+
+{
+  "tel": "076440802",
+  "address": "122  Street",
+  "description": "Bsc.in Maths",
+  "User": {
+    "userid": 1
+  }
+}
+
+
+{
+  "tel": "076433302",
+  "address": "122 33 Street",
+  "description": "Bsc.in Maths",
+  "User": {
+    "userid": 2
+  }
+}
+
+

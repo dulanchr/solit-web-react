@@ -1,34 +1,33 @@
 {
-  "email": "dulan@example.com",
-  "password": "dior1",
-  "usertype": "admin"
-}
-{
-  "email": "cujo@example.com",
-  "password": "dior2",
-  "usertype": "admin"
+  "email": "example@example.com",
+  "password": "password123",
+  "firstname": "John",
+  "lastname": "Doe",
+  "profilepicture": "profile.jpg"
 }
 
 {
-  "email": "prabhath@example.com",
-  "password": "dior3",
-  "usertype": "tutor"
+  "email": "example1@example.com",
+  "password": "password123",
+  "firstname": "Jane",
+  "lastname": "Smith",
+  "profilepicture": "profile1.jpg"
 }
 
-{
-  "email": "chathurika@example.com",
-  "password": "dior4",
-  "usertype": "tutor"
-}
 
 {
-  "email": "chamodi@example.com",
-  "password": "dior5",
-  "usertype": "student"
+  "email": "example2@example.com",
+  "password": "password456",
+  "firstname": "David",
+  "lastname": "Brown",
+  "profilepicture": "profile2.jpg"
 }
 
+
 {
-  "email": "sandeep@example.com",
-  "password": "dior6",
-  "usertype": "student"
+  "email": "example3@example.com",
+  "password": "password789",
+  "firstname": "Sarah",
+  "lastname": "Johnson",
+  "profilepicture": "profile3.jpg"
 }

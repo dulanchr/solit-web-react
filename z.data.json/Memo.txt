@@ -161,3 +161,42 @@ import { useEffect } from 'react';
     });
 
 
+const express = require('express');
+const router = express.Router();
+const { CourseCard } = require('../models');
+
+// Get all CourseCards
+router.get('/', async (req, res) => {
+  try {
+    const CourseCardInfo = await CourseCard.findAll({
+        include: [
+          {
+            model: Tutor,
+            where: {
+                tutorid: tutors.tutorid,
+            },
+          },
+        ]
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// Create a new CourseCard
+router.post('/', async (req, res) => {
+  try {
+    const CourseCardData = req.body;
+    const newCourseCard = await CourseCard.create(CourseCardData);
+    res.json(newCourseCard);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+module.exports = router;
+
+
+this code produce {"message":"Server Error"} as the data in the link http://localhost:3001/coursecard fix the issue to get the data from course table and tutor table which is related as one to many

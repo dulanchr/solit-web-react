@@ -7,7 +7,7 @@ export default function CourseContainer() {
   const [CourseData, setCourseData] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/course").then((response) => {
+    axios.get("http://localhost:3001/coursecard").then((response) => {
       setCourseData(response.data);
     });
   }, []);
