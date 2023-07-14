@@ -6,7 +6,8 @@ import Courses from '../Pages/Courses/Courses'
 import Classes from '../Pages//Classes/Classes'
 import Aboutus from '../Pages/Aboutus'
 import Core from '../Pages/Core'
-import Signup from '../Pages/Signup'
+import SignUp from '../Pages/SignUp/Signup'
+import Pay from '../Pages/SignUp/Pay'
 export default function 
 
 
@@ -20,8 +21,11 @@ export default function
         <Route path="/courses" element={<Courses/>}></Route>
         <Route path="/aboutus" element={<Aboutus/>}></Route>
         <Route path="/login" element={<Login/>}></Route>
-        <Route path="/signup" element={<Signup/>}></Route>
-        <Route path="/core/:userid" element={<Core/>}></Route>
+        <Route path="/signup" element={<SignUp/>}></Route>
+        <Route path="/core" element={<Core/>}></Route>
+        <Route path="/pay" element={<Pay/>}></Route>
+
+
       </Routes>
     </Router>
   </div>

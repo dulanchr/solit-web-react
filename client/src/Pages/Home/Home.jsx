@@ -15,6 +15,7 @@ import ClassesLink from '../Classes/ClassContainer';
 import ClassContainer from '../Classes/ClassContainer';
 import ClassConntainerLink from './ClassContainerLink';
 import TeacherContainer from '../Classes/TeacherContainer';
+import Footer from '../../components/Footer';
 
 export default function Head(props) {
   return (
@@ -33,7 +34,7 @@ export default function Head(props) {
                 </p>
                 <div className="tp-hero__btn-wrappper d-md-flex align-items-center">
                   <div className="hero-btn-1 mr-20 p-relative z-index-1">
-                    <a href="/cour" className="tp-btn br-10">
+                    <a href="/courses" className="tp-btn br-10">
                       <span>Explore Courses ➔</span>
                       <div className="transition"></div>
                     </a>
@@ -88,6 +89,9 @@ export default function Head(props) {
             <CoreComments/>
             <CoursesLink/>
             <TeacherContainer/>
+            <div>
+            <Footer/>
+            </div>
       </>     
 
    

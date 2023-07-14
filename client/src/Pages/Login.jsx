@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import './login.css';
 import logocore from './images/logo-core.png';
 import slogancore from './images/slogan-core.png';
+import Footer from "../components/Footer";
 
 
 
@@ -103,7 +104,7 @@ const Login = (props) => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                           />
-                          <i className="fal fa-envelope"></i>
+                          <i class="fi fi-rr-envelope"></i>
                         </div>
                       </div>
                       <div className="sign__input-wrapper mb-10">
@@ -115,6 +116,7 @@ const Login = (props) => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                           />
+                          <i class="fi fi-rr-key"></i>
                           
                         </div>
                       </div>
@@ -143,6 +145,9 @@ const Login = (props) => {
         </div>
       </div>
       </div>
+      <div>
+      <Footer/>
+   </div>
     </>
   );
 };

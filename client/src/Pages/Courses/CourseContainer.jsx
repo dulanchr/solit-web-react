@@ -35,7 +35,6 @@ export default function CourseContainer() {
             {CourseData.map((course, index) => (
               <div className="col-lg-4 col-md-6 tp-courses__item mb-30" key={index}>
                 <div className="tp-courses__thumb w-img fix p-relative">
-                
                   <img src={courseimg} width={400} alt="coursethumb" />
                   <span className="tp-courses__cat" style={{ backgroundColor: getCategroyColor(course.category) }}>
                     <a href="./courses">{course.category}</a>
@@ -46,28 +45,18 @@ export default function CourseContainer() {
                     <span className="tp-ratting">
                       <i className="icon_star_alt"></i> {course.rating}
                     </span>
-                    <span>
-                      <i className="icon_heart_alt"></i>
-                      {course.likes}
-                    </span>
-                    <span>
-                      <i className="fa-light fa-user"></i>325
-                    </span>
                   </div>
                   <h3 className="tp-courses__title">
                     <a href="course-details.html">{course.title}</a>
                   </h3>
                   <div className="tp-courses__avata">
                     <span>
-                      <a href="#">by {course.instructor}</a>
+                      <a href="#">by {course.tutor ? course.tutor.firstname + ' ' + course.tutor.lastname : 'Unknown'}</a>
                     </span>
                   </div>
                   <div className="tp-courses__price d-flex justify-content-between">
                     <div className="tp-courses__time">
-                      <span>
-                        <i className="fa-light fa-clock"></i>
-                        {course.episodes} Episodes
-                      </span>
+                      <span>{course.episodes} Episodes</span>
                     </div>
                     <div className="tp-courses__value">
                       <span>Rs. {course.price}</span>

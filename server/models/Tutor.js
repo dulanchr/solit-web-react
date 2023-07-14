@@ -6,6 +6,14 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       allowNull: false,
     },
+    firstname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     tel: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -17,16 +25,15 @@ module.exports = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING,
       allowNull: false,
-    }
+    },
   });
 
   Tutor.associate = (models) => {
     Tutor.belongsTo(models.User, {
       foreignKey: 'userid',
-      as: 'user', // Add this line to set the alias for the association
+      as: 'user',
     });
   };
-  
 
   return Tutor;
 };

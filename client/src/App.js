@@ -15,9 +15,7 @@ function App() {
      
       <Pathfile/>
     </div>
-    <div>
-      <Footer/>
-   </div>
+    
     </>
  
   );

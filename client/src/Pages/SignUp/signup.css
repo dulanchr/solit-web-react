@@ -1,0 +1,255 @@
+.mission-section2 {
+  margin-top: 15vh;
+  padding-left: 10vh;
+  padding-bottom: 2vh;
+}
+
+.mission-section2 h1 {
+  margin-left: 26vh;
+  font-size: 50px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  
+}
+
+.mission-section2 h2 {
+  margin-top: -2vh;
+  margin-left: 26vh;
+  font-size: 45px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  
+}
+.error {
+  color: red;
+}
+
+.signupbackground {
+  height: 200vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.367), rgba(0, 0, 0, 0.297)), url('../images/SignupBG.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.sign__input-wrapper select {
+  width: 100%;
+  padding: 10px;
+  outline: 0;
+  border: 1px solid rgba(124, 124, 124, 0.397);
+  border-radius: 10px;
+  appearance: none;
+  background-color: #fff;
+  font-size: 0.9em;
+  transition: border-color 0.3s ease;
+}
+
+.sign__input-wrapper.select-focus select:focus {
+  border-color: #08268a;
+}
+
+.sign__input-wrapper select + h5 {
+  position: relative;
+}
+
+.sign__input-wrapper select + h5:before {
+  position: absolute;
+  content: attr(data-placeholder);
+  left: 10px;
+  top: 15px;
+  color: grey;
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+  pointer-events: none;
+}
+
+.sign__input-wrapper.select-placeholder select:placeholder-shown + h5:before {
+  top: 15px;
+  font-size: 0.9em;
+}
+
+.sign__input-wrapper.select-focus select:focus + h5:before,
+.sign__input-wrapper.select-valid select:valid + h5:before {
+  top: 30px;
+  font-size: 0.7em;
+  font-weight: 600;
+}
+
+.sign__input-wrapper.select-valid select:valid + h5:before {
+  color: rgba(0, 0, 0, 0.53);
+}
+
+.submitsignup {
+  border: none;
+  outline: none;
+  background-color: #08268a;
+  padding: 10px;
+  border-radius: 0;
+  color: #fff;
+  font-size: 16px;
+  transform: .3s ease;
+}
+
+.submitsignup:hover {
+  background-color: rgb(30, 47, 99);
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.formsignup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 420px;
+  background-color: #eaeaea;
+  padding: 20px;
+  border-radius: 15px;
+  position: relative;
+}
+
+.titlesignup {
+  font-size: 28px;
+  color: #152045;
+  font-weight: 600;
+  letter-spacing: -1px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+}
+
+.titlesignup::before,
+.titlesignup::after {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  left: 0px;
+  background-color: #152045;
+}
+
+.titlesignup::before {
+  width: 18px;
+  height: 18px;
+  background-color: #1520456f;
+}
+
+.titlesignup::after {
+  width: 18px;
+  height: 18px;
+  animation: pulse 1s linear infinite;
+}
+
+.messagesignup,
+.signin {
+  color: rgba(61, 61, 61, 0.822);
+  font-size: 14px;
+}
+
+.signin {
+  text-align: center;
+}
+
+.signin a {
+  color: #152045;
+}
+
+.signin a:hover {
+  text-decoration: underline #3663f5;
+}
+
+.flexsignup {
+  display: flex;
+  width: 400px;
+  gap: 2vw;
+}
+
+.flexsignup2 {
+  display: grid;
+  width: 397px;
+  line-height: 0.2rem;
+}
+
+.formsignup label {
+  position: relative;
+}
+
+.formsignup label .input {
+  width: 100%;
+  padding: 10px 10px 20px 10px;
+  outline: 0;
+  border: 1px solid rgba(124, 124, 124, 0.397);
+  border-radius: 10px;
+  appearance: none;
+  background-color: #fff;
+  font-size: 0.9em;
+  transition: border-color 0.3s ease;
+}
+
+.formsignup label .input:focus {
+  border-color: #08268a;
+}
+
+.formsignup label .input + span {
+  position: absolute;
+  left: 10px;
+  top: 15px;
+  color: grey;
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+
+.formsignup label .input:placeholder-shown + span {
+  top: 15px;
+  font-size: 0.9em;
+}
+
+.formsignup label .input:focus + span,
+.form label .input:valid + span {
+  top: 30px;
+  font-size: 0.7em;
+  font-weight: 600;
+}
+
+.formsignup label .input:valid + span {
+  color: rgba(0, 0, 0, 0.53);
+}
+
+.submitsignup {
+  border: none;
+  outline: none;
+  background-color: #08268a;
+  padding: 10px;
+  border-radius: 0;
+  color: #fff;
+  font-size: 16px;
+  transform: .3s ease;
+}
+
+.submitsignup:hover {
+  background-color: rgb(30, 47, 99);
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}

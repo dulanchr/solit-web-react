@@ -1,6 +1,7 @@
 import React from 'react';
 import './aboutus.css';
 import banner from './images/banneraboutus.png';
+import Footer from '../components/Footer';
 
 
 const AboutUs = () => {
@@ -158,22 +159,26 @@ const AboutUs = () => {
 
       <div className='containercards4'>
       
-      <div className='containercards4'>
-        <div class="card-container2">
+      <div className='containercards5'>
+        
 
         <iframe src="https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d730.6496583416051!2d79.99823296020249!3d7.247034859988332!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e0!4m0!4m5!1s0x3ae2e6af63046707%3A0x6cf668d9919ebac9!2sB271!3m2!1d7.247001699999999!2d79.99804309999999!5e0!3m2!1sen!2slk!4v1689193780816!5m2!1sen!2slk" width="100%" height="400" style={{ border: 0 }} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
 
         </div>
 
-        <div class="card-container2">
-
-       <span>.</span>
-
-
-        </div>
       </div>
-    </div>
+
+    
+    <div class="card-container2">
+
+<span>.</span>
+
+
+ </div>
+ <div>
+      <Footer/>
+   </div>
 
       
     </>

@@ -1,3 +1,11 @@
+
+
+
+
+
+
+
+
 @keyframes slideInBackground {
   from {
     transform: translateY(-100%);
@@ -15,6 +23,7 @@
     opacity: 1;
   }
 }
+
 
 .Lp-hero__section {
   position: relative;

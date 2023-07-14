@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@flaticon/flaticon-uicons": "^2.2.0",
     "@react-navigation/native": "^6.1.7",
     "@sefailyasoz/react-carousel": "^1.1.1",
     "@testing-library/jest-dom": "^5.16.5",

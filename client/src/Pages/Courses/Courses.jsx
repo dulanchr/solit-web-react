@@ -1,6 +1,7 @@
 import React from 'react';
 import './courses.css'
 import CourseContainer from './CourseContainer';
+import Footer from '../../components/Footer';
 export default function App() {
   return (
         <><div className='navbgc'><p>.</p></div>
@@ -12,6 +13,9 @@ export default function App() {
         <div className="containercr">
         <CourseContainer/>
         </div>
+        <div>
+      <Footer/>
+   </div>
         
         </>
   );

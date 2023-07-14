@@ -2,6 +2,7 @@ import React from 'react'
 import './classes.css'
 import ClassContainer from './ClassContainer'
 import TeacherContainer from './TeacherContainer'
+import Footer from '../../components/Footer'
 
 
 export default function Classes() {
@@ -14,6 +15,9 @@ export default function Classes() {
       <ClassContainer/>
       <TeacherContainer/>
     </div>
+    <div>
+     <Footer/>
+   </div>
     
     </>
   )
