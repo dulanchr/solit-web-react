@@ -46,6 +46,8 @@ app.use('/tutor', TutorRouter);
 const UserRouter = require('./routes/Users');
 app.use("/user", UserRouter);
 
+const LoginRouter = require('./routes/Login');
+app.use("/login", LoginRouter);
 
 
 
