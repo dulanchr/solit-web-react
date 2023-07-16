@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@react-navigation/native": "^6.1.7",
-    "axios": "^1.4.0"
+    "axios": "^1.4.0",
+    "stripe": "^12.13.0"
   }
 }

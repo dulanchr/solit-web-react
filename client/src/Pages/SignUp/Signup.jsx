@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import './signup.css';
 import { useNavigate } from "react-router-dom";
 
-import logocore from '../images/logo-core.png';
-import slogancore from '../images/slogan-core.png';
-
 const SignUp = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -15,8 +12,8 @@ const SignUp = () => {
   const [school, setSchool] = useState('');
   const [grade, setGrade] = useState('');
   const [gender, setGender] = useState('');
-  const [firstName, setFirstName] = useState(''); // Added firstName state
-  const [lastName, setLastName] = useState(''); // Added lastName state
+  const [firstName, setFirstName] = useState(''); 
+  const [lastName, setLastName] = useState(''); 
   const [error, setError] = useState('');
 
   const handleSignUp = async (e) => {

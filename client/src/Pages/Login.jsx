@@ -134,7 +134,7 @@ const Login = (props) => {
                         </button>
                         <div className="sign__new text-center mt-20">
                           <p>
-                            New here? Be a member <a href="/signup">Sign Up</a>
+                            New here? Be a member <a href="/signupforcourses">Sign Up</a>
                           </p>
                         </div>
                       </form>
