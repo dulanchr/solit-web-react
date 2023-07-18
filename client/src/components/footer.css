@@ -92,7 +92,7 @@
     border-top: 1px solid #cccccc00;
     padding: 20px 0;
     color: #232222;
-    border-image: linear-gradient(to right, #19191900, #191919, #19191900) 3;
+    border-image: -gradient(to right, #19191900, #191919, #19191900) 3;
   }
   
   .footer__bottom p {

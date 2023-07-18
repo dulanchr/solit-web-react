@@ -4,6 +4,7 @@ import banner from './images/banneraboutus.png';
 import Footer from '../components/Footer';
 
 
+
 const AboutUs = () => {
   return (
     <>
@@ -47,6 +48,7 @@ const AboutUs = () => {
                   <path strokeLinejoin="round" strokeLinecap="round" strokeWidth="1.5" stroke="#000000" d="M20 7L9.00004 18L3.99994 13"></path>
                 </g>
               </svg>
+
             </div>
             <div className="content">
               <span className="title">Accredited Campus</span>

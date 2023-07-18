@@ -1,0 +1,90 @@
+.feed {
+    background: linear-gradient(rgb(1, 4, 26), rgb(0, 0, 0)), url('../images/SignupBG.jpg');
+    height: 100vh;
+    z-index: 10000; 
+    position: fixed; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dash-container {
+    height:100%;
+    width: 100%;
+    display: flex;
+    border-radius: 10px;
+
+  }
+  
+  .dash-sidebar {
+    border-radius: 0 0 0 0;
+    width: 250px;
+    background-color: #FAFAFA;
+    color: #171717;
+    padding: 20px;
+  }
+
+  .dash-sidebar2 {
+    margin-top: -10vh;
+    background: linear-gradient(rgba(1, 4, 26, 0.233), rgba(0, 0, 0, 0.162)), url('../images/banner-feed.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 0 0 0 0;
+    width: 15px;
+  
+    color: #171717;
+    padding: 20px;
+  }
+  
+  .dash-logo {
+    
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  .dash-logo h1  {
+ 
+    margin-left: 10px;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  .dash-logo img {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  
+  .dash-nav {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    
+  }
+  
+  .dash-nav-item {
+    border-radius: 5px;
+    display: block;
+    padding: 10px;
+    color: #9b9b9b;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  .dash-nav-item.active {
+    background-color: #c4c4c445; 
+  }
+  .dash-nav-item:hover {
+    background-color: #c4c4c445;
+  }
+  
+  .dash-content {
+    border-radius: 0px 0 0 0px;
+    flex: 1;
+    padding: 20px;
+    background-color: #ebebeb;
+    overflow: hidden;      /* Clip the content that exceeds the container */
+        /* Enable vertical scrolling when necessary */
+  }
+  
+  

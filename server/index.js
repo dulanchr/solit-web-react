@@ -49,6 +49,9 @@ app.use("/user", UserRouter);
 const LoginRouter = require('./routes/Login');
 app.use("/login", LoginRouter);
 
+const PaymentRouter = require('./routes/Payments');
+app.use("/payment", PaymentRouter);
+
 
 
 

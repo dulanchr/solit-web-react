@@ -30,8 +30,11 @@ module.exports = (sequelize, DataTypes) => {
 
   Tutor.associate = (models) => {
     Tutor.belongsTo(models.User, {
-      foreignKey: 'userid',
-      as: 'user',
+      foreignKey: "userid",
+      as: "user",
+    });
+    Tutor.hasMany(models.Class, {
+      foreignKey: "tutorId",
     });
   };
 
