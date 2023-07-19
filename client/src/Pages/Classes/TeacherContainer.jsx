@@ -1,38 +1,24 @@
-import React from 'react'
-import './teachercontainer.css'
-
+import React, { useState, useEffect } from 'react';
+import './teachercontainer.css';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import mainprofile from '../images/profilemain.jpg';
 
 export default function TeacherContainer() {
+  const [teachers, setTeachers] = useState([]);
 
-  const teachers = [
-    {
-      firstName: 'Prabhath',
-      lastName: 'Chathuranga',
-      class: 'Mathematics, Ordinary Level',
-      image: mainprofile,
-    },
-    {
-      firstName: 'Teacher 2',
-      lastName: 'LastName2',
-      class: 'Subject2, Class2',
-      image: mainprofile,
-    },
-    {
-      firstName: 'Teacher 3',
-      lastName: 'LastName3',
-      class: 'Subject3, Class3',
-      image: mainprofile,
-    },
-    {
-      firstName: 'Teacher 4',
-      lastName: 'LastName4',
-      class: 'Subject4, Class4',
-      image: mainprofile,
-    },
-    // Add more teacher objects as needed
-  ];
+  useEffect(() => {
+    // Fetch data from the backend API
+    axios.get('http://localhost:3001/tutor')
+      .then((response) => {
+        // Update the state with the retrieved data
+        setTeachers(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
     <>
       <div className='caption1'>
@@ -43,16 +29,15 @@ export default function TeacherContainer() {
         {teachers.map((teacher, index) => (
           <div className="container" key={index}>
             <div className="card_boxteacher">
-              <img src={teacher.image} alt="Card Image" />
+              <img src={teacher.image || mainprofile} alt="Card Image" />
               <div className="card_content">
-                <h3>{`${teacher.firstName} ${teacher.lastName}`}</h3>
-                <p>{teacher.class}</p>
+                <h3>{`${teacher.firstname} ${teacher.lastname}`}</h3>
+                <p>{teacher.description}</p>
               </div>
             </div>
           </div>
         ))}
       </div>
-
-    </>  
-    )
+    </>
+  );
 }

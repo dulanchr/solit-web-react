@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import './coursestab.css';
-import CourseContainer from '../Courses/CourseContainer';
+import React, { useState } from "react";
+import "./coursestab.css";
+import CourseContainer from "../Courses/CourseContainer";
 
 export default function CoursesTab() {
   const [formData, setFormData] = useState({
-    title: '',
-    category: '',
-    episodes: '',
-    price: '',
-    description: '',
+    title: "",
+    category: "",
+    episodes: "",
+    price: "",
+    description: "",
     thumbnail: null,
-    courselink: '',
+    courselink: "",
   });
 
   const [formErrors, setFormErrors] = useState({
-    title: '',
-    category: '',
-    episodes: '',
-    price: '',
-    description: '',
-    courselink: '',
+    title: "",
+    category: "",
+    episodes: "",
+    price: "",
+    description: "",
+    courselink: "",
   });
 
   const handleChange = (event) => {
@@ -30,7 +30,7 @@ export default function CoursesTab() {
     }));
     setFormErrors((prevState) => ({
       ...prevState,
-      [name]: '',
+      [name]: "",
     }));
   };
 
@@ -46,20 +46,23 @@ export default function CoursesTab() {
     if (!thumbnailFile) return null;
 
     const formData = new FormData();
-    formData.append('thumbnail', thumbnailFile);
+    formData.append("thumbnail", thumbnailFile);
 
     const requestOptions = {
-      method: 'POST',
+      method: "POST",
       body: formData,
     };
 
-    const response = await fetch('http://localhost:3001/upload', requestOptions);
+    const response = await fetch(
+      "http://localhost:3001/upload",
+      requestOptions
+    );
     const data = await response.json();
 
     if (response.ok) {
       return data.thumbnailUrl;
     } else {
-      throw new Error('Failed to upload thumbnail');
+      throw new Error("Failed to upload thumbnail");
     }
   };
 
@@ -69,52 +72,52 @@ export default function CoursesTab() {
     // Validation checks
     let hasErrors = false;
     const newFormErrors = {
-      title: '',
-      category: '',
-      episodes: '',
-      price: '',
-      description: '',
-      courselink: '',
+      title: "",
+      category: "",
+      episodes: "",
+      price: "",
+      description: "",
+      courselink: "",
     };
 
-    if (formData.title.trim() === '') {
-      newFormErrors.title = 'Required.';
+    if (formData.title.trim() === "") {
+      newFormErrors.title = "Required.";
       hasErrors = true;
     }
 
-    if (formData.category.trim() === '') {
-      newFormErrors.category = 'Required.';
+    if (formData.category.trim() === "") {
+      newFormErrors.category = "Required.";
       hasErrors = true;
     }
 
-    if (formData.episodes.trim() === '') {
-      newFormErrors.episodes = 'Required';
+    if (formData.episodes.trim() === "") {
+      newFormErrors.episodes = "Required";
       hasErrors = true;
     } else if (!/^\d+$/.test(formData.episodes.trim())) {
-      newFormErrors.episodes = 'Enter a valid number.';
+      newFormErrors.episodes = "Enter a valid number.";
       hasErrors = true;
     }
 
-    if (formData.price.trim() === '') {
-      newFormErrors.price = 'Required';
+    if (formData.price.trim() === "") {
+      newFormErrors.price = "Required";
       hasErrors = true;
     } else if (!/^\d+$/.test(formData.price.trim())) {
-      newFormErrors.price = 'Enter a valid price (integer only).';
+      newFormErrors.price = "Enter a valid price (integer only).";
       hasErrors = true;
     }
 
-    if (formData.description.trim() === '') {
-      newFormErrors.description = 'Required';
+    if (formData.description.trim() === "") {
+      newFormErrors.description = "Required";
       hasErrors = true;
     }
 
-    if (formData.courselink.trim() === '') {
-      newFormErrors.courselink = 'Required';
+    if (formData.courselink.trim() === "") {
+      newFormErrors.courselink = "Required";
       hasErrors = true;
     } else if (
       !/^(ftp|http|https):\/\/[^ "]+$/.test(formData.courselink.trim())
     ) {
-      newFormErrors.courselink = 'Enter a valid web link.';
+      newFormErrors.courselink = "Enter a valid web link.";
       hasErrors = true;
     }
 
@@ -136,34 +139,34 @@ export default function CoursesTab() {
     };
 
     const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(courseData),
     };
 
-    fetch('http://localhost:3001/course', requestOptions)
+    fetch("http://localhost:3001/course", requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        console.log('Data successfully submitted:', data);
+        console.log("Data successfully submitted:", data);
         // Reset the form after submission if needed
         setFormData({
-          title: '',
-          category: '',
-          episodes: '',
-          price: '',
-          description: '',
-          courselink: '',
+          title: "",
+          category: "",
+          episodes: "",
+          price: "",
+          description: "",
+          courselink: "",
           thumbnail: null,
         });
       })
       .catch((error) => {
-        console.error('Error submitting data:', error);
+        console.error("Error submitting data:", error);
       });
   };
 
   return (
     <div className="coursecontorls">
-      <h2 style={{ marginTop: '0vh', fontSize: '1rem', color: '#232323' }}>
+      <h2 style={{ marginTop: "0vh", fontSize: "1rem", color: "#232323" }}>
         Add Courses:
       </h2>
       <div className="addcourses">
@@ -272,10 +275,10 @@ export default function CoursesTab() {
       </div>
       <h2
         style={{
-          marginTop: '2vh',
-          fontSize: '1rem',
-          color: '#232323',
-          opacity: '0.5',
+          marginTop: "2vh",
+          fontSize: "1rem",
+          color: "#232323",
+          opacity: "0.5",
         }}
       >
         My Courses:

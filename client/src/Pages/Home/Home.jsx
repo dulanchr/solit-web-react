@@ -86,9 +86,11 @@ export default function Head(props) {
       </div>
             <ClassConntainerLink/>
             <AboutCoreLink/>
-            <CoreComments/>
+            {/* <CoreComments/> */}
             <CoursesLink/>
             <TeacherContainer/>
+
+
             <div>
             <Footer/>
             </div>

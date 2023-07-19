@@ -1,32 +1,29 @@
+// studentreviews.js
+
 module.exports = (sequelize, DataTypes) => {
-    const Admin = sequelize.define("Admin", {
-      adminId: {
+    const StudentReview = sequelize.define("StudentReview", {
+      reviewId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      firstname: {
+      title: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      lastname: {
+      reviewtext: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      tel: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      }
     });
   
-    Admin.associate = (models) => {
-      Admin.belongsTo(models.User, {
-        foreignKey: 'userId',
-        allowNull: false,
+    StudentReview.associate = (models) => {
+      StudentReview.belongsTo(models.Student, {
+        foreignKey: "studentId",
       });
     };
   
-    return Admin;
+    return StudentReview;
   };
   

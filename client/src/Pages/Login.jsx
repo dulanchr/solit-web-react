@@ -1,66 +1,58 @@
 import React, { useEffect, useState } from "react";
-import './login.css';
-import logocore from './images/logo-core.png';
-import slogancore from './images/slogan-core.png';
+import "./login.css";
+import logocore from "./images/logo-core.png";
+import slogancore from "./images/slogan-core.png";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
   const navigate = useNavigate(); // Initialize the useNavigate hook
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    // Perform validation
-
+  
     try {
-      const response = await fetch('http://localhost:3001/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
+      const response = await fetch(
+        `http://localhost:3001/login?email=${email}&password=${password}`
+      );
+  
       if (response.ok) {
-        const user = await response.json();
-        
-        if (user.type === 'admin') {
-          // Navigate to admin page
-          navigate('/admin');
-        } else if (user.type === 'tutor') {
-          // Navigate to tutor page
-          navigate('/tutor');
-        } else if (user.type === 'student') {
-          // Navigate to student page
-          navigate('/student');
-        } else {
-          setError('Invalid user type');
-        }
+        const { userType, user } = await response.json();
+  
+        if (userType === "admin") {
+          navigate("/feedadmin");
 
+        } else if (userType === "tutor") {
+          navigate("/feedtutor");
+
+        } else if (userType === "student") {
+          navigate("/feedstudent");
+          
+        } else {
+          setError("Invalid user type");
+        }
+  
         // Clear input fields and error state
-        setEmail('');
-        setPassword('');
-        setError('');
+        setEmail("");
+        setPassword("");
+        setError("");
       } else {
-        setError('Invalid email or password');
+        setError("Invalid email or password");
       }
     } catch (error) {
-      console.error('Error:', error);
-      setError('An error occurred. Please try again later.');
+      console.error("Error:", error);
+      setError("An error occurred. Please try again later.");
     }
   };
+  
 
   return (
     <>
-      <div className='superlogin'>
+      <div className="superlogin">
         {/* Logo Section */}
         <div className="Lp-hero__section">
           <div className="containerL">
@@ -76,9 +68,7 @@ const Login = (props) => {
         {/* Card Section */}
         <div className="blokkencore">
           <h1>What is CORE?</h1>
-          <p>
-            "During the vibrant autumn season,"
-          </p>
+          <p>"During the vibrant autumn season,"</p>
         </div>
 
         {/* Login Section */}
@@ -134,7 +124,8 @@ const Login = (props) => {
                         </button>
                         <div className="sign__new text-center mt-20">
                           <p>
-                            New here? Be a member <a href="/signupforcourses">Sign Up</a>
+                            New here? Be a member{" "}
+                            <a href="/signupforcourses">Sign Up</a>
                           </p>
                         </div>
                       </form>
@@ -145,13 +136,9 @@ const Login = (props) => {
             </div>
           </div>
         </div>
-
-
-
-        
       </div>
       <div>
-        <Footer/>
+        <Footer />
       </div>
     </>
   );

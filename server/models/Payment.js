@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
   const Payment = sequelize.define('Payment', {
-    paymentid: {
+    paymentId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -42,7 +42,7 @@ module.exports = (sequelize) => {
 
   Payment.associate = (models) => {
     Payment.belongsTo(models.Course, {
-      foreignKey: 'courseid',
+      foreignKey: 'courseId',
     });
   };
 

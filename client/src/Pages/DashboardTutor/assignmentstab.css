@@ -1,0 +1,49 @@
+.assignmentfolder{
+    
+    border-radius: 5px;
+    background-color: rgba(83, 83, 83, 0);
+    width: 100%;
+    height: auto;
+    max-height: 47vh;
+    
+    display: block;
+    justify-content: center;
+
+    overflow: hidden;
+    padding: 50px;
+}
+.class-folder {
+    margin: 10px;
+    margin-top: 0vh;
+    background-color: rgba(0, 255, 255, 0);
+    border-radius: 5px;
+    padding: 15px;
+    height: auto;
+    max-width: 150px;
+    min-height: 25vh;
+    max-height: 25vh;
+    overflow: hidden;
+    justify-content: center;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s;
+  }
+  
+  .class-folder:hover {
+ 
+    background-color: rgb(240, 240, 240);
+  }
+.class-folder img{
+    margin-top: 2vh;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.class-folder h1{
+
+    font-size: 16px;
+    font-weight: 300;
+}
+
+
+

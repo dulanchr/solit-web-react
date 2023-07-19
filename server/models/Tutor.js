@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Tutor = sequelize.define("Tutor", {
-    tutorid: {
+    tutorId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Tutor.associate = (models) => {
     Tutor.belongsTo(models.User, {
-      foreignKey: "userid",
+      foreignKey: "userId",
       as: "user",
     });
     Tutor.hasMany(models.Class, {

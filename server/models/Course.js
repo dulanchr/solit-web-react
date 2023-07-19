@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Course = sequelize.define("Course", {
-    courseid: {
+    courseId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Course.associate = (models) => {
     Course.belongsTo(models.Tutor, {
-      foreignKey: "tutorid",
+      foreignKey: "tutorId",
       as: 'tutor',
     });
   };

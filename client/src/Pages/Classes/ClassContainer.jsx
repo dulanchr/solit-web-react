@@ -1,44 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import classimage from '../images/signupbanner~1.jpg';
 
 import './classcontainer.css';
 
 const ClassContainer = () => {
-  const teachers = [
-    {
-      classname: 'Mathematics',
-      classgrade: 'Grade11',
-      tutorfirstname: 'Math',
-      tutorlastname: 'Tutor',
-      image: classimage,
-    },
-    
+  const [teachers, setTeachers] = useState([]);
 
-   
-    
-    // Add more teacher objects as needed
-  ];
+  useEffect(() => {
+    // Fetch data from the backend API
+    axios.get('http://localhost:3001/classcards')
+      .then((response) => {
+        // Update the state with the retrieved data
+        setTeachers(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <>
-      
-
       <div className='containercards'>
         {teachers.map((teacher, index) => (
           <div className="container" key={index}>
             <div className="card_boxclass">
-              <img src={teacher.image} alt="Card Imageclass" />
+              <img src={teacher.thumbnail || classimage} alt="Card Imageclass" />
               <div className="card_contentclass">
-                <h3>{teacher.classname}</h3>
-                <p>{teacher.classgrade}</p>
-                <p>by: {`${teacher.tutorfirstname} ${teacher.tutorlastname}`}</p>
+                <h3>{teacher.className}</h3>
+                <p>{teacher.grade}</p>
+                <p>by: {`${teacher.Tutor.firstname} ${teacher.Tutor.lastname}`}</p>
               </div>
             </div>
           </div>
         ))}
       </div>
-
     </>
   );
 };

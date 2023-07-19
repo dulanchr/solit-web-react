@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@react-navigation/native": "^6.1.7",
+    "3d-react-carousel": "^1.0.0",
     "axios": "^1.4.0",
     "react-stripe-checkout": "^2.6.3",
     "stripe": "^12.13.0"

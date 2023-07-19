@@ -25,6 +25,9 @@ app.use('/assignmentstudent', AssignmentStudentRouter);
 const ClassRouter = require('./routes/Classes');
 app.use('/class', ClassRouter);
 
+const ClassCardRouter = require('./routes/ClassCards');
+app.use('/classcards', ClassCardRouter);
+
 const ClassStudentRouter = require('./routes/ClassStudents');
 app.use('/classstudent', ClassStudentRouter);
 
@@ -40,6 +43,12 @@ app.use("/question", QuestionRouter);
 const StudentRouter = require('./routes/Students');
 app.use('/student', StudentRouter);
 
+const StudentreviewRouter = require('./routes/StudentReviews');
+app.use('/studentreview', StudentreviewRouter);
+
+const ReviewCardRouter = require('./routes/ReviewCards');
+app.use('/reviewcard', ReviewCardRouter);
+
 const TutorRouter = require('./routes/Tutors');
 app.use('/tutor', TutorRouter);
 
@@ -51,11 +60,6 @@ app.use("/login", LoginRouter);
 
 const PaymentRouter = require('./routes/Payments');
 app.use("/payment", PaymentRouter);
-
-
-
-
-
 
 
 db.sequelize.sync().then(() => {

@@ -1,8 +1,10 @@
 import React from 'react'
 import './assignments.css'
-export default function Assignments() {
+export default function Assignmentlist() {
   return (
    <div className="assignmentcontainer">
+
+     
         <div className="assignmentcard">
             <div className="assignmenttitle">
                 <h1>Assignemt Title</h1>

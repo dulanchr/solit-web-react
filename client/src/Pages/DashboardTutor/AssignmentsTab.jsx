@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './coursestab.css';
-import Assignments from './Assignments';
+import './assignmentstab.css';
+
+import folder from '../images/folder.png';
+import Assignmentlist from './Assignments';
 
 export default function AssignmentsTab() {
+  
   const [formData, setFormData] = useState({
+    classId: '',
     title: '',
     description: '',
     content: '',
@@ -11,11 +16,25 @@ export default function AssignmentsTab() {
   });
 
   const [formErrors, setFormErrors] = useState({
+    classId: '',
     title: '',
     description: '',
     content: '',
     deadline: '',
   });
+
+  const [classOptions, setClassOptions] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/class')
+      .then((response) => response.json())
+      .then((data) => {
+        setClassOptions(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching class options:', error);
+      });
+  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -35,11 +54,17 @@ export default function AssignmentsTab() {
     // Validation checks
     let hasErrors = false;
     const newFormErrors = {
+      classId: '',
       title: '',
       description: '',
       content: '',
       deadline: '',
     };
+
+    if (formData.classId === '') {
+      newFormErrors.classId = 'Required.';
+      hasErrors = true;
+    }
 
     if (formData.title.trim() === '') {
       newFormErrors.title = 'Required.';
@@ -70,7 +95,7 @@ export default function AssignmentsTab() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/assignments', {
+      const response = await fetch('http://localhost:3001/assignment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,6 +109,7 @@ export default function AssignmentsTab() {
 
         // Reset the form after submission if needed
         setFormData({
+          classId: '',
           title: '',
           description: '',
           content: '',
@@ -105,7 +131,13 @@ export default function AssignmentsTab() {
       return false;
     }
   };
+  const [selectedClass, setSelectedClass] = useState(null); // New state to track selected class
 
+  const handleFolderClick = (className) => {
+    setSelectedClass((prevSelectedClass) =>
+      prevSelectedClass === className ? null : className
+    );
+  };
   return (
     <div className="coursecontorls">
       <h2 style={{ marginTop: '0vh', fontSize: '1rem', color: '#232323' }}>
@@ -113,6 +145,25 @@ export default function AssignmentsTab() {
       </h2>
       <div className="addcourses">
         <form className="addc-form" onSubmit={handleSubmit}>
+          <div className="addc-form-group">
+            <label htmlFor="classId">Class:</label>
+            <select
+              id="classId"
+              name="classId"
+              value={formData.classId}
+              onChange={handleChange}
+            >
+              <option value="">-- Select Class --</option>
+              {classOptions.map((option) => (
+                <option key={option.classId} value={option.classId}>
+                  {option.className}
+                </option>
+              ))}
+            </select>
+            {formErrors.classId && (
+              <span className="error">{formErrors.classId}</span>
+            )}
+          </div>
           <div className="addc-form-group">
             <label htmlFor="title">Title:</label>
             <input
@@ -129,14 +180,13 @@ export default function AssignmentsTab() {
           </div>
           <div className="addc-form-group">
             <label htmlFor="description">Description:</label>
-            <input
-              type="text"
+            <textarea
               id="description"
               name="description"
               value={formData.description}
               onChange={handleChange}
               placeholder="Enter the description"
-            />
+            ></textarea>
             {formErrors.description && (
               <span className="error">{formErrors.description}</span>
             )}
@@ -173,6 +223,9 @@ export default function AssignmentsTab() {
           </button>
         </form>
       </div>
+      
+      
+      
       <h2
         style={{
           marginTop: '2vh',
@@ -184,9 +237,33 @@ export default function AssignmentsTab() {
         My Assignments:
       </h2>
 
+
+
+
+
       <div className="mycourses">
-        <Assignments />
+        {classOptions.map((option) => (
+          <div
+            key={option.classId}
+            className="class-folder"
+            onClick={() => handleFolderClick(option.className)}
+          >
+            <img src={folder} width={120} height={120} alt="logocore" />
+            <h1>{option.className}</h1>
+          </div>
+        ))}
       </div>
+
+
+
+      {/* Render Assignmentlist component if a class is selected */}
+      {selectedClass && <Assignmentlist selectedClass={selectedClass} />}
+
+
+
+      
     </div>
+
+
   );
 }

@@ -11,6 +11,7 @@ import SignUp from '../Pages/SignUp/Signup'
 import Courses2 from '../Pages/Courses/Courses2'
 import Pay from '../Pages/Pay/Pay'
 import FeedTutor from '../Pages/DashboardTutor/FeedTutor'
+import FeedStudent from '../Pages/DashboardStudent/FeedStudent'
 export default function 
 
 
@@ -31,6 +32,8 @@ export default function
 
 
         <Route path="/feedtutor" element={<FeedTutor/>}></Route>
+        <Route path="/feedstudent" element={<FeedStudent/>}></Route>
+        
 
 
       </Routes>
