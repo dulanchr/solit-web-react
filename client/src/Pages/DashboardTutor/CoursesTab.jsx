@@ -2,7 +2,36 @@ import React, { useState } from "react";
 import "./coursestab.css";
 import CourseContainer from "../Courses/CourseContainer";
 
+import { storage } from "../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
+
 export default function CoursesTab() {
+  const [imageUpload, setImageUpload] = useState(null);
+
+  const uploadImage = () => {
+    if (imageUpload == null) return;
+
+    const uniqueFilename = imageUpload.name + v4();
+    const imageRef = ref(storage, `CourseThumbs/${uniqueFilename}`);
+
+    uploadBytes(imageRef, imageUpload)
+      .then(() => {
+        // Get the download URL of the uploaded image
+        getDownloadURL(imageRef).then((downloadURL) => {
+          // Update the thumbnail field in formData with the download URL
+          setFormData((prevState) => ({
+            ...prevState,
+            thumbnail: downloadURL,
+          }));
+        });
+        alert("Image Uploaded");
+      })
+      .catch((error) => {
+        console.error("Error uploading image:", error);
+      });
+  };
+
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -258,15 +287,18 @@ export default function CoursesTab() {
               <span className="error">{formErrors.courselink}</span>
             )}
           </div>
-          <div className="addc-form-group">
-            <label htmlFor="thumbnail">Upload Thumbnail:</label>
-            <input
-              type="file"
-              id="thumbnail"
-              name="thumbnail"
-              accept="image/*"
-              onChange={handleFileChange}
-            />
+          <div>
+            <div className="addc-form-group">
+              {/* <h1>Upload Image Page</h1> */}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event) => {
+                  setImageUpload(event.target.files[0]);
+                }}
+              />
+            </div>
+            <button onClick={uploadImage}>Upload</button>
           </div>
           <button type="submit" className="addc-btn">
             Add

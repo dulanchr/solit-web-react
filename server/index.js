@@ -62,6 +62,9 @@ const PaymentRouter = require('./routes/Payments');
 app.use("/payment", PaymentRouter);
 
 
+const UploadRouter = require('./routes/Uploads');
+app.use("/upload", UploadRouter);
+
 db.sequelize.sync().then(() => {
     app.listen(3001, () => {
         console.log('Server running on port 3001');
