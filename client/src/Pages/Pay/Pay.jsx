@@ -1,103 +1,146 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './pay.css';
-import paypal from '../images/paypal.png';
-import applepay from '../images/apple-pay.png';
-import googlepay from '../images/google-pay.png';
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import "./pay.css";
+import paypal from "../images/paypal.png";
+import applepay from "../images/apple-pay.png";
+import googlepay from "../images/google-pay.png";
+const nodemailer = require("nodemailer");
 
 export default function Pay() {
+  const { id: courseId } = useParams();
   const [formData, setFormData] = useState({
-    email: '',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: ''
+    email: "",
+    cardNumber: "",
+    expiryDate: "",
+    cvv: "",
   });
 
   const [formErrors, setFormErrors] = useState({
-    email: '',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: ''
+    email: "",
+    cardNumber: "",
+    expiryDate: "",
+    cvv: "",
   });
+
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setFormErrors({ ...formErrors, [e.target.name]: '' }); // Clear the error message when the input changes
+    setFormErrors({ ...formErrors, [e.target.name]: "" });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate form data
     const { email, cardNumber, expiryDate, cvv } = formData;
-
     if (!email) {
-      setFormErrors({ ...formErrors, email: 'Please enter your email.' });
+      setFormErrors({ ...formErrors, email: "Please enter your email." });
       return;
     }
 
     if (!cardNumber) {
-      setFormErrors({ ...formErrors, cardNumber: 'Please enter your card number.' });
+      setFormErrors({
+        ...formErrors,
+        cardNumber: "Please enter your card number.",
+      });
       return;
     }
 
     if (!expiryDate) {
-      setFormErrors({ ...formErrors, expiryDate: 'Please enter the expiry date.' });
+      setFormErrors({
+        ...formErrors,
+        expiryDate: "Please enter the expiry date.",
+      });
       return;
     }
 
     if (!cvv) {
-      setFormErrors({ ...formErrors, cvv: 'Please enter the CVV.' });
+      setFormErrors({ ...formErrors, cvv: "Please enter the CVV." });
       return;
     }
 
     // Validate card number
     const cardNumberRegex = /^[0-9]{16}$/;
     if (!cardNumberRegex.test(cardNumber)) {
-      setFormErrors({ ...formErrors, cardNumber: 'Invalid card number. Please enter a valid 16-digit card number.' });
+      setFormErrors({
+        ...formErrors,
+        cardNumber:
+          "Invalid card number. Please enter a valid 16-digit card number.",
+      });
       return;
     }
 
     // Validate expiry date
     const expiryDateRegex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
     if (!expiryDateRegex.test(expiryDate)) {
-      setFormErrors({ ...formErrors, expiryDate: 'Invalid expiry date. Please enter a valid date in the format MM/YY.' });
+      setFormErrors({
+        ...formErrors,
+        expiryDate:
+          "Invalid expiry date. Please enter a valid date in the format MM/YY.",
+      });
       return;
     }
 
     // Validate CVV
     const cvvRegex = /^[0-9]{3}$/;
     if (!cvvRegex.test(cvv)) {
-      setFormErrors({ ...formErrors, cvv: 'Invalid CVV. Please enter a valid 3-digit CVV number.' });
+      setFormErrors({
+        ...formErrors,
+        cvv: "Invalid CVV. Please enter a valid 3-digit CVV number.",
+      });
       return;
     }
 
-    // Send data to the server
-    fetch('http://localhost:3001/payment', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response data
-        console.log(data);
-        // Navigate to another page
-        navigate('/another-page');
-      })
-      .catch((error) => {
-        // Handle error
-        console.error('Error:', error);
+    try {
+      // Simulate successful payment
+      setPaymentSuccess(true);
+
+      // Send the email and courseId to the server
+      const response = await axios.post("http://localhost:3001/payment", {
+        email: formData.email,
+        courseId: courseId,
       });
+
+      // Email sending logic here
+      const transporter = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+          user: "soliteducation@gmail.com",
+          pass: "2HWWo09j)(r#",
+        },
+      });
+
+      const emailOptions = {
+        from: "SOLIT Education (Pvt) Ltd",
+        to: response.data.email,
+        subject: "Payment Confirmation",
+        text: `Thank you for your payment! Your payment was successful. If you are willing to be a member of the CORE community, use the following link and code (${response.data.usercode}) to request Membership. Thank You, Good luck on your learning!`,
+      };
+
+      transporter.sendMail(emailOptions, (error, info) => {
+        if (error) {
+          console.error("Error sending email:", error);
+        } else {
+          console.log("Email sent:", info.response);
+        }
+      });
+    } catch (error) {
+      console.error("Error sending payment details:", error);
+    }
+  };
+
+  const handleOkClick = () => {
+    setPaymentSuccess(false);
+    navigate("/courses");
   };
 
   return (
     <>
-      <div className='navbgc'>
+      <div className="navbgc">
         <p>.</p>
       </div>
       <div className="paymentpage">
@@ -105,13 +148,28 @@ export default function Pay() {
           <form className="form-pay" onSubmit={handleSubmit}>
             <div className="payment--options">
               <button name="paypal" type="button">
-                <img src={paypal} width={50} alt="pay" style={{ marginTop: '0vh' }} />
+                <img
+                  src={paypal}
+                  width={50}
+                  alt="pay"
+                  style={{ marginTop: "0vh" }}
+                />
               </button>
               <button name="apple-pay" type="button">
-                <img src={applepay} width={50} alt="pay" style={{ marginTop: '0.5vh' }} />
+                <img
+                  src={applepay}
+                  width={50}
+                  alt="pay"
+                  style={{ marginTop: "0.5vh" }}
+                />
               </button>
               <button name="google-pay" type="button">
-                <img src={googlepay} width={50} alt="pay" style={{ marginTop: '0.5vh' }} />
+                <img
+                  src={googlepay}
+                  width={50}
+                  alt="pay"
+                  style={{ marginTop: "0.5vh" }}
+                />
               </button>
             </div>
             <div className="separator">
@@ -121,7 +179,9 @@ export default function Pay() {
             </div>
             <div className="credit-card-info--form">
               <div className="input_container">
-                <label htmlFor="email_field" className="input_label">Email Address</label>
+                <label htmlFor="email_field" className="input_label">
+                  Email Address
+                </label>
                 <input
                   id="email_field"
                   className="input_field"
@@ -132,10 +192,14 @@ export default function Pay() {
                   value={formData.email}
                   onChange={handleChange}
                 />
-                {formErrors.email && <p className="error">{formErrors.email}</p>}
+                {formErrors.email && (
+                  <p className="error">{formErrors.email}</p>
+                )}
               </div>
               <div className="input_container">
-                <label htmlFor="card_number_field" className="input_label">Card Number</label>
+                <label htmlFor="card_number_field" className="input_label">
+                  Card Number
+                </label>
                 <input
                   id="card_number_field"
                   className="input_field"
@@ -146,10 +210,14 @@ export default function Pay() {
                   value={formData.cardNumber}
                   onChange={handleChange}
                 />
-                {formErrors.cardNumber && <p className="error">{formErrors.cardNumber}</p>}
+                {formErrors.cardNumber && (
+                  <p className="error">{formErrors.cardNumber}</p>
+                )}
               </div>
               <div className="input_container">
-                <label htmlFor="expiry_date_field" className="input_label">Expiry Date / CVV</label>
+                <label htmlFor="expiry_date_field" className="input_label">
+                  Expiry Date / CVV
+                </label>
                 <div className="split">
                   <input
                     id="expiry_date_field"
@@ -172,14 +240,36 @@ export default function Pay() {
                     onChange={handleChange}
                   />
                 </div>
-                {formErrors.expiryDate && <p className="error">{formErrors.expiryDate}</p>}
+                {formErrors.expiryDate && (
+                  <p className="error">{formErrors.expiryDate}</p>
+                )}
                 {formErrors.cvv && <p className="error">{formErrors.cvv}</p>}
               </div>
             </div>
-            <button className="purchase--btn" type="submit">Checkout</button>
+            <button className="purchase--btn" type="submit">
+              Checkout
+            </button>
           </form>
         </div>
       </div>
+      {paymentSuccess && (
+        <div className="popup-container">
+          <div className="popup">
+            <div className="popup-content">
+              <p>Payment Successful!</p>
+              <h1>
+                <i class="fi fi-rr-envelope-download"></i>
+              </h1>
+              <>
+                You will be updated with an email. Check your inbox to access
+                the files & for more details on CORE membership.
+              </>
+              <p>Thank you for the purchase!</p>
+              <button onClick={handleOkClick}>OK</button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

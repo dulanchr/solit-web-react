@@ -26,23 +26,11 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    cardNumber: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    expiryDate: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    cvv: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
   });
 
   Payment.associate = (models) => {
     Payment.belongsTo(models.Course, {
-      foreignKey: 'courseId',
+      foreignKey: 'courseId', // This establishes the one-to-many relationship
     });
   };
 

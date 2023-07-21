@@ -1,4 +1,6 @@
-module.exports = (sequelize, DataTypes) => {
+const { DataTypes } = require('sequelize');
+
+module.exports = (sequelize) => {
   const Course = sequelize.define("Course", {
     courseId: {
       type: DataTypes.INTEGER,
@@ -40,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
     Course.belongsTo(models.Tutor, {
       foreignKey: "tutorId",
       as: 'tutor',
+    });
+
+    Course.hasMany(models.Payment, {
+      foreignKey: "courseId", // This establishes the one-to-many relationship
     });
   };
 

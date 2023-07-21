@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 const { Course } = require('../models');
 
-router.get("/", async (req,res) =>{
+router.get("/", async (req, res) =>{
   const listOfCourses = await Course.findAll();
   console.log(listOfCourses);
   res.json(listOfCourses);
-});  
+}); 
+
+
+
 router.post('/', async (req, res) => {
   try {
     const courseData = req.body;

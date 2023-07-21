@@ -1,0 +1,84 @@
+/* Course Content Container */
+.coursecontent-page {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    background-color: #fff0f000;
+    margin-top: -18vh;
+    height: 101vh;
+    width: 100%;
+    flex-direction: column;
+  }
+  
+
+.coursecon-container {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(163, 0, 0, 0.1);
+    margin-top: 15vh;
+    width: 120vh;
+    height: 60vh;
+  }
+  
+  /* Course Thumbnail */
+  .coursecon-thumbnail img {
+    width: 10vw;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Course Content */
+  .coursecon-content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .coursecon-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .coursecon-description {
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  /* Course Meta Info */
+  .coursecon-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .coursecon-episodes {
+    font-size: 14px;
+    color: #888;
+  }
+  
+  .coursecon-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #6b58ca;
+  }
+  
+  /* Buy Now Button */
+  .coursecon-buy-button {
+    padding: 10px 20px;
+    background-color: #8a72fe;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .coursecon-buy-button:hover {
+    background-color: #6b58ca;
+  }
+  
