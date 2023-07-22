@@ -1,0 +1,83 @@
+.newstudents-container {
+  display: flex;
+  flex-direction: row; /* Display cards in a row */
+  flex-wrap: wrap; /* Wrap cards to next row if needed */
+  justify-content: flex-start; /* Align cards from left to right */
+  gap: 20px; /* Add some space between cards */
+  height: auto;
+  width: 78vw;
+  background-color: #2ecc71;
+  padding: 20px; 
+  
+}
+
+
+.newstudents-card {
+
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  min-width: 20vw;
+  max-width:20vw;
+}
+
+.avatar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.avatar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.student-form .form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+.student-form label {
+width: 100%;
+  display: block;
+
+
+}
+
+.student-form input {
+  
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  
+}
+
+.student-form input[readonly] {
+  background-color: #f9f9f9;
+  cursor: not-allowed;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.accept-button,
+.reject-button {
+  padding: 10px 20px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.accept-button {
+  background-color: #2ecc71;
+}
+
+.reject-button {
+  background-color: #e74c3c;
+}

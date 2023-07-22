@@ -5,7 +5,6 @@ import "./pay.css";
 import paypal from "../images/paypal.png";
 import applepay from "../images/apple-pay.png";
 import googlepay from "../images/google-pay.png";
-const nodemailer = require("nodemailer");
 
 export default function Pay() {
   const { id: courseId } = useParams();
@@ -68,8 +67,7 @@ export default function Pay() {
     if (!cardNumberRegex.test(cardNumber)) {
       setFormErrors({
         ...formErrors,
-        cardNumber:
-          "Invalid card number. Please enter a valid 16-digit card number.",
+        cardNumber: "Invalid card number. Check again.",
       });
       return;
     }
@@ -105,29 +103,11 @@ export default function Pay() {
         courseId: courseId,
       });
 
-      // Email sending logic here
-      const transporter = nodemailer.createTransport({
-        service: "Gmail",
-        auth: {
-          user: "soliteducation@gmail.com",
-          pass: "2HWWo09j)(r#",
-        },
-      });
+      const usercode = response.data.payment.usercode;
+      console.log("Usercode:", usercode);
 
-      const emailOptions = {
-        from: "SOLIT Education (Pvt) Ltd",
-        to: response.data.email,
-        subject: "Payment Confirmation",
-        text: `Thank you for your payment! Your payment was successful. If you are willing to be a member of the CORE community, use the following link and code (${response.data.usercode}) to request Membership. Thank You, Good luck on your learning!`,
-      };
-
-      transporter.sendMail(emailOptions, (error, info) => {
-        if (error) {
-          console.error("Error sending email:", error);
-        } else {
-          console.log("Email sent:", info.response);
-        }
-      });
+      // Set the usercode state with the received payment ID
+      setFormData({ ...formData, usercode: usercode });
     } catch (error) {
       console.error("Error sending payment details:", error);
     }
@@ -135,9 +115,13 @@ export default function Pay() {
 
   const handleOkClick = () => {
     setPaymentSuccess(false);
-    navigate("/courses");
+    navigate(`/signup/${formData.usercode}`); // Use formData.usercode to navigate to the signup page with the correct usercode
   };
 
+  const handleBackClick = () => {
+    setPaymentSuccess(false);
+    navigate("/courses"); // Navigate to "/courses" when the button is clicked
+  };
   return (
     <>
       <div className="navbgc">
@@ -265,7 +249,8 @@ export default function Pay() {
                 the files & for more details on CORE membership.
               </>
               <p>Thank you for the purchase!</p>
-              <button onClick={handleOkClick}>OK</button>
+              <button onClick={handleOkClick}>Sign Up</button>
+              <button onClick={handleBackClick}>More Courses</button>
             </div>
           </div>
         </div>

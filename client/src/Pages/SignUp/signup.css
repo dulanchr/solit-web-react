@@ -27,7 +27,7 @@
 }
 
 .signupbackground {
-  height: 200vh;
+  height: 235vh;
   background: linear-gradient(rgba(0, 0, 0, 0.367), rgba(0, 0, 0, 0.297)), url('../images/SignupBG.jpg');
   background-size: cover;
   background-position: center;

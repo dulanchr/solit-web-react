@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import './feedtutor.css';
-import AssignmentsTab from './AssignmentsTab';
-import CoursesTab from './CoursesTab';
-import StudentsTab from './StudentsTab';
-import logocore from '../images/logo-core-c.png';
+import React, { useState } from "react";
+import "./feedtutor.css";
+import AssignmentsTab from "./AssignmentsTab";
+import CoursesTab from "./CoursesTab";
+import StudentsTab from "./StudentsTab";
+import logocore from "../images/logo-core-c.png";
 
 const FeedTab = () => (
   <div>
@@ -13,7 +13,7 @@ const FeedTab = () => (
 );
 
 export default function FeedTutor() {
-  const [activeTab, setActiveTab] = useState('feed');
+  const [activeTab, setActiveTab] = useState("feed");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -21,13 +21,13 @@ export default function FeedTutor() {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'feed':
+      case "feed":
         return <FeedTab />;
-      case 'assignments':
+      case "assignments":
         return <AssignmentsTab />;
-      case 'courses':
+      case "courses":
         return <CoursesTab />;
-      case 'students':
+      case "students":
         return <StudentsTab />;
       default:
         return null;
@@ -39,34 +39,61 @@ export default function FeedTutor() {
       <div className="dash-container">
         <div className="dash-sidebar">
           <div className="dash-logo">
-            <img src={logocore} width={160} alt="logocore" style={{ marginLeft: '.5vw' }} />
+            <img
+              src={logocore}
+              width={160}
+              alt="logocore"
+              style={{ marginLeft: ".5vw" }}
+            />
           </div>
           <ul className="dash-nav">
             <li>
-              <a href="#" className={`dash-nav-item ${activeTab === 'feed' ? 'active' : ''}`} onClick={() => handleTabClick('feed')}>
+              <a
+                href="#"
+                className={`dash-nav-item ${
+                  activeTab === "feed" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("feed")}
+              >
                 Feed
               </a>
             </li>
             <li>
-              <a href="#" className={`dash-nav-item ${activeTab === 'assignments' ? 'active' : ''}`} onClick={() => handleTabClick('assignments')}>
+              <a
+                href="#"
+                className={`dash-nav-item ${
+                  activeTab === "assignments" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("assignments")}
+              >
                 Assignments
               </a>
             </li>
             <li>
-              <a href="#" className={`dash-nav-item ${activeTab === 'courses' ? 'active' : ''}`} onClick={() => handleTabClick('courses')}>
+              <a
+                href="#"
+                className={`dash-nav-item ${
+                  activeTab === "courses" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("courses")}
+              >
                 Courses
               </a>
             </li>
             <li>
-              <a href="#" className={`dash-nav-item ${activeTab === 'students' ? 'active' : ''}`} onClick={() => handleTabClick('students')}>
+              <a
+                href="#"
+                className={`dash-nav-item ${
+                  activeTab === "students" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("students")}
+              >
                 Students
               </a>
             </li>
           </ul>
         </div>
-        <div className="dash-content">
-          {renderContent()}
-        </div>
+        <div className="dash-content">{renderContent()}</div>
       </div>
     </div>
   );

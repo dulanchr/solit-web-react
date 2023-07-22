@@ -13,6 +13,7 @@ import FeedTutor from "../Pages/DashboardTutor/FeedTutor";
 import FeedStudent from "../Pages/DashboardStudent/FeedStudent";
 import ImageUploader from "../Pages/ImageUploader";
 import CourseContent from "../Pages/Courses/CourseContent";
+import FeedAdmin from "../Pages/DashboardAdmin/FeedAdmin";
 
 export default function AppRouter() {
   return (
@@ -29,11 +30,13 @@ export default function AppRouter() {
           <Route path="/aboutus" element={<Aboutus />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup/:usercode" element={<SignUp />} />
           <Route path="/core" element={<Core />} />
           <Route path="/pay/:id" element={<Pay />} />
 
           <Route path="/feedtutor" element={<FeedTutor />} />
           <Route path="/feedstudent" element={<FeedStudent />} />
+          <Route path="/feedadmin" element={<FeedAdmin />} />
 
           <Route path="/image" element={<ImageUploader />} />
         </Routes>

@@ -62,6 +62,9 @@ const PaymentRouter = require('./routes/Payments');
 app.use("/payment", PaymentRouter);
 
 
+const RequesterRouter = require('./routes/Requesters');
+app.use("/requester", RequesterRouter);
+
 const UploadRouter = require('./routes/Uploads');
 app.use("/upload", UploadRouter);
 

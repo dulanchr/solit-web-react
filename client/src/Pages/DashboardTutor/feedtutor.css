@@ -84,7 +84,8 @@
     flex: 1;
     padding: 20px;
     background-color: #ebebeb;
-    overflow: hidden;      /* Clip the content that exceeds the container */
+    overflow: hidden;
+    overflow-y: auto;    /* Clip the content that exceeds the container */
         /* Enable vertical scrolling when necessary */
   }
   

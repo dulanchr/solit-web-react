@@ -13,19 +13,6 @@ router.post('/', async (req, res) => {
   try {
     const paymentData = req.body;
     const createdPayment = await Payment.create(paymentData);
-    res.json(createdPayment);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to create payment' });
-  }
-});
-
-
-router.post('/', async (req, res) => {
-  try {
-    const paymentData = req.body;
-    const createdPayment = await Payment.create(paymentData);
-
 
     const transporter = nodemailer.createTransport({
       service: 'Gmail', // You can change this to another email service provider if needed
@@ -51,7 +38,8 @@ router.post('/', async (req, res) => {
       }
     });
 
-    res.json(createdPayment);
+    
+    res.json({ payment: createdPayment });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create payment' });
