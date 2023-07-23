@@ -55,7 +55,7 @@ export default function FeedTutor() {
                 }`}
                 onClick={() => handleTabClick("feed")}
               >
-                Feed
+                <i class="fi fi-br-apps"></i> Feed
               </a>
             </li>
             <li>
@@ -66,7 +66,7 @@ export default function FeedTutor() {
                 }`}
                 onClick={() => handleTabClick("assignments")}
               >
-                Assignments
+                <i class="fi fi-br-document"></i>Assignments
               </a>
             </li>
             <li>
@@ -77,7 +77,7 @@ export default function FeedTutor() {
                 }`}
                 onClick={() => handleTabClick("courses")}
               >
-                Courses
+                <i class="fi fi-br-bookmark"></i> Courses
               </a>
             </li>
             <li>
@@ -88,7 +88,7 @@ export default function FeedTutor() {
                 }`}
                 onClick={() => handleTabClick("students")}
               >
-                Students
+                <i class="fi fi-rr-users-alt"></i>Students
               </a>
             </li>
           </ul>

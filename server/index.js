@@ -65,6 +65,14 @@ app.use("/payment", PaymentRouter);
 const RequesterRouter = require('./routes/Requesters');
 app.use("/requester", RequesterRouter);
 
+
+const StudRegisterRouter = require('./routes/StudRegisters');
+app.use("/studregister", StudRegisterRouter);
+const StudRegCoreRouter = require('./routes/StudRegCore');
+app.use("/studregcore", StudRegCoreRouter);
+const ToturRegisterRouter = require('./routes/TutorRegisters');
+app.use("/tutorregister", ToturRegisterRouter);
+
 const UploadRouter = require('./routes/Uploads');
 app.use("/upload", UploadRouter);
 

@@ -3,7 +3,6 @@
     height: 100vh;
     z-index: 10000; 
     position: fixed; 
-    
     top: 0;
     left: 0;
     right: 0;
@@ -23,15 +22,16 @@
   
   .dash-sidebar {
     border-radius: 0 0 0 0;
-    width: 250px;
-    background-color: #FAFAFA;
+    width: 220px;
+    background-color: #ffffff;
+    /* background: linear-gradient(rgba(1, 4, 26, 0.233), rgba(0, 0, 0, 0.162)), url('../images/banner-feed.png'); */
     color: #171717;
     padding: 20px;
   }
 
   .dash-sidebar2 {
     margin-top: -10vh;
-    background: linear-gradient(rgba(1, 4, 26, 0.233), rgba(0, 0, 0, 0.162)), url('../images/banner-feed.png');
+    
     background-size: cover;
     background-position: center;
     border-radius: 0 0 0 0;
@@ -61,29 +61,49 @@
     list-style-type: none;
     padding: 0;
     margin: 0;
+    font-weight: 500;
     
   }
   
   .dash-nav-item {
+    display: flex;
+    align-items: center; /* Align the icon and text vertically */
     border-radius: 5px;
-    display: block;
-    padding: 10px;
-    color: #9b9b9b;
+    padding: 15px;
+    color: #3c3c3c;
     text-decoration: none;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.1s ease;
+    font-size: 1.1rem;
+    margin-top: 10px;
+    border-radius: 20px;
+    
   }
+  
+  /* New icon class to style the icon */
+  .dash-nav-item  i {
+    
+    margin: 5px 15px 0px 10px;
+    font-size: 1rem /* Set the size of the icon */
+  }
+  
+
+ 
   .dash-nav-item.active {
-    background-color: #c4c4c445; 
+    border-radius: 20px;
+    background-color: #283fc313;
+    color: #283FC3; 
   }
   .dash-nav-item:hover {
-    background-color: #c4c4c445;
+    border-radius: 20px;
+    background-color: #283fc313;
+    color: #283FC3;
   }
   
   .dash-content {
     border-radius: 0px 0 0 0px;
     flex: 1;
     padding: 20px;
-    background-color: #ebebeb;
+    background-color: #EFF0F2;
     overflow: hidden;
     overflow-y: auto;    /* Clip the content that exceeds the container */
         /* Enable vertical scrolling when necessary */

@@ -1,0 +1,61 @@
+/* Styling for the newtutor-container */
+.newtutor-container {
+    background-color: #fff;
+    color: #888888;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+    padding: 20px;
+    min-width: 30vw;
+    max-width:30vw;
+    overflow: hidden;
+  }
+
+.newtutor-container h2{
+    margin-top: -0vh;
+    font-weight: 100;
+    font-size: 2rem;
+}
+  
+  /* Styling for the newtutor-form */
+  .newtutor-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Styling for the newtutor-form-group */
+  .newtutor-form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .newtutor-form-group label {
+    font-weight: 500;
+    color: #2f2f2f;
+    width: 100%;
+  display: block;
+  }
+  
+  .newtutor-form-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100vw;
+  }
+  
+  /* Styling for the newtutor-btn */
+  .newtutor-btn {
+    width: 100px;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 23.4vw;
+  }
+  
+  .newtutor-btn:hover {
+    background-color: #0056b3;
+  }
+  

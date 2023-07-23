@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "../DashboardTutor/feedtutor.css";
-import AssignmentsTab from "../DashboardTutor/AssignmentsTab";
-import CoursesTab from "../DashboardTutor/CoursesTab";
 import logocore from "../images/logo-core-c.png";
 import NewStudentsTab from "./NewStudentsTab";
+import NewTeachers from "./NewTeachers";
+import NewClasses from "./NewClasses";
+import FetchRequesters from "./NewStudentsTab";
 
 const FeedTab = () => (
   <div>
@@ -23,12 +24,12 @@ export default function FeedAdmin() {
     switch (activeTab) {
       case "feed":
         return <FeedTab />;
-      case "assignments":
-        return <AssignmentsTab />;
-      case "courses":
-        return <CoursesTab />;
       case "newstudents":
-        return <NewStudentsTab />;
+        return <FetchRequesters />;
+      case "newteachers":
+        return <NewTeachers />;
+      case "newclasses":
+        return <NewClasses />;
       default:
         return null;
     }
@@ -41,7 +42,7 @@ export default function FeedAdmin() {
           <div className="dash-logo">
             <img
               src={logocore}
-              width={160}
+              width={120}
               alt="logocore"
               style={{ marginLeft: ".5vw" }}
             />
@@ -55,40 +56,43 @@ export default function FeedAdmin() {
                 }`}
                 onClick={() => handleTabClick("feed")}
               >
-                Feed
+                <i class="fi fi-br-apps"></i>Feed
               </a>
             </li>
+
             <li>
               <a
                 href="#"
                 className={`dash-nav-item ${
-                  activeTab === "assignments" ? "active" : ""
-                }`}
-                onClick={() => handleTabClick("assignments")}
-              >
-                Assignments
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={`dash-nav-item ${
-                  activeTab === "courses" ? "active" : ""
-                }`}
-                onClick={() => handleTabClick("courses")}
-              >
-                Courses
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={`dash-nav-item ${
-                  activeTab === "students" ? "active" : ""
+                  activeTab === "newstudents" ? "active" : ""
                 }`}
                 onClick={() => handleTabClick("newstudents")}
               >
-                New Students
+                <i class="fi fi-rr-user-add"></i>New Stdudents
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#"
+                className={`dash-nav-item ${
+                  activeTab === "newteachers" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("newteachers")}
+              >
+                <i class="fi fi-sr-user-add"></i>New Teachers
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#"
+                className={`dash-nav-item ${
+                  activeTab === "newclasses" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("newclasses")}
+              >
+                <i class="fi fi-br-add"></i>New Classes
               </a>
             </li>
           </ul>

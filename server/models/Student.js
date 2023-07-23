@@ -17,11 +17,11 @@ module.exports = (sequelize, DataTypes) => {
 
     fether: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     rating: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     gender: {
       type: DataTypes.STRING,
