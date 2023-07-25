@@ -14,7 +14,7 @@ export default function NewStudentsTab() {
 
   const fetchStudentData = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/requester");
+      const response = await axios.get("http://localhost:3001/studregcore");
       setStudents(response.data);
     } catch (error) {
       console.error(error);
@@ -22,48 +22,10 @@ export default function NewStudentsTab() {
     }
   };
 
-  const handleAcceptClick = (student) => {
-    setSelectedStudent(student);
-    setShowAcceptPopup(true);
-  };
-
-  const handleRejectClick = (student) => {
-    setSelectedStudent(student);
-    setShowRejectPopup(true);
-  };
-
-  const handleOkClick = async () => {
-    // Add student or delete student based on the pop-up context
-    try {
-      if (showAcceptPopup) {
-        // Perform the action to add student here (POST)
-        await axios.post("http://localhost:3001/register", selectedStudent);
-      } else if (showRejectPopup) {
-        // Perform the action to delete student here (DELETE)
-        await axios.delete(
-          `http://localhost:3001/requester/${selectedStudent.requesterId}`
-        );
-      }
-      setShowAcceptPopup(false);
-      setShowRejectPopup(false);
-      setSelectedStudent(null);
-      fetchStudentData(); // Refresh student data after the action is performed
-    } catch (error) {
-      console.error(error);
-      // Handle error here (show an error message, etc.)
-    }
-  };
-
-  const handleBackClick = () => {
-    setShowAcceptPopup(false);
-    setShowRejectPopup(false);
-    setSelectedStudent(null);
-  };
-
   return (
     <div className="newstudents-container">
-      {students.map((student, index) => (
-        <div key={index} className="newstudents-card">
+      {students.map((student) => (
+        <div key={student.id} className="newstudents-card">
           <div className="avatar">
             {/* You can add an image here as the student's avatar */}
             {/* <img src="student-avatar.jpg" alt="Student Avatar" /> */}
@@ -75,7 +37,7 @@ export default function NewStudentsTab() {
                 type="text"
                 id="firstName"
                 name="firstName"
-                value={student.firstname}
+                value={student.Student.firstname}
                 readOnly
               />
             </div>
@@ -85,7 +47,7 @@ export default function NewStudentsTab() {
                 type="text"
                 id="lastName"
                 name="lastName"
-                value={student.lastname}
+                value={student.Student.lastname}
                 readOnly
               />
             </div>
@@ -95,7 +57,7 @@ export default function NewStudentsTab() {
                 type="text"
                 id="gender"
                 name="gender"
-                value={student.gender}
+                value={student.Student.gender}
                 readOnly
               />
             </div>
@@ -105,7 +67,7 @@ export default function NewStudentsTab() {
                 type="text"
                 id="tel"
                 name="tel"
-                value={student.tel}
+                value={student.Student.tel}
                 readOnly
               />
             </div>
@@ -115,7 +77,7 @@ export default function NewStudentsTab() {
                 type="text"
                 id="telParent"
                 name="telParent"
-                value={student.telparent}
+                value={student.Student.telparent}
                 readOnly
               />
             </div>
@@ -125,7 +87,7 @@ export default function NewStudentsTab() {
                 type="text"
                 id="address"
                 name="address"
-                value={student.address}
+                value={student.Student.address}
                 readOnly
               />
             </div>
@@ -135,7 +97,7 @@ export default function NewStudentsTab() {
                 type="text"
                 id="school"
                 name="school"
-                value={student.school}
+                value={student.Student.school}
                 readOnly
               />
             </div>
@@ -145,7 +107,7 @@ export default function NewStudentsTab() {
                 type="text"
                 id="grade"
                 name="grade"
-                value={student.grade}
+                value={student.Student.grade}
                 readOnly
               />
             </div>
@@ -153,14 +115,14 @@ export default function NewStudentsTab() {
               <button
                 type="button" // Set type to "button" to prevent form submission
                 className="accept-button"
-                onClick={() => handleAcceptClick(student)}
+                // onClick={() => handleAcceptClick(student)}
               >
                 Accept
               </button>
               <button
                 type="button" // Set type to "button" to prevent form submission
                 className="reject-button"
-                onClick={() => handleRejectClick(student)}
+                // onClick={() => handleRejectClick(student)}
               >
                 Reject
               </button>
@@ -168,48 +130,6 @@ export default function NewStudentsTab() {
           </form>
         </div>
       ))}
-
-      {/* Accept Pop-up */}
-      {showAcceptPopup && (
-        <div className="popup-container">
-          <div className="popup">
-            <div className="popup-content">
-              <p>Payment Successful!</p>
-              <h1>
-                <i className="fi fi-rr-envelope-download"></i>
-              </h1>
-              <p>
-                Are you sure? This action will add a new student in the CORE
-                community.
-              </p>
-              <p>Thank you for the purchase!</p>
-              <button onClick={handleOkClick}>ADD STUDENT</button>
-              <button onClick={handleBackClick}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Reject Pop-up */}
-      {showRejectPopup && (
-        <div className="popup-container">
-          <div className="popup">
-            <div className="popup-content">
-              <p>Payment Successful!</p>
-              <h1>
-                <i className="fi fi-rr-envelope-download"></i>
-              </h1>
-              <p>
-                Are you sure? This action will delete the user data forever.
-                This cannot be undone.
-              </p>
-              <p>Thank you for the purchase!</p>
-              <button onClick={handleOkClick}>DELETE REQUEST</button>
-              <button onClick={handleBackClick}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

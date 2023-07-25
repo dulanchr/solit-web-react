@@ -96,11 +96,33 @@ const SignUp = () => {
     }
 
     try {
-      // Fetch the user data associated with the user code from the backe
-
       // Simulated API call to post sign-up data to the server
-      const requesterData = {
+      const userData = {
         email,
+        password,
+        validity: false, // Setting the validity to false for the new user
+      };
+
+      // Create a new user
+      const userResponse = await fetch("http://localhost:3001/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!userResponse.ok) {
+        setFormData({
+          ...formData,
+          error: "Sign-up failed. Please try again.",
+        });
+        return;
+      }
+
+      const userResult = await userResponse.json();
+
+      const studentData = {
         firstname: firstName,
         lastname: lastName,
         gender,
@@ -109,19 +131,19 @@ const SignUp = () => {
         address,
         school,
         grade,
+        userId: userResult.userId, // Associate the student with the newly created user
       };
 
-      // Create a new requester
-      const requesterResponse = await fetch("http://localhost:3001/requester", {
+      // Create a new student
+      const studentResponse = await fetch("http://localhost:3001/student", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requesterData),
+        body: JSON.stringify(studentData),
       });
-
-      if (requesterResponse.ok) {
-        // Requester creation successful
+      if (studentResponse.ok) {
+        // Requester and student creation successful
         setFormData({
           email: "",
           phoneNumber: "",
@@ -140,7 +162,7 @@ const SignUp = () => {
         // Show the popup when the sign-up is successful
         setPopupVisible(true);
       } else {
-        // Requester creation failed, display error message
+        // Student creation failed, display error message
         setFormData({
           ...formData,
           error: "Sign-up failed. Please try again.",

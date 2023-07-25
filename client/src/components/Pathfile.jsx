@@ -14,6 +14,8 @@ import FeedStudent from "../Pages/DashboardStudent/FeedStudent";
 import ImageUploader from "../Pages/ImageUploader";
 import CourseContent from "../Pages/Courses/CourseContent";
 import FeedAdmin from "../Pages/DashboardAdmin/FeedAdmin";
+import ClassContent from "../Pages/Classes/ClassContent";
+import TeacherContent from "../Pages/Classes/TeacherContent";
 
 export default function AppRouter() {
   return (
@@ -22,21 +24,25 @@ export default function AppRouter() {
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/classes" element={<Classes />} />
+          <Route path="/classcontent/:id" element={<ClassContent />} />
+          <Route path="/teachercontent/:id" element={<TeacherContent />} />
 
           <Route path="/courses" element={<Courses />} />
           <Route path="/coursecontent/:id" element={<CourseContent />} />
 
           <Route path="/signupforcourses" element={<Courses2 />} />
           <Route path="/aboutus" element={<Aboutus />} />
+
           <Route path="/login" element={<Login />} />
+          <Route path="/feedtutor/:id" element={<FeedTutor />} />
+          <Route path="/feedstudent/:id" element={<FeedStudent />} />
+          <Route path="/feedadmin/:id" element={<FeedAdmin />} />
+
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signup/:usercode" element={<SignUp />} />
+
           <Route path="/core" element={<Core />} />
           <Route path="/pay/:id" element={<Pay />} />
-
-          <Route path="/feedtutor" element={<FeedTutor />} />
-          <Route path="/feedstudent" element={<FeedStudent />} />
-          <Route path="/feedadmin" element={<FeedAdmin />} />
 
           <Route path="/image" element={<ImageUploader />} />
         </Routes>

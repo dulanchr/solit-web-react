@@ -25,7 +25,7 @@ export default function CourseContainer() {
       case "ICT":
         return "#F8B739";
       default:
-        return "#e96d71"; // Default color if category not found
+        return "#e96d71";
     }
   };
 

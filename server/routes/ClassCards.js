@@ -21,4 +21,25 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/byId/:Id', async (req, res) => {
+  const Id = req.params.Id;
+  try {
+    const classcontent = await Class.findByPk(Id, {
+      include: [
+        {
+          model: Tutor,
+          attributes: ['firstname', 'lastname'],
+        },
+      ],
+    });
+    if (!classcontent) {
+      return res.status(404).json({ error: 'Class content not found.' });
+    }
+    res.json(classcontent);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 module.exports = router;

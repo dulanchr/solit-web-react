@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./login.css";
 import logocore from "./images/logo-core.png";
 import slogancore from "./images/slogan-core.png";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 
-const Login = (props) => {
+const Login = () => {
   const navigate = useNavigate(); // Initialize the useNavigate hook
 
   const [email, setEmail] = useState("");
@@ -14,28 +14,25 @@ const Login = (props) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch(
         `http://localhost:3001/login?email=${email}&password=${password}`
       );
-  
+
       if (response.ok) {
         const { userType, user } = await response.json();
-  
+
         if (userType === "admin") {
-          navigate("/feedadmin");
-
+          navigate(`/feedadmin/${user.userId}`); // Pass the user ID as a parameter
         } else if (userType === "tutor") {
-          navigate("/feedtutor");
-
+          navigate(`/feedtutor/${user.userId}`); // Pass the user ID as a parameter
         } else if (userType === "student") {
-          navigate("/feedstudent");
-          
+          navigate(`/feedstudent/${user.userId}`); // Pass the user ID as a parameter
         } else {
           setError("Invalid user type");
         }
-  
+
         // Clear input fields and error state
         setEmail("");
         setPassword("");
@@ -48,7 +45,6 @@ const Login = (props) => {
       setError("An error occurred. Please try again later.");
     }
   };
-  
 
   return (
     <>

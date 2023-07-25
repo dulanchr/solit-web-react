@@ -1,0 +1,80 @@
+/* classlist.css */
+
+.classli-list {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    text-align: center;
+    color: #333;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .classli-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+  }
+  
+  .classli-title {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 0;
+  }
+  
+  .classli-location {
+    font-size: 1rem;
+    color: #777;
+    margin: 0;
+  }
+  
+  .classli-buttons {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    
+  }
+  
+  /* Styles for the Edit button */
+  .classli-editbtn button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .classli-editbtn button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Styles for the Remove button */
+  .classli-removebtn button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .classli-removebtn button:hover {
+    background-color: #c82333;
+  }
+  

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "./feedtutor.css";
 import AssignmentsTab from "./AssignmentsTab";
 import CoursesTab from "./CoursesTab";
 import StudentsTab from "./StudentsTab";
 import logocore from "../images/logo-core-c.png";
+import axios from "axios";
 
 const FeedTab = () => (
   <div>
@@ -13,7 +15,21 @@ const FeedTab = () => (
 );
 
 export default function FeedTutor() {
+  const { id } = useParams(); // Get the id parameter from the URL
   const [activeTab, setActiveTab] = useState("feed");
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/user/byMail/${id}`) // Fetch user data by id
+      .then((response) => {
+        setUserData(response.data);
+        setActiveTab(response.data.email); // Set the activeTab state with the email field
+      })
+      .catch((error) => {
+        console.error("Error fetching user content:", error);
+      });
+  }, [id]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -55,7 +71,7 @@ export default function FeedTutor() {
                 }`}
                 onClick={() => handleTabClick("feed")}
               >
-                <i class="fi fi-br-apps"></i> Feed
+                <i class="fi fi-br-apps"></i> Feed {activeTab.email}
               </a>
             </li>
             <li>

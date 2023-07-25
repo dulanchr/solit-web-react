@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import '../DashboardTutor/feedtutor.css';
-import AssignmentsTab from '../DashboardTutor/AssignmentsTab';
-import CoursesTab from '../DashboardTutor/CoursesTab';
-import StudentsTab from '../DashboardTutor/StudentsTab';
-import logocore from '../images/logo-core-c.png';
+import React, { useEffect, useState } from "react";
+import "../DashboardTutor/feedtutor.css";
+import AssignmentsTab from "../DashboardTutor/AssignmentsTab";
+import CoursesTab from "../DashboardTutor/CoursesTab";
+import StudentsTab from "../DashboardTutor/StudentsTab";
+import logocore from "../images/logo-core-c.png";
+import axios from "axios";
 
 const FeedTab = () => (
   <div>
@@ -13,7 +14,23 @@ const FeedTab = () => (
 );
 
 export default function FeedStudent() {
-  const [activeTab, setActiveTab] = useState('feed');
+  const [activeTab, setActiveTab] = useState("feed");
+  const [userData, setUserData] = useState(null);
+
+  // Assuming you have the userId available in the component
+  const userId = "YOUR_USER_ID_HERE"; // Replace this with the actual user ID
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/user/byId/${userId}`) // Fetch user data by id
+      .then((response) => {
+        setUserData(response.data);
+        setActiveTab("feed"); // Set the activeTab to 'feed' by default
+      })
+      .catch((error) => {
+        console.error("Error fetching user content:", error);
+      });
+  }, [userId]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -21,13 +38,13 @@ export default function FeedStudent() {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'feed':
+      case "feed":
         return <FeedTab />;
-      case 'assignments':
+      case "assignments":
         return <AssignmentsTab />;
-      case 'courses':
+      case "courses":
         return <CoursesTab />;
-      case 'students':
+      case "students":
         return <StudentsTab />;
       default:
         return null;
@@ -39,34 +56,61 @@ export default function FeedStudent() {
       <div className="dash-container">
         <div className="dash-sidebar">
           <div className="dash-logo">
-            <img src={logocore} width={160} alt="logocore" style={{ marginLeft: '.5vw' }} />
+            <img
+              src={logocore}
+              width={160}
+              alt="logocore"
+              style={{ marginLeft: ".5vw" }}
+            />
           </div>
           <ul className="dash-nav">
             <li>
-              <a href="#" className={`dash-nav-item ${activeTab === 'feed' ? 'active' : ''}`} onClick={() => handleTabClick('feed')}>
+              <a
+                href="#"
+                className={`dash-nav-item ${
+                  activeTab === "feed" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("feed")}
+              >
                 Feed
               </a>
             </li>
             <li>
-              <a href="#" className={`dash-nav-item ${activeTab === 'assignments' ? 'active' : ''}`} onClick={() => handleTabClick('assignments')}>
+              <a
+                href="#"
+                className={`dash-nav-item ${
+                  activeTab === "assignments" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("assignments")}
+              >
                 Assignments
               </a>
             </li>
             <li>
-              <a href="#" className={`dash-nav-item ${activeTab === 'courses' ? 'active' : ''}`} onClick={() => handleTabClick('courses')}>
+              <a
+                href="#"
+                className={`dash-nav-item ${
+                  activeTab === "courses" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("courses")}
+              >
                 Courses
               </a>
             </li>
             <li>
-              <a href="#" className={`dash-nav-item ${activeTab === 'students' ? 'active' : ''}`} onClick={() => handleTabClick('students')}>
+              <a
+                href="#"
+                className={`dash-nav-item ${
+                  activeTab === "students" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("students")}
+              >
                 Students
               </a>
             </li>
           </ul>
         </div>
-        <div className="dash-content">
-          {renderContent()}
-        </div>
+        <div className="dash-content">{renderContent()}</div>
       </div>
     </div>
   );

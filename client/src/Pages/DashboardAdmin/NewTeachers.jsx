@@ -10,6 +10,7 @@ export default function NewTeachers() {
     description: "",
     email: "",
     password: "",
+    Validity: true,
   });
 
   const [showAcceptPopup, setShowAcceptPopup] = useState(false);

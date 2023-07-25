@@ -6,7 +6,7 @@
   gap: 20px; /* Add some space between cards */
   height: auto;
   width: 78vw;
-  background-color: #2ecc71;
+  background-color: #2ecc7000;
   padding: 20px; 
   
 }
@@ -15,8 +15,9 @@
 .newstudents-card {
 
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #686868;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
   padding: 20px;
   min-width: 20vw;
   max-width:20vw;
@@ -69,15 +70,17 @@ width: 100%;
 .reject-button {
   padding: 10px 20px;
   border: none;
-  color: #fff;
+  font-weight: bold;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
 .accept-button {
-  background-color: #2ecc71;
+  background-color: #1bc562af;
+  color: #ffffff;
 }
 
 .reject-button {
-  background-color: #e74c3c;
+  background-color: #e74d32bd;
+  color: #ffffff;
 }

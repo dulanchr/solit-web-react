@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
+    validity: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
   });
 
   return User;

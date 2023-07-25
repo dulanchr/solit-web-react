@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../DashboardTutor/feedtutor.css";
 import logocore from "../images/logo-core-c.png";
 import NewStudentsTab from "./NewStudentsTab";
 import NewTeachers from "./NewTeachers";
 import NewClasses from "./NewClasses";
 import FetchRequesters from "./NewStudentsTab";
+import axios from "axios";
 
 const FeedTab = () => (
   <div>
@@ -15,6 +16,22 @@ const FeedTab = () => (
 
 export default function FeedAdmin() {
   const [activeTab, setActiveTab] = useState("feed");
+  const [userData, setUserData] = useState(null);
+
+  // Assuming you have the userId available in the component
+  const userId = "ID"; // Replace this with the actual user ID
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/user/byId/${userId}`) // Fetch user data by id
+      .then((response) => {
+        setUserData(response.data);
+        setActiveTab("feed"); // Set the activeTab to 'feed' by default
+      })
+      .catch((error) => {
+        console.error("Error fetching user content:", error);
+      });
+  }, [userId]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);

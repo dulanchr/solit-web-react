@@ -61,11 +61,6 @@ app.use("/login", LoginRouter);
 const PaymentRouter = require('./routes/Payments');
 app.use("/payment", PaymentRouter);
 
-
-const RequesterRouter = require('./routes/Requesters');
-app.use("/requester", RequesterRouter);
-
-
 const StudRegisterRouter = require('./routes/StudRegisters');
 app.use("/studregister", StudRegisterRouter);
 const StudRegCoreRouter = require('./routes/StudRegCore');
