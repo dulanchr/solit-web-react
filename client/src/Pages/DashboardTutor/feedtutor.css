@@ -110,3 +110,46 @@
   }
   
   
+
+  .addc-form {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  /* Styling for the addc-form-group */
+  .addc-form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .addc-form-group label {
+    font-weight: 500;
+    color: #2f2f2f;
+    width: 100%;
+  display: block;
+  }
+  
+  .addc-form-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100vw;
+  }
+  
+  /* Styling for the addc-btn */
+  .addc-btn {
+    width: 100px;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 23.4vw;
+  }
+  
+  .addc-btn:hover {
+    background-color: #0056b3;
+  }
+  

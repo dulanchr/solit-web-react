@@ -1,30 +1,21 @@
-import React, { useState } from "react";
-import "./coursestab.css";
-import CourseContainer from "../Courses/CourseContainer";
+import React, { useState, useEffect } from "react";
 
 import { storage } from "../../firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { v4 } from "uuid";
+import { ref, uploadBytes } from "firebase/storage";
 
-export default function CoursesTab() {
+export default function CourseTab() {
   const [imageUpload, setImageUpload] = useState(null);
-
-  const uploadImage = () => {
+  const uploadImage = (courseId) => {
     if (imageUpload == null) return;
 
-    const uniqueFilename = imageUpload.name + v4();
-    const imageRef = ref(storage, `CourseThumbs/${uniqueFilename}`);
+    // Use the class ID to rename the image file
+    const imageRef = ref(
+      storage,
+      `CourseThumbs/${courseId}/${imageUpload.name}`
+    );
 
     uploadBytes(imageRef, imageUpload)
       .then(() => {
-        // Get the download URL of the uploaded image
-        getDownloadURL(imageRef).then((downloadURL) => {
-          // Update the thumbnail field in formData with the download URL
-          setFormData((prevState) => ({
-            ...prevState,
-            thumbnail: downloadURL,
-          }));
-        });
         alert("Image Uploaded");
       })
       .catch((error) => {
@@ -32,292 +23,191 @@ export default function CoursesTab() {
       });
   };
 
-  const [formData, setFormData] = useState({
+  const [courseData, setCourseData] = useState({
     title: "",
-    category: "",
+    description: "",
     episodes: "",
     price: "",
-    description: "",
-    thumbnail: null,
     courselink: "",
+    tutorId: "", // To store the selected tutor ID
+    category: "",
   });
 
-  const [formErrors, setFormErrors] = useState({
-    title: "",
-    category: "",
-    episodes: "",
-    price: "",
-    description: "",
-    courselink: "",
-  });
+  const [tutors, setTutors] = useState([]); // To store the tutor data fetched from the API
+
+  useEffect(() => {
+    // Fetch tutor data from the API and store it in the "tutors" state
+    fetch("http://localhost:3001/tutor")
+      .then((response) => response.json())
+      .then((data) => setTutors(data))
+      .catch((error) => console.error("Error fetching tutor data:", error));
+  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prevState) => ({
-      ...prevState,
+    setCourseData({
+      ...courseData,
       [name]: value,
-    }));
-    setFormErrors((prevState) => ({
-      ...prevState,
-      [name]: "",
-    }));
+    });
   };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setFormData((prevState) => ({
-      ...prevState,
-      thumbnail: file,
-    }));
-  };
-
-  const uploadThumbnail = async (thumbnailFile) => {
-    if (!thumbnailFile) return null;
-
-    const formData = new FormData();
-    formData.append("thumbnail", thumbnailFile);
-
-    const requestOptions = {
-      method: "POST",
-      body: formData,
-    };
-
-    const response = await fetch(
-      "http://localhost:3001/upload",
-      requestOptions
-    );
-    const data = await response.json();
-
-    if (response.ok) {
-      return data.thumbnailUrl;
-    } else {
-      throw new Error("Failed to upload thumbnail");
-    }
-  };
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Validation checks
-    let hasErrors = false;
-    const newFormErrors = {
-      title: "",
-      category: "",
-      episodes: "",
-      price: "",
-      description: "",
-      courselink: "",
-    };
-
-    if (formData.title.trim() === "") {
-      newFormErrors.title = "Required.";
-      hasErrors = true;
-    }
-
-    if (formData.category.trim() === "") {
-      newFormErrors.category = "Required.";
-      hasErrors = true;
-    }
-
-    if (formData.episodes.trim() === "") {
-      newFormErrors.episodes = "Required";
-      hasErrors = true;
-    } else if (!/^\d+$/.test(formData.episodes.trim())) {
-      newFormErrors.episodes = "Enter a valid number.";
-      hasErrors = true;
-    }
-
-    if (formData.price.trim() === "") {
-      newFormErrors.price = "Required";
-      hasErrors = true;
-    } else if (!/^\d+$/.test(formData.price.trim())) {
-      newFormErrors.price = "Enter a valid price (integer only).";
-      hasErrors = true;
-    }
-
-    if (formData.description.trim() === "") {
-      newFormErrors.description = "Required";
-      hasErrors = true;
-    }
-
-    if (formData.courselink.trim() === "") {
-      newFormErrors.courselink = "Required";
-      hasErrors = true;
-    } else if (
-      !/^(ftp|http|https):\/\/[^ "]+$/.test(formData.courselink.trim())
-    ) {
-      newFormErrors.courselink = "Enter a valid web link.";
-      hasErrors = true;
-    }
-
-    if (hasErrors) {
-      setFormErrors(newFormErrors);
-      return;
-    }
-
-    const thumbnailUrl = await uploadThumbnail(formData.thumbnail);
-
-    const courseData = {
-      title: formData.title,
-      category: formData.category,
-      episodes: formData.episodes,
-      price: formData.price,
-      description: formData.description,
-      thumbnail: thumbnailUrl,
-      courselink: formData.courselink,
-    };
-
-    const requestOptions = {
+    fetch("http://localhost:3001/course", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(courseData),
-    };
-
-    fetch("http://localhost:3001/course", requestOptions)
+    })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Data successfully submitted:", data);
-        // Reset the form after submission if needed
-        setFormData({
+        console.log("New course added:", data);
+
+        if (data && data.courseId) {
+          uploadImage(data.courseId);
+        }
+
+        setCourseData({
           title: "",
-          category: "",
+          description: "",
           episodes: "",
           price: "",
-          description: "",
           courselink: "",
-          thumbnail: null,
+          tutorId: "",
+          category: "",
         });
       })
       .catch((error) => {
-        console.error("Error submitting data:", error);
+        // Handle error
+        console.error("Error adding new course:", error);
       });
   };
 
+  const categoryOptions = [
+    "Mathematics",
+    "Combined Mathematics",
+    "O/L Science",
+    "ICT",
+  ];
+
   return (
-    <div className="coursecontorls">
-      <h2 style={{ marginTop: "0vh", fontSize: "1rem", color: "#232323" }}>
-        Add Courses:
-      </h2>
-      <div className="addcourses">
-        <form className="addc-form" onSubmit={handleSubmit}>
-          <div className="addc-form-group">
-            <label htmlFor="title">Title:</label>
+    <div className="newclass-page">
+      <div className="newclass-container">
+        <h2>Add a new course</h2>
+        <form onSubmit={handleSubmit} className="newclass-form">
+          <div className="newclass-form-group">
+            <label htmlFor="className">Course Title:</label>
             <input
               type="text"
-              id="title"
-              name="title"
-              value={formData.title}
+              id="courseTitle"
+              name="title" // Changed from "courseTitle" to "title"
+              value={courseData.title}
               onChange={handleChange}
-              placeholder="Course Title"
+              required
             />
-            {formErrors.title && (
-              <span className="error">{formErrors.title}</span>
-            )}
           </div>
-          <div className="addc-form-group">
+          <div className="newclass-form-group">
+            <label htmlFor="grade">Description:</label>
+            <input
+              type="text"
+              id="grade"
+              name="description" // Changed from "grade" to "description"
+              value={courseData.description}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="newclass-form-group">
+            <label htmlFor="date">Episodes:</label>
+            <input
+              type="text"
+              id="date"
+              name="episodes" // Changed from "date" to "episodes"
+              value={courseData.episodes}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="newclass-form-group">
+            <label htmlFor="time">Price:</label>
+            <input
+              type="text"
+              id="time"
+              name="price" // Changed from "time" to "price"
+              value={courseData.price}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="newclass-form-group">
+            <label htmlFor="location">Course-Link:</label>
+            <input
+              type="text"
+              id="location"
+              name="courselink" // Changed from "location" to "courselink"
+              value={courseData.courselink}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="newclass-form-group">
             <label htmlFor="category">Category:</label>
             <select
               id="category"
               name="category"
-              value={formData.category}
+              value={courseData.category}
               onChange={handleChange}
+              required
             >
-              <option value="">-- Select Category --</option>
-              <option value="Mathematics">Mathematics</option>
-              <option value="Combined Mathematics">Combined Mathematics</option>
-              <option value="O/L Science">O/L Science</option>
-              <option value="ICT">ICT</option>
+              <option value="" disabled>
+                Select a category
+              </option>
+              {categoryOptions.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
             </select>
-            {formErrors.category && (
-              <span className="error">{formErrors.category}</span>
-            )}
           </div>
-          <div className="addc-form-group">
-            <label htmlFor="episodes">Number of Episodes:</label>
-            <input
-              type="number"
-              id="episodes"
-              name="episodes"
-              value={formData.episodes}
+          <div className="newclass-form-group">
+            <label htmlFor="tutorId">Tutor:</label>
+            <select
+              id="tutorId"
+              name="tutorId"
+              value={courseData.tutorId}
               onChange={handleChange}
-              placeholder="23"
-            />
-            {formErrors.episodes && (
-              <span className="error">{formErrors.episodes}</span>
-            )}
+              required
+            >
+              <option value="" disabled>
+                Select a tutor
+              </option>
+              {tutors.map((tutor) => (
+                <option key={tutor.tutorId} value={tutor.tutorId}>
+                  {tutor.firstname} {tutor.lastname}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="addc-form-group">
-            <label htmlFor="price">Price:</label>
-            <input
-              type="number"
-              id="price"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              placeholder="Enter the price"
-            />
-            {formErrors.price && (
-              <span className="error">{formErrors.price}</span>
-            )}
-          </div>
-          <div className="addc-form-group">
-            <label htmlFor="description">Description:</label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Enter the description"
-            ></textarea>
-            {formErrors.description && (
-              <span className="error">{formErrors.description}</span>
-            )}
-          </div>
-          <div className="addc-form-group">
-            <label htmlFor="courselink">Course Link:</label>
-            <input
-              type="text"
-              id="courselink"
-              name="courselink"
-              value={formData.courselink}
-              onChange={handleChange}
-              placeholder="Enter the course link (URL)"
-            />
-            {formErrors.courselink && (
-              <span className="error">{formErrors.courselink}</span>
-            )}
-          </div>
-          <div>
-            <div className="addc-form-group">
-              {/* <h1>Upload Image Page</h1> */}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event) => {
-                  setImageUpload(event.target.files[0]);
-                }}
-              />
-            </div>
-            <button onClick={uploadImage}>Upload</button>
-          </div>
-          <button type="submit" className="addc-btn">
-            Add
-          </button>
-        </form>
-      </div>
-      <h2
-        style={{
-          marginTop: "2vh",
-          fontSize: "1rem",
-          color: "#232323",
-          opacity: "0.5",
-        }}
-      >
-        My Courses:
-      </h2>
 
-      <div className="mycourses">
-        <CourseContainer />
+          <div className="newclass-form-group">
+            <label htmlFor="thumbnail">Select Course Thumbnail:</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(event) => {
+                setImageUpload(event.target.files[0]);
+              }}
+            />
+          </div>
+
+          <button onClick={uploadImage} className="newclass-btn">
+            Add Course
+          </button>
+          {/* <button type="submit" className="newclass-btn">
+        Add Class
+      </button> */}
+        </form>
       </div>
     </div>
   );

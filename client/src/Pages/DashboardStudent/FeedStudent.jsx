@@ -5,6 +5,7 @@ import CoursesTab from "../DashboardTutor/CoursesTab";
 import StudentsTab from "../DashboardTutor/StudentsTab";
 import logocore from "../images/logo-core-c.png";
 import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 
 const FeedTab = () => (
   <div>
@@ -14,11 +15,12 @@ const FeedTab = () => (
 );
 
 export default function FeedStudent() {
+  const { id } = useParams();
   const [activeTab, setActiveTab] = useState("feed");
   const [userData, setUserData] = useState(null);
 
   // Assuming you have the userId available in the component
-  const userId = "YOUR_USER_ID_HERE"; // Replace this with the actual user ID
+  const userId = id; // Replace this with the actual user ID
 
   useEffect(() => {
     axios
@@ -31,7 +33,6 @@ export default function FeedStudent() {
         console.error("Error fetching user content:", error);
       });
   }, [userId]);
-
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };

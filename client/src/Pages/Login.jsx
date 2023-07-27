@@ -3,7 +3,7 @@ import "./login.css";
 import logocore from "./images/logo-core.png";
 import slogancore from "./images/slogan-core.png";
 import Footer from "../components/Footer";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate(); // Initialize the useNavigate hook
@@ -21,7 +21,9 @@ const Login = () => {
       );
 
       if (response.ok) {
-        const { userType, user } = await response.json();
+        const { userType, user, accessToken } = await response.json();
+        console.log("Received access token:", accessToken);
+        localStorage.setItem("accessToken", accessToken);
 
         if (userType === "admin") {
           navigate(`/feedadmin/${user.userId}`); // Pass the user ID as a parameter

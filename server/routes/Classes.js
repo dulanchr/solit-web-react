@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { Class } = require('../models');
+const { Class, Assignment } = require('../models'); // Make sure to import the Assignment model.
 
-// Get all classes
+// Get all classes along with their associated assignments
 router.get('/', async (req, res) => {
   try {
-    const classes = await Class.findAll();
+    const classes = await Class.findAll({
+      include: {
+        model: Assignment,
+        attributes: ['assignmentId', 'title', 'description', 'content', 'deadline'], // Include specific attributes of Assignment
+      },
+    });
     res.json(classes);
   } catch (error) {
     console.error(error);

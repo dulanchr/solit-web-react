@@ -13,37 +13,100 @@
     padding: 50px;
 }
 .class-folder {
-    margin: 10px;
-    margin-top: 0vh;
-    background-color: rgba(0, 255, 255, 0);
-    border-radius: 5px;
-    padding: 15px;
-    height: auto;
-    max-width: 150px;
-    min-height: 25vh;
-    max-height: 25vh;
-    overflow: hidden;
-    justify-content: center;
-    display: inline-block;
-    text-align: center;
+  margin-top: 5vh;
+  background-color: #fff;
+  color: #888888;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+  padding: 20px;
+  height: auto;
+  min-width: 30vw;
+  max-width:30vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  }
+
+  .asssignment-item{
+    border-radius: 15px;
+    background-color: #77777710;
+    padding: 10px;
+    margin-bottom: -3vh;
+  }
+  
+
+
+
+
+  .classassignmentlist-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    padding: 15px 0;
+  }
+  
+  .classassignmentlist-title {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 0;
+  }
+  
+  .classassignmentlist-location {
+    font-size: 1rem;
+    color: #777;
+    margin: 0;
+  }
+  
+  .classassignmentlist-buttons {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    
+  }
+  
+  /* Styles for the Edit button */
+  .classassignmentlist-editbtn button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
     transition: background-color 0.3s;
   }
   
-  .class-folder:hover {
- 
-    background-color: rgb(240, 240, 240);
+  .classassignmentlist-editbtn button:hover {
+    background-color: #0056b3;
   }
-.class-folder img{
-    margin-top: 2vh;
-    font-size: 16px;
-    font-weight: 300;
+  
+  /* Styles for the Remove button */
+  .classassignmentlist-removebtn button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .classassignmentlist-removebtn button:hover {
+    background-color: #c82333;
+  }
+  
+
+.class-contentext{
+  padding-top: 30px;
+  padding-left: 30px;
+  overflow: hidden;
+  flex-wrap: wrap;
+  width: 90%;
+
+
+  display: flex;
+  gap: 1rem;
 }
-
-.class-folder h1{
-
-    font-size: 16px;
-    font-weight: 300;
-}
-
-
 

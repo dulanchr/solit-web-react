@@ -16,10 +16,10 @@ router.post('/', async (req, res) => {
   });
 
 
-  router.get('/byMail/:email', async (req, res) => {
-    const email = req.params.email;
+  router.get('/byId/:Id', async (req, res) => {
+    const id = req.params.Id;
     try {
-      const userinformation = await User.findByPk(email);
+      const userinformation = await User.findByPk(id);
       if (!userinformation) {
         return res.status(404).json({ error: 'User not found.' });
       }

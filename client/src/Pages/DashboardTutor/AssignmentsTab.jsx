@@ -1,40 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import './coursestab.css';
-import './assignmentstab.css';
+import React, { useState, useEffect } from "react";
+import "./coursestab.css";
+import "./assignmentstab.css";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-import folder from '../images/folder.png';
-import Assignmentlist from './Assignments';
+import folder from "../images/folder.png";
+import Assignmentlist from "./Assignments";
+import CourseTab from "./CoursesTab";
 
 export default function AssignmentsTab() {
-  
+  let navigate = useNavigate();
   const [formData, setFormData] = useState({
-    classId: '',
-    title: '',
-    description: '',
-    content: '',
-    deadline: '',
+    classId: "",
+    title: "",
+    description: "",
+    content: "",
+    deadline: "",
   });
 
   const [formErrors, setFormErrors] = useState({
-    classId: '',
-    title: '',
-    description: '',
-    content: '',
-    deadline: '',
+    classId: "",
+    title: "",
+    description: "",
+    content: "",
+    deadline: "",
   });
 
   const [classOptions, setClassOptions] = useState([]);
 
-  useEffect(() => {
-    fetch('http://localhost:3001/class')
+  const [classAssignments, setClassAssignments] = useState({});
+
+  const isLoggedIn = () => {
+    return !!getAccessToken(); // Returns true if accessToken is not null
+  };
+
+  const fetchData = () => {
+    axios
+      .get("http://localhost:3001/class")
+      .then((response) => {
+        // setClassAssignments(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching class options:", error);
+      });
+
+    fetch("http://localhost:3001/class")
       .then((response) => response.json())
       .then((data) => {
+        setClassAssignments(data);
         setClassOptions(data);
       })
       .catch((error) => {
-        console.error('Error fetching class options:', error);
+        console.error("Error fetching class options:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
+  const getAccessToken = () => {
+    return localStorage.getItem("accessToken");
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -44,48 +70,50 @@ export default function AssignmentsTab() {
     }));
     setFormErrors((prevState) => ({
       ...prevState,
-      [name]: '',
+      [name]: "",
     }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Validation checks
+    if (!isLoggedIn()) {
+      console.log("User not logged in. Please log in to create assignments.");
+      return;
+    }
     let hasErrors = false;
     const newFormErrors = {
-      classId: '',
-      title: '',
-      description: '',
-      content: '',
-      deadline: '',
+      classId: "",
+      title: "",
+      description: "",
+      content: "",
+      deadline: "",
     };
 
-    if (formData.classId === '') {
-      newFormErrors.classId = 'Required.';
+    if (formData.classId === "") {
+      newFormErrors.classId = "Required.";
       hasErrors = true;
     }
 
-    if (formData.title.trim() === '') {
-      newFormErrors.title = 'Required.';
+    if (formData.title.trim() === "") {
+      newFormErrors.title = "Required.";
       hasErrors = true;
     }
 
-    if (formData.description.trim() === '') {
-      newFormErrors.description = 'Required.';
+    if (formData.description.trim() === "") {
+      newFormErrors.description = "Required.";
       hasErrors = true;
     }
 
-    if (formData.content.trim() === '') {
-      newFormErrors.content = 'Required.';
+    if (formData.content.trim() === "") {
+      newFormErrors.content = "Required.";
       hasErrors = true;
     } else if (!isValidUrl(formData.content.trim())) {
-      newFormErrors.content = 'Enter a valid link.';
+      newFormErrors.content = "Enter a valid link.";
       hasErrors = true;
     }
 
-    if (formData.deadline.trim() === '') {
-      newFormErrors.deadline = 'Required';
+    if (formData.deadline.trim() === "") {
+      newFormErrors.deadline = "Required";
       hasErrors = true;
     }
 
@@ -95,31 +123,33 @@ export default function AssignmentsTab() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/assignment', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/assignment", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getAccessToken()}`,
+          "Content-Type": "application/json",
         },
+
         body: JSON.stringify(formData),
       });
+      const accessToken = getAccessToken();
+      console.log("Received access token:", accessToken);
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Assignment created:', data);
-
-        // Reset the form after submission if needed
+        console.log("Assignment created:", data);
         setFormData({
-          classId: '',
-          title: '',
-          description: '',
-          content: '',
-          deadline: '',
+          classId: "",
+          title: "",
+          description: "",
+          content: "",
+          deadline: "",
         });
       } else {
-        throw new Error('Failed to create assignment');
+        throw new Error("Failed to create assignment");
       }
     } catch (error) {
-      console.error('Error creating assignment:', error);
+      console.error("Error creating assignment:", error);
     }
   };
 
@@ -131,19 +161,53 @@ export default function AssignmentsTab() {
       return false;
     }
   };
-  const [selectedClass, setSelectedClass] = useState(null); // New state to track selected class
+  const handleRemoveAssignment = async (assignmentId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3001/assignment/${assignmentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        // Assignment was deleted successfully, so you may want to update the state
+        // and refresh the assignment list to reflect the changes.
+        // For example, you can refetch the assignments data after deletion.
+        fetchData(); // Refetch the assignments data after deletion
+      }
+    } catch (error) {
+      console.error("Error deleting assignment:", error);
+    }
+  };
 
-  const handleFolderClick = (className) => {
-    setSelectedClass((prevSelectedClass) =>
-      prevSelectedClass === className ? null : className
-    );
+  const [confirmRemove, setConfirmRemove] = useState(false);
+  const [removingAssignmentId, setRemovingAssignmentId] = useState(null);
+
+  const handleRemoveAssignmentClick = (assignmentId) => {
+    setConfirmRemove(true);
+    setRemovingAssignmentId(assignmentId);
+  };
+
+  const handleCancelClick = () => {
+    setConfirmRemove(false);
+    setRemovingAssignmentId(null);
+  };
+
+  const handleRemoveAssignmentConfirm = async () => {
+    if (removingAssignmentId) {
+      await handleRemoveAssignment(removingAssignmentId);
+      setConfirmRemove(false);
+      setRemovingAssignmentId(null);
+    }
   };
   return (
     <div className="coursecontorls">
-      <h2 style={{ marginTop: '0vh', fontSize: '1rem', color: '#232323' }}>
-        Add Assignments:
-      </h2>
       <div className="addcourses">
+        <h2 style={{ marginTop: "0vh", fontSize: "1.5rem", color: "#232323" }}>
+          Add Assignments:
+        </h2>
         <form className="addc-form" onSubmit={handleSubmit}>
           <div className="addc-form-group">
             <label htmlFor="classId">Class:</label>
@@ -223,47 +287,77 @@ export default function AssignmentsTab() {
           </button>
         </form>
       </div>
-      
-      
-      
-      <h2
-        style={{
-          marginTop: '2vh',
-          fontSize: '1rem',
-          color: '#232323',
-          opacity: '0.5',
-        }}
-      >
-        My Assignments:
-      </h2>
-
-
-
-
-
-      <div className="mycourses">
-        {classOptions.map((option) => (
-          <div
-            key={option.classId}
-            className="class-folder"
-            onClick={() => handleFolderClick(option.className)}
-          >
-            <img src={folder} width={120} height={120} alt="logocore" />
-            <h1>{option.className}</h1>
+      <div className="class-contentext">
+        {classOptions.map((classOption) => (
+          <div key={classOption.classId} className="class-folder">
+            <h2
+              style={{
+                marginTop: "2vh",
+                fontSize: "1.5rem",
+                color: "#232323",
+                opacity: "0.5",
+              }}
+            >
+              {classOption.className}
+              {"."}
+            </h2>
+            {classOption.Assignments.map((assigndata) => (
+              <div key={assigndata.assignmentId}>
+                <div className="asssignment-item">
+                  <p
+                    style={{
+                      marginTop: "2vh",
+                      fontSize: "1.5rem",
+                      color: "#000",
+                      opacity: "0.5",
+                    }}
+                  >
+                    {assigndata.title}
+                  </p>
+                  <p
+                    style={{
+                      marginTop: "2vh",
+                      fontSize: "1rem",
+                      color: "#000",
+                      opacity: "0.5",
+                    }}
+                  >
+                    {assigndata.content}
+                  </p>
+                  <div className="classli-buttons">
+                    <div className="classli-removebtn">
+                      <button
+                        onClick={() =>
+                          handleRemoveAssignmentClick(assigndata.assignmentId)
+                        }
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         ))}
       </div>
 
-
-
-      {/* Render Assignmentlist component if a class is selected */}
-      {selectedClass && <Assignmentlist selectedClass={selectedClass} />}
-
-
-
-      
+      {/* Confirmation popup */}
+      {confirmRemove && (
+        <div className="popup-container">
+          <div className="popup">
+            <div className="popup-content">
+              <p>Delete the assignment!</p>
+              <h1>
+                <i class="fi fi-rr-envelope-download"></i>
+              </h1>
+              <p>Please note that this action can't be reversed!</p>
+              <button onClick={handleRemoveAssignmentConfirm}>Ok</button>
+              <button onClick={handleCancelClick}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-
-
   );
 }

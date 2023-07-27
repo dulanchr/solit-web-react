@@ -4,6 +4,7 @@ import "./newclasses.css";
 import { storage } from "../../firebase";
 import { ref, uploadBytes } from "firebase/storage";
 import ClassList from "./ClassList";
+import CourseTab from "../DashboardTutor/CoursesTab";
 
 export default function NewClasses() {
   const [imageUpload, setImageUpload] = useState(null);
@@ -168,7 +169,7 @@ export default function NewClasses() {
           </div>
 
           <div className="newclass-form-group">
-            <label htmlFor="thumbnail">Select Thubnail</label>
+            <label htmlFor="thumbnail">Select Thumbnail</label>
             <input
               type="file"
               accept="image/*"

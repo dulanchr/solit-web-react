@@ -1,28 +1,29 @@
-import React from 'react'
-import './assignments.css'
-export default function Assignmentlist() {
+// Assignmentlist.jsx
+import React from "react";
+
+const Assignmentlist = ({ assignment, onDelete, onEdit }) => {
+  const handleDelete = () => {
+    onDelete(assignment.id);
+  };
+
+  const handleEdit = () => {
+    // Implement editing logic here and update the assignment data accordingly
+    // You can create an edit form or a modal to gather updated data from the user
+    // and then call the onEdit function to update the assignment.
+  };
+
   return (
-   <div className="assignmentcontainer">
+    <div className="classassignmentlist-item">
+      <h1>{assignment.title}</h1>
+      <h2>{assignment.content}</h2>
+      <p>{assignment.description}</p>
+      <p>{assignment.deadline}</p>
+      <div>
+        <button onClick={handleEdit}>Edit</button>
+        <button onClick={handleDelete}>Delete</button>
+      </div>
+    </div>
+  );
+};
 
-     
-        <div className="assignmentcard">
-            <div className="assignmenttitle">
-                <h1>Assignemt Title</h1>
-            </div>
-            <div className="assignmentsubtitle">
-                <h2>Subject</h2>
-                <h2>,</h2>
-                <h2>Grade 10</h2>
-            
-
-            </div>
-            <div className="assignmentcontent">
-                <p>
-                Please note that the code assumes you have the Sequelize models propePlease note that the code assumes you have the Sequelize models properly set up and imported. Adjust the path in the require statement const db = require('../path/to/your/models'); to match your file structure and provide the correct path to your Sequelize models.rly set up and imported. Adjust the path in the require statement const db = require('../path/to/your/models'); to match your file structure and provide the correct path to your Sequelize models.                </p>
-            </div>
-
-        </div>
-    
-   </div>
-  )
-}
+export default Assignmentlist;

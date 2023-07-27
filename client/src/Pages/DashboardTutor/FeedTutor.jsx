@@ -21,7 +21,7 @@ export default function FeedTutor() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/user/byMail/${id}`) // Fetch user data by id
+      .get(`http://localhost:3001/user/byId/${id}`) // Fetch user data by id
       .then((response) => {
         setUserData(response.data);
         setActiveTab(response.data.email); // Set the activeTab state with the email field
