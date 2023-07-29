@@ -4,7 +4,6 @@ import "./newclasses.css";
 import { storage } from "../../firebase";
 import { ref, uploadBytes } from "firebase/storage";
 import ClassList from "./ClassList";
-import CourseTab from "../DashboardTutor/CoursesTab";
 
 export default function NewClasses() {
   const [imageUpload, setImageUpload] = useState(null);

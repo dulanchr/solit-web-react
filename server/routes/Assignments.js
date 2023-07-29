@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { Class, Assignment, Student, Tutor } = require('../models');
 
+
+const validToken = require('../middlewares/AuthMiddleware');
 // Get all assignments
 
 router.get('/', async (req, res) => {
@@ -10,7 +12,7 @@ router.get('/', async (req, res) => {
       include: [
         {
           model: Class,
-          attributes: ['className', 'classId'],
+          attributes: ['className', 'classId'], 
         },
         Student,
         Tutor,
@@ -27,6 +29,7 @@ router.post('/', async (req, res) => {
   try {
     const assignmentData = req.body;
     const newAssignment = await Assignment.create(assignmentData);
+    
     res.json(newAssignment);
   } catch (error) {
     console.error(error);

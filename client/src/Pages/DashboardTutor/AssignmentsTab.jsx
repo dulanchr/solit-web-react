@@ -4,10 +4,6 @@ import "./assignmentstab.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import folder from "../images/folder.png";
-import Assignmentlist from "./Assignments";
-import CourseTab from "./CoursesTab";
-
 export default function AssignmentsTab() {
   let navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -31,14 +27,14 @@ export default function AssignmentsTab() {
   const [classAssignments, setClassAssignments] = useState({});
 
   const isLoggedIn = () => {
-    return !!getAccessToken(); // Returns true if accessToken is not null
+    return !!getAccessToken();
   };
 
   const fetchData = () => {
     axios
       .get("http://localhost:3001/class")
       .then((response) => {
-        // setClassAssignments(response.data);
+        setClassAssignments(response.data);
       })
       .catch((error) => {
         console.error("Error fetching class options:", error);
@@ -112,7 +108,7 @@ export default function AssignmentsTab() {
       hasErrors = true;
     }
 
-    if (formData.deadline.trim() === "") {
+    if (formData.deadline && formData.deadline.trim() === "") {
       newFormErrors.deadline = "Required";
       hasErrors = true;
     }
@@ -123,20 +119,18 @@ export default function AssignmentsTab() {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/assignment", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-          "Content-Type": "application/json",
-        },
+      const response = await axios.post(
+        "http://localhost:3001/assignment",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-        body: JSON.stringify(formData),
-      });
-      const accessToken = getAccessToken();
-      console.log("Received access token:", accessToken);
-
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status === 200) {
+        const data = response.data;
         console.log("Assignment created:", data);
         setFormData({
           classId: "",
@@ -145,8 +139,7 @@ export default function AssignmentsTab() {
           content: "",
           deadline: "",
         });
-      } else {
-        throw new Error("Failed to create assignment");
+        fetchData(); // Refetch the assignments data after creating a new assignment
       }
     } catch (error) {
       console.error("Error creating assignment:", error);
@@ -166,9 +159,9 @@ export default function AssignmentsTab() {
       const response = await axios.delete(
         `http://localhost:3001/assignment/${assignmentId}`,
         {
-          headers: {
-            Authorization: `Bearer ${getAccessToken()}`,
-          },
+          // headers: {
+          //   Authorization: `Bearer ${getAccessToken()}`,
+          // },
         }
       );
       if (response.status === 200) {

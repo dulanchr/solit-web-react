@@ -22,6 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
+
+
   });
 
   Assignment.associate = (models) => {
