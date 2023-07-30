@@ -1,9 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
     const AssignmentStudent = sequelize.define("AssignmentStudent", {
-        AssignmentStudentId: {
+        assignmentStudentId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        allowNull: false,
+      },
+      submission: {
+        type: DataTypes.STRING,
         allowNull: false,
       }
       
@@ -13,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 
     AssignmentStudent.associate = (models) => {
         AssignmentStudent.belongsTo(models.Assignment, {
-        foreignKey: "AssignmentId",
+        foreignKey: "assignmentId",
       });
   
 

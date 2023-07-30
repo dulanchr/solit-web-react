@@ -1,26 +1,54 @@
 import React, { useState, useEffect } from "react";
 import "./coursestab.css";
 import "./assignmentstab.css";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function AssignmentsTab() {
-  let navigate = useNavigate();
+  const { id } = useParams();
+  const [tutorId, setTutorId] = useState();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     classId: "",
     title: "",
     description: "",
     content: "",
     deadline: "",
+    tutorId: null, // Initialize with null
   });
-
   const [formErrors, setFormErrors] = useState({
     classId: "",
     title: "",
     description: "",
     content: "",
     deadline: "",
+    tutorId: null, // Initialize with null
   });
+
+  useEffect(() => {
+    fetch(`http://localhost:3001/gettutorid/assignment/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // Assuming data is an array and contains at least one object
+        if (Array.isArray(data) && data.length > 0) {
+          setTutorId(data[0].tutorId); // Access tutorId from the first object in the array
+        }
+      })
+      .catch((error) => console.error("Error fetching tutor data:", error));
+  }, [id]);
+
+  console.log("export tutorId here", { tutorId });
+  useEffect(() => {
+    console.log("export tutorid here", { tutorId });
+    setFormData((prevCourseData) => ({
+      ...prevCourseData,
+      tutorId: tutorId,
+    }));
+    setFormErrors((prevFormErrors) => ({
+      ...prevFormErrors,
+      tutorId: tutorId,
+    }));
+  }, [tutorId]);
 
   const [classOptions, setClassOptions] = useState([]);
 
@@ -173,6 +201,17 @@ export default function AssignmentsTab() {
     } catch (error) {
       console.error("Error deleting assignment:", error);
     }
+  };
+
+  const handleEditAssignment = async (assignmentId) => {
+    axios
+      .put(`http://localhost:3001/assignment/${assignmentId}`)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const [confirmRemove, setConfirmRemove] = useState(false);

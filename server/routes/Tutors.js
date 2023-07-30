@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Tutor } = require('../models');
+const { Tutor, User} = require('../models');
 
 // Get all tutors
 router.get('/', async (req, res) => {
@@ -25,17 +25,43 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/byId/:Id', async (req, res) => {
-  const Id = req.params.Id;
+// Get tutor by ID
+router.get('/byId/:id', async (req, res) => {
+  const id = req.params.id;
   try {
-    const teacherContent = await Tutor.findByPk(Id);
-    if (!teacherContent) {
-      return res.status(404).json({ error: 'Tutor content not found.' });
+    const tutor = await Tutor.findByPk(id);
+    if (!tutor) {
+      return res.status(404).json({ error: 'Tutor not found.' });
     }
-    res.json(teacherContent);
+    res.json(tutor);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+router.get('/byUserId/:userId', async (req, res) => {
+  const userId = req.params.userId; // Corrected
+  
+  try {
+    const userWithTutor = await Tutor.findOne({
+      where: { userId:userId },
+      // include: [
+      //   {
+      //     model: Tutor,
+      //     as: "user", 
+      //   },
+      // ],
+    });
+
+    if (!userWithTutor) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    return res.status(200).json(userWithTutor);
+  } catch (error) {
+    console.error("Error fetching tutor information:", error);
+    return res.status(500).json(error.message);
   }
 });
 

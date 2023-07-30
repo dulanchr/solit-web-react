@@ -18,22 +18,31 @@ app.use('/answer', AnswerRouter);
 
 const AssignmentRouter = require('./routes/Assignments');
 app.use('/assignment', AssignmentRouter);
+const GetAssignmentListRouter = require('./routes/GetAssignmentList');
+app.use('/getassignmentlist', GetAssignmentListRouter);
 
 const AssignmentStudentRouter = require('./routes/AssignmentStudents');
 app.use('/assignmentstudent', AssignmentStudentRouter);
 
+
+const GetPosteList = require('./routes/PosteList');
+app.use('/getpostelist', GetPosteList);
+
 const ClassRouter = require('./routes/Classes');
 app.use('/class', ClassRouter);
-
 const ClassCardRouter = require('./routes/ClassCards');
 app.use('/classcards', ClassCardRouter);
+const GetClassDataRouter = require('./routes/GetClassData');
+app.use('/getclassdata', GetClassDataRouter);
+
 
 const ClassStudentRouter = require('./routes/ClassStudents');
 app.use('/classstudent', ClassStudentRouter);
 
 const CourseCardRouter = require('./routes/Courses');
 app.use("/course", CourseCardRouter);
-
+const GetCDataRouter = require('./routes/GetCourseData');
+app.use("/getcoursedata", GetCDataRouter);
 const CourseRouter = require('./routes/CourseCards');
 app.use("/coursecard", CourseRouter);
 
@@ -51,6 +60,9 @@ app.use('/reviewcard', ReviewCardRouter);
 
 const TutorRouter = require('./routes/Tutors');
 app.use('/tutor', TutorRouter);
+const GetTutorIdRouter = require('./routes/GetTutorId');
+app.use('/gettutorid', GetTutorIdRouter);
+
 
 const UserRouter = require('./routes/Users');
 app.use("/user", UserRouter);
@@ -60,6 +72,8 @@ app.use("/login", LoginRouter);
 
 const PaymentRouter = require('./routes/Payments');
 app.use("/payment", PaymentRouter);
+const GetPaymentDataRouter = require('./routes/GetPaymentData');
+app.use("/getpaymentdata", GetPaymentDataRouter);
 
 const StudRegisterRouter = require('./routes/StudRegisters');
 app.use("/studregister", StudRegisterRouter);

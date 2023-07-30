@@ -25,7 +25,7 @@ export default function CourseContent() {
 
   // Function to handle Buy Now button click
   const handleBuyNowClick = () => {
-    // Navigate to the specific payment page based on the courseId
+    // Navigate to the specific payment page based on the courseId/
     navigate(`/pay/${courseContent.courseId}`);
   };
 

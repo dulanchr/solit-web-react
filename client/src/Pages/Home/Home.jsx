@@ -1,21 +1,21 @@
-import React from 'react';
-import './home.css';
-import mainimage from '../images/student03.png';
+import React from "react";
+import "./home.css";
+import mainimage from "../images/student03.png";
 
-import bookshape from '../images/book-shape.png';
-import circleshape from '../images/circle-shape.png';
-import dotsshape from '../images/role-shape-2.png';
-import lineshape from '../images/line-shape.png';
-import linesshape from '../images/lines-shape.png';
-import roleshape from '../images/role-shape.png';
-import AboutCoreLink from './AboutCoreLink';
-import CoreComments from './CoreComments';
-import CoursesLink from './CoursesLink';
-import ClassesLink from '../Classes/ClassContainer';
-import ClassContainer from '../Classes/ClassContainer';
-import ClassConntainerLink from './ClassContainerLink';
-import TeacherContainer from '../Classes/TeacherContainer';
-import Footer from '../../components/Footer';
+import bookshape from "../images/book-shape.png";
+import circleshape from "../images/circle-shape.png";
+import dotsshape from "../images/role-shape-2.png";
+import lineshape from "../images/line-shape.png";
+import linesshape from "../images/lines-shape.png";
+import roleshape from "../images/role-shape.png";
+import AboutCoreLink from "./AboutCoreLink";
+import CoreComments from "./CoreComments";
+import CoursesLink from "./CoursesLink";
+import ClassesLink from "../Classes/ClassContainer";
+import ClassContainer from "../Classes/ClassContainer";
+import ClassConntainerLink from "./ClassContainerLink";
+import TeacherContainer from "../Classes/TeacherContainer";
+import Footer from "../../components/Footer";
 
 export default function Head(props) {
   return (
@@ -80,22 +80,19 @@ export default function Head(props) {
           through the trees. It's a time of change and transition, as nature
           prepares for the winter ahead. The days grow shorter, and the nights
           become cooler, reminding us of the fleeting nature of time. As we
-          embrace this season of transformation, we find solace in the beauty
-          of nature and the cyclical rhythm of life.
+          embrace this season of transformation, we find solace in the beauty of
+          nature and the cyclical rhythm of life.
         </p>
       </div>
-            <ClassConntainerLink/>
-            <AboutCoreLink/>
-            {/* <CoreComments/> */}
-            <CoursesLink/>
-            <TeacherContainer/>
+      <ClassConntainerLink />
+      <AboutCoreLink />
+      {/* <CoreComments/> */}
+      <CoursesLink />
+      <TeacherContainer />
 
-
-            <div>
-            <Footer/>
-            </div>
-      </>     
-
-   
+      <div>
+        <Footer />
+      </div>
+    </>
   );
 }

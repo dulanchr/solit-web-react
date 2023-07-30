@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { storage } from "../../firebase";
 import { ref, uploadBytes } from "firebase/storage";
 
 export default function CourseTab() {
+  const { id } = useParams();
+
   const [imageUpload, setImageUpload] = useState(null);
+  const [tutorIdFromUserId, setTutorIdFromUserId] = useState(null);
+
   const uploadImage = (courseId) => {
     if (imageUpload == null) return;
 
@@ -29,19 +34,25 @@ export default function CourseTab() {
     episodes: "",
     price: "",
     courselink: "",
-    tutorId: "", // To store the selected tutor ID
+    tutorId: tutorIdFromUserId, // To store the selected tutor ID
     category: "",
   });
 
   const [tutors, setTutors] = useState([]); // To store the tutor data fetched from the API
 
   useEffect(() => {
-    // Fetch tutor data from the API and store it in the "tutors" state
-    fetch("http://localhost:3001/tutor")
+    fetch(`http://localhost:3001/gettutorid/${id}`)
       .then((response) => response.json())
-      .then((data) => setTutors(data))
+      .then((data) => {
+        if (data && data.tutorId) {
+          setCourseData((prevCourseData) => ({
+            ...prevCourseData,
+            tutorId: data.tutorId,
+          }));
+        }
+      })
       .catch((error) => console.error("Error fetching tutor data:", error));
-  }, []);
+  }, [id]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -74,7 +85,7 @@ export default function CourseTab() {
           episodes: "",
           price: "",
           courselink: "",
-          tutorId: "",
+          tutorId: tutorIdFromUserId,
           category: "",
         });
       })
@@ -170,7 +181,7 @@ export default function CourseTab() {
               ))}
             </select>
           </div>
-          <div className="newclass-form-group">
+          {/* <div className="newclass-form-group">
             <label htmlFor="tutorId">Tutor:</label>
             <select
               id="tutorId"
@@ -188,7 +199,7 @@ export default function CourseTab() {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
 
           <div className="newclass-form-group">
             <label htmlFor="thumbnail">Select Course Thumbnail:</label>

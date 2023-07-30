@@ -1,48 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const { Payment } = require('../models');
-const nodemailer = require('nodemailer');
-
-router.get('/', async (req, res) => {
-  const listOfPayments = await Payment.findAll();
-  console.log(listOfPayments);
-  res.json(listOfPayments);
-});
+const stripe = require('stripe')('sk_test_51NZDIhKKyLhD2yiyj09mdJ71q6yAspLWYoJYSMHlkv4j8AS1FERxeEL5OGPn0uKB2iEO1tO91CWXDRyOACBAFCnG00WodpMsmi');
 
 router.post('/', async (req, res) => {
   try {
-    const paymentData = req.body;
-    const createdPayment = await Payment.create(paymentData);
-
-    const transporter = nodemailer.createTransport({
-      service: 'Gmail', // You can change this to another email service provider if needed
-      auth: {
-        user: 'soliteducation@gmail.com', // Replace with your Gmail username
-        pass: '2HWWo09j)(r#', // Replace with your Gmail password
-      },
+    const { amount, currency, payment_method_types } = req.body;
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency,
+      payment_method_types,
     });
-
-    const emailOptions = {
-      from: 'soliteducation@gmail.com',
-      to: createdPayment.email,
-      subject: 'Payment Confirmation',
-      text: `Thank you for your payment! Your payment was successful. If you are willing to be a member of the CORE community, use the following link and code (${createdPayment.usercode}) to request Membership. Thank You, Good luck on your learning!`,
-    };
-    
-
-    transporter.sendMail(emailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending email:', error);
-      } else {
-        console.log('Email sent:', info.response);
-      }
-    });
-
-    
-    res.json({ payment: createdPayment });
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to create payment' });
+    console.error('Error creating payment intent:', error);
+    res.status(500).json({ error: 'Failed to create payment intent' });
   }
 });
 

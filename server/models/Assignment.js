@@ -22,13 +22,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-
-
   });
 
   Assignment.associate = (models) => {
     Assignment.belongsTo(models.Class, {
       foreignKey: "classId",
+    });
+
+    // Add the one-to-many association with Tutor
+    Assignment.belongsTo(models.Tutor, {
+      foreignKey: "tutorId",
     });
   };
 

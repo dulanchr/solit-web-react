@@ -16,6 +16,8 @@ import CourseContent from "../Pages/Courses/CourseContent";
 import FeedAdmin from "../Pages/DashboardAdmin/FeedAdmin";
 import ClassContent from "../Pages/Classes/ClassContent";
 import TeacherContent from "../Pages/Classes/TeacherContent";
+import PayStripe from "../Pages/Pay/PayStripe";
+import PosteContent from "../Pages/DashboardTutor/PosteContent";
 
 export default function AppRouter() {
   return (
@@ -38,11 +40,14 @@ export default function AppRouter() {
           <Route path="/feedstudent/:id" element={<FeedStudent />} />
           <Route path="/feedadmin/:id" element={<FeedAdmin />} />
 
+          <Route path="/postecontent" element={<PosteContent />} />
+
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signup/:usercode" element={<SignUp />} />
 
           <Route path="/core" element={<Core />} />
           <Route path="/pay/:id" element={<Pay />} />
+          <Route path="/payment" element={<PayStripe />} />
 
           <Route path="/image" element={<ImageUploader />} />
         </Routes>

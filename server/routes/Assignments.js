@@ -53,5 +53,21 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 });
+router.put('/:id', async (req, res) => {
+  try {
+    const assignmentId = req.params.assignmentId;
+    const updatedAssignmentData = req.body;
+
+   const updateAssignment = await updatedAssignmentData.update(updatedAssignmentData, {
+      where: { assignmentId: assignmentId },
+    });
+    res.json(updateAssignment)
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 
 module.exports = router;

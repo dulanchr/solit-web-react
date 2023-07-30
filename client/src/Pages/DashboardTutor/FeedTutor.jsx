@@ -6,13 +6,7 @@ import CoursesTab from "./CoursesTab";
 import StudentsTab from "./StudentsTab";
 import logocore from "../images/logo-core-c.png";
 import axios from "axios";
-
-const FeedTab = () => (
-  <div>
-    <h2>Welcome to the Feed!</h2>
-    <p>This is the Feed content.</p>
-  </div>
-);
+import FeedTab from "./FeedTab";
 
 export default function FeedTutor() {
   const { id } = useParams(); // Get the id parameter from the URL

@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./pay.css";
 import paypal from "../images/paypal.png";
 import applepay from "../images/apple-pay.png";
 import googlepay from "../images/google-pay.png";
+import emailjs from "@emailjs/browser";
 
 export default function Pay() {
+  const form = useRef();
   const { id: courseId } = useParams();
   const [formData, setFormData] = useState({
     email: "",
@@ -22,13 +24,72 @@ export default function Pay() {
     cvv: "",
   });
 
+  const [getCoursedata, setgetCoursedata] = useState({
+    courselink: "",
+  });
+  const [PaymentData, setPaymentData] = useState({
+    courselink: "",
+  });
+
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   const navigate = useNavigate();
+  useEffect(() => {
+    // Define an async function to fetch course data
+    const fetchCourseData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/getcoursedata/${courseId}`
+        );
+        const courseData = response.data; // Assuming the response contains the course data
+        setgetCoursedata({ courselink: courseData.courselink });
+      } catch (error) {
+        console.error("Error fetching course data:", error);
+      }
+    };
 
+    // Call the function to fetch course data
+    fetchCourseData();
+  }, [courseId]);
+
+  useEffect(() => {
+    // Define an async function to fetch payment data
+    const fetchPaymentData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/payment/${courseId}`
+        );
+        const paymentData = response.data; // Assuming the response contains the payment data
+        setPaymentData({ usercode: paymentData.usercode });
+      } catch (error) {
+        console.error("Error fetching payment data:", error);
+      }
+    };
+
+    // Call the function to fetch payment data
+    fetchPaymentData();
+  }, [courseId]);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setFormErrors({ ...formErrors, [e.target.name]: "" });
+  };
+
+  // Move the sendAcceptEmail function outside of the handleSubmit function
+  const sendAcceptEmail = () => {
+    const params = {
+      course_link: getCoursedata.courselink,
+      user_code: PaymentData.usercode,
+      user_email: formData.email,
+      signup_link: `http://localhost:3000/signup/${PaymentData.usercode}`, // Use PaymentData.usercode here
+    };
+    emailjs
+      .send("service_5695pgu", "template_sjxvtxk", params, "k3ZSYx6meJP6rONrM")
+      .then((result) => {
+        console.log(result.text);
+      })
+      .catch((error) => {
+        console.log(error.text);
+      });
   };
 
   const handleSubmit = async (e) => {
@@ -97,7 +158,9 @@ export default function Pay() {
       // Simulate successful payment
       setPaymentSuccess(true);
 
-      // Send the email and courseId to the server
+      // Move the sendAcceptEmail function call here
+      sendAcceptEmail();
+
       const response = await axios.post("http://localhost:3001/payment", {
         email: formData.email,
         courseId: courseId,
@@ -115,13 +178,14 @@ export default function Pay() {
 
   const handleOkClick = () => {
     setPaymentSuccess(false);
-    navigate(`/signup/${formData.usercode}`); // Use formData.usercode to navigate to the signup page with the correct usercode
+    navigate(`/signup/${formData.usercode}`);
   };
 
   const handleBackClick = () => {
     setPaymentSuccess(false);
     navigate("/courses"); // Navigate to "/courses" when the button is clicked
   };
+
   return (
     <>
       <div className="navbgc">
