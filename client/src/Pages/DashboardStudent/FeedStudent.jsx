@@ -1,38 +1,28 @@
 import React, { useEffect, useState } from "react";
-import "../DashboardTutor/feedtutor.css";
-import AssignmentsTab from "../DashboardTutor/AssignmentsTab";
-import CoursesTab from "../DashboardTutor/CoursesTab";
-import StudentsTab from "../DashboardTutor/StudentsTab";
+import { useParams, useNavigate } from "react-router-dom";
 import logocore from "../images/logo-core-c.png";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
-
-const FeedTab = () => (
-  <div>
-    <h2>Welcome to the Feed!</h2>
-    <p>This is the Feed content.</p>
-  </div>
-);
+import FeedTabStudent from "./FeedTabStudent";
+import StudentAssignmentsTab from "./StudentAssignmentsTab";
+import MyProgress from "./MyProgress";
 
 export default function FeedStudent() {
-  const { id } = useParams();
+  const { id } = useParams(); // Get the id parameter from the URL
   const [activeTab, setActiveTab] = useState("feed");
   const [userData, setUserData] = useState(null);
 
-  // Assuming you have the userId available in the component
-  const userId = id; // Replace this with the actual user ID
-
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/user/byId/${userId}`) // Fetch user data by id
+      .get(`http://localhost:3001/user/byId/${id}`) // Fetch user data by id
       .then((response) => {
         setUserData(response.data);
-        setActiveTab("feed"); // Set the activeTab to 'feed' by default
+        setActiveTab(response.data.email); // Set the activeTab state with the email field
       })
       .catch((error) => {
         console.error("Error fetching user content:", error);
       });
-  }, [userId]);
+  }, [id]);
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -40,13 +30,9 @@ export default function FeedStudent() {
   const renderContent = () => {
     switch (activeTab) {
       case "feed":
-        return <FeedTab />;
-      case "assignments":
-        return <AssignmentsTab />;
-      case "courses":
-        return <CoursesTab />;
-      case "students":
-        return <StudentsTab />;
+        return <FeedTabStudent />;
+      case "myprogress":
+        return <MyProgress />;
       default:
         return null;
     }
@@ -73,40 +59,19 @@ export default function FeedStudent() {
                 }`}
                 onClick={() => handleTabClick("feed")}
               >
-                Feed
+                <i class="fi fi-br-apps"></i> Feed {activeTab.email}
               </a>
             </li>
-            <li>
-              <a
-                href="#"
-                className={`dash-nav-item ${
-                  activeTab === "assignments" ? "active" : ""
-                }`}
-                onClick={() => handleTabClick("assignments")}
-              >
-                Assignments
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={`dash-nav-item ${
-                  activeTab === "courses" ? "active" : ""
-                }`}
-                onClick={() => handleTabClick("courses")}
-              >
-                Courses
-              </a>
-            </li>
+
             <li>
               <a
                 href="#"
                 className={`dash-nav-item ${
                   activeTab === "students" ? "active" : ""
                 }`}
-                onClick={() => handleTabClick("students")}
+                onClick={() => handleTabClick("myprogress")}
               >
-                Students
+                <i class="fi fi-rr-chart-histogram"></i>Myself
               </a>
             </li>
           </ul>

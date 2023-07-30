@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "./feedtab.css";
 import profilePicture from "./profile~1.jpg";
 
-export default function FeedTab() {
+export default function FeedTabAdmin() {
   const { id } = useParams();
-  const [tutorId, setTutorId] = useState();
-  const [firstname, setFirstname] = useState();
-  const [lastname, setlastname] = useState();
-  const navigate = useNavigate();
-  const [showPopup, setShowPopup] = useState(false);
   const [AssignmentData, setAssignmentData] = useState([]);
-  const [comment, setComment] = useState("");
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleImageClick = (index) => {
     setCurrentPostIndex(index);
@@ -22,50 +17,6 @@ export default function FeedTab() {
   const handleClosePopup = () => {
     setShowPopup(false);
   };
-
-  const handleCommentChange = (event) => {
-    setComment(event.target.value);
-  };
-
-  const handleCommentSubmit = () => {
-    console.log("Submitted comment:", comment);
-
-    const postData = {
-      contentpdf: "path/to/content.pdf",
-      reply: comment,
-      agrees: "0",
-      poster: firstname,
-      assignmentId: id,
-      userId: id,
-    };
-
-    fetch("http://localhost:3001/answer", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Successfully posted data:", data);
-        handleClosePopup();
-      })
-      .catch((error) => console.error("Error posting data:", error));
-  };
-
-  useEffect(() => {
-    fetch(`http://localhost:3001/gettutorid/user/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setFirstname(data[0].firstname);
-          setlastname(data[0].lastname);
-          setTutorId(data[0].tutorId);
-        }
-      })
-      .catch((error) => console.error("Error fetching tutor data:", error));
-  }, [id]);
 
   useEffect(() => {
     fetch(`http://localhost:3001/gettutorid/assignment`)
@@ -81,7 +32,7 @@ export default function FeedTab() {
   return (
     <div>
       <div>
-        <h1>Welcome back, {firstname}</h1>
+        <h1>You're now logged in as an admin</h1>
         <div className="poste-bin">
           {AssignmentData.map((assignment, index) => (
             <div
@@ -109,13 +60,7 @@ export default function FeedTab() {
             <p>{AssignmentData[currentPostIndex].description}</p>
             {AssignmentData[currentPostIndex].content}
           </div>
-          <textarea
-            value={comment}
-            onChange={handleCommentChange}
-            placeholder="Enter your answer here..."
-          ></textarea>
           <button onClick={handleClosePopup}>Close</button>
-          <button onClick={handleCommentSubmit}>Answer</button>
         </div>
       )}
     </div>

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./newteachers.css";
+import { storage } from "../../firebase";
+import { ref, uploadBytes } from "firebase/storage";
 
 export default function NewTeachers() {
   const [teacherData, setTeacherData] = useState({
@@ -12,8 +14,9 @@ export default function NewTeachers() {
     password: "",
     Validity: true,
   });
-
+  const [imageUpload, setImageUpload] = useState(null);
   const [showAcceptPopup, setShowAcceptPopup] = useState(false);
+  const [submitting, setSubmitting] = useState(false); // State to track form submission
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -22,8 +25,12 @@ export default function NewTeachers() {
       [name]: value,
     });
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (submitting) return; // Prevent multiple submissions
+
+    setSubmitting(true); // Set submitting state to true during form submission
 
     fetch("http://localhost:3001/tutorregister", {
       method: "POST",
@@ -34,9 +41,10 @@ export default function NewTeachers() {
     })
       .then((response) => response.json())
       .then((data) => {
-        // Handle successful response or do something with the data
         console.log("New teacher added:", data);
-        setShowAcceptPopup(true); // Show the success popup
+        setShowAcceptPopup(true);
+        setSubmitting(false); // Reset submitting state after successful submission
+
         // Reset the input fields to their initial empty values
         setTeacherData({
           firstname: "",
@@ -47,15 +55,34 @@ export default function NewTeachers() {
           email: "",
           password: "",
         });
+
+        // Clear the image upload state after successful image upload
+        setImageUpload(null);
       })
       .catch((error) => {
-        // Handle error
         console.error("Error adding new teacher:", error);
+        setSubmitting(false); // Reset submitting state after error
       });
   };
 
   const handleOkClick = () => {
     setShowAcceptPopup(false);
+  };
+
+  const uploadImage = (teacherId) => {
+    if (imageUpload == null) return;
+    const imageRef = ref(
+      storage,
+      `TeacherAvatars/${teacherId}/${imageUpload.name}`
+    );
+
+    uploadBytes(imageRef, imageUpload)
+      .then(() => {
+        // No need to show the popup here, as it's already shown after form submission
+      })
+      .catch((error) => {
+        console.error("Error uploading image:", error);
+      });
   };
 
   return (
@@ -139,8 +166,19 @@ export default function NewTeachers() {
             required
           />
         </div>
-        <button type="submit" className="newtutor-btn">
-          Add Tutor
+
+        <div className="newtutor-form-group">
+          <label htmlFor="thumbnail">Select Avatar</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(event) => {
+              setImageUpload(event.target.files[0]);
+            }}
+          />
+        </div>
+        <button type="submit" className="newtutor-btn" disabled={submitting}>
+          {submitting ? "Adding Tutor..." : "Add Tutor"}
         </button>
       </form>
 
@@ -148,12 +186,11 @@ export default function NewTeachers() {
         <div className="popup-container">
           <div className="popup">
             <div className="popup-content">
-              <p>Payment Successful!</p>
+              <p>Tutor Added Successfully!</p>
               <h1>
                 <i className="fi fi-rr-envelope-download"></i>
               </h1>
-              <p>Tutor is added</p>
-              <p>Thank you for the purchase!</p>
+              <p>Thank you for adding the new teacher!</p>
               <button onClick={handleOkClick}>OK</button>
             </div>
           </div>

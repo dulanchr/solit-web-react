@@ -3,28 +3,42 @@ const router = express.Router();
 const { Question, User, Tutor, Assignment } = require('../models');
 
 
-router.get('/assignment/:userId', async (req, res) => {
-  try {
-    const { userId } = req.params;
+router.get('/user/:userId', async (req, res) => {
 
-    const tutor = await Tutor.findOne({
-      where: { userId },
-      attributes: ['tutorId'], 
+    const  userId  = req.params.userId;
+    const tutor = await User.findAll({ 
+      attributes:['password'],
+      where:  {userId: userId},
+      
+      include:[
+        {
+          model:Tutor,
+          attributes:['firstname','lastname','tutorId']
+        },
+       
+      ]
     });
 
-    if (!tutor) {
-      return res.status(404).json({ message: 'Tutor not found for the given userId' });
-    }
+    const filteredData = tutor.map((det) =>({
+      firstname: det.Tutors[0]?.firstname,
+      lastname: det.Tutors[0]?.lastname,
+      tutorId: det.Tutors[0]?.tutorId
+    }))
 
+    res.json(filteredData);
+ 
+});
+
+
+router.get('/assignment', async (req, res) => {
+  try {
     const assignments = await Assignment.findAll({
-      where: { tutorId: tutor.tutorId },
-      include: [Tutor], 
     });
 
     res.json(assignments);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 

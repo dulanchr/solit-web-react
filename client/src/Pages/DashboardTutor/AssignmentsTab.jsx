@@ -14,7 +14,7 @@ export default function AssignmentsTab() {
     description: "",
     content: "",
     deadline: "",
-    tutorId: null, // Initialize with null
+    tutorId: tutorId, // Initialize with null
   });
   const [formErrors, setFormErrors] = useState({
     classId: "",
@@ -22,11 +22,11 @@ export default function AssignmentsTab() {
     description: "",
     content: "",
     deadline: "",
-    tutorId: null, // Initialize with null
+    tutorId: tutorId, // Initialize with null
   });
 
   useEffect(() => {
-    fetch(`http://localhost:3001/gettutorid/assignment/${id}`)
+    fetch(`http://localhost:3001/gettutorid/user/${id}`)
       .then((response) => response.json())
       .then((data) => {
         // Assuming data is an array and contains at least one object
@@ -38,6 +38,7 @@ export default function AssignmentsTab() {
   }, [id]);
 
   console.log("export tutorId here", { tutorId });
+
   useEffect(() => {
     console.log("export tutorid here", { tutorId });
     setFormData((prevCourseData) => ({

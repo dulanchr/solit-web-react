@@ -1,0 +1,68 @@
+.poste-bin {
+  background-color: rgba(250, 235, 215, 0);
+  display: grid;
+  padding: 10vh;
+  grid-template-columns: repeat(8, 1fr);
+  grid-gap: 35px;
+  max-width: 90%;
+  height: 60vh;
+  margin: 0 auto;
+}
+
+.poste {
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out;
+}
+
+.poste:hover {
+  transform: scale(1.1);
+}
+
+/* Styles for the popup */
+.poste-popup {
+  position: fixed;
+  top: 50%;
+  left: 58%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.093);
+  padding: 20px;
+  max-width: 400px;
+  width: 90%;
+  border-radius:  20px 20px 20px 20px;
+}
+
+.poste-popup h3 {
+  margin-top: 0;
+}
+
+.poste-popup textarea {
+
+  border-radius:15px;
+  width: 96%;
+  height: 100px;
+  resize: none;
+  border: #fff;
+  background-color: aliceblue;
+  margin-bottom: 10px;
+}
+
+.poste-popup button {
+  margin-right: 10px;
+  background-color: rgb(87, 87, 87);
+}
+
+.poste-popup button:last-child {
+  margin-right: 0;
+}
+
+
+.poste-content{
+
+  background-color: rgb(221, 221, 221);
+  padding: 10px;
+  height: 15vh;
+  border-radius:15px;
+  margin-bottom: 3vh;
+}

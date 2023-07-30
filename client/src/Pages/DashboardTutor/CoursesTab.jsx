@@ -6,6 +6,7 @@ import { ref, uploadBytes } from "firebase/storage";
 
 export default function CourseTab() {
   const { id } = useParams();
+  const [tutorId, setTutorId] = useState();
 
   const [imageUpload, setImageUpload] = useState(null);
   const [tutorIdFromUserId, setTutorIdFromUserId] = useState(null);
@@ -34,25 +35,47 @@ export default function CourseTab() {
     episodes: "",
     price: "",
     courselink: "",
-    tutorId: tutorIdFromUserId, // To store the selected tutor ID
+    tutorId: tutorId, // To store the selected tutor ID
+    category: "",
+  });
+
+  const [CourseErrors, setCourseErrors] = useState({
+    title: "",
+    description: "",
+    episodes: "",
+    price: "",
+    courselink: "",
+    tutorId: tutorId, // To store the selected tutor ID
     category: "",
   });
 
   const [tutors, setTutors] = useState([]); // To store the tutor data fetched from the API
 
   useEffect(() => {
-    fetch(`http://localhost:3001/gettutorid/${id}`)
+    fetch(`http://localhost:3001/gettutorid/assignment/${id}`)
       .then((response) => response.json())
       .then((data) => {
-        if (data && data.tutorId) {
-          setCourseData((prevCourseData) => ({
-            ...prevCourseData,
-            tutorId: data.tutorId,
-          }));
+        // Assuming data is an array and contains at least one object
+        if (Array.isArray(data) && data.length > 0) {
+          setTutorId(data[0].tutorId); // Access tutorId from the first object in the array
         }
       })
       .catch((error) => console.error("Error fetching tutor data:", error));
   }, [id]);
+
+  console.log("export tutorId here", { tutorId });
+
+  useEffect(() => {
+    console.log("export tutorid here", { tutorId });
+    setCourseData((prevCourseData) => ({
+      ...prevCourseData,
+      tutorId: tutorId,
+    }));
+    setCourseErrors((prevFormErrors) => ({
+      ...prevFormErrors,
+      tutorId: tutorId,
+    }));
+  }, [tutorId]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -76,7 +99,7 @@ export default function CourseTab() {
         console.log("New course added:", data);
 
         if (data && data.courseId) {
-          uploadImage(data.courseId);
+          uploadImage(data.courseId); // Pass the courseId to the uploadImage function
         }
 
         setCourseData({

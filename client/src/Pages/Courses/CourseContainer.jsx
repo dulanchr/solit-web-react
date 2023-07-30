@@ -1,18 +1,59 @@
 import React, { useEffect, useState } from "react";
 import "./coursecontainer.css";
 import axios from "axios";
-import courseimg from "./img/course-sci.jpg";
 import { useNavigate } from "react-router-dom";
+
+import { storage } from "../../firebase";
+import { ref, listAll, getDownloadURL } from "firebase/storage";
 
 export default function CourseContainer() {
   let navigate = useNavigate();
   const [CourseData, setCourseData] = useState([]);
+  const [imageUrls, setImageUrls] = useState({});
 
   useEffect(() => {
     axios.get("http://localhost:3001/coursecard").then((response) => {
       setCourseData(response.data);
+      retrieveImages(response.data);
     });
   }, []);
+
+  const retrieveImages = async (courses) => {
+    try {
+      const urlsPromises = courses.map(async (course) => {
+        const storageRef = ref(storage, `CourseThumbs/${course.courseId}`);
+        try {
+          const res = await listAll(storageRef);
+          const urls = await Promise.all(
+            res.items.map(async (itemRef) => {
+              try {
+                const url = await getDownloadURL(itemRef);
+                return url;
+              } catch (error) {
+                console.log(error);
+                return null;
+              }
+            })
+          );
+          return { id: course.courseId, urls };
+        } catch (error) {
+          console.log(error);
+          return null;
+        }
+      });
+
+      const urlsData = await Promise.all(urlsPromises);
+      const imageUrlsObject = urlsData.reduce((acc, curr) => {
+        if (curr) {
+          acc[curr.id] = curr.urls;
+        }
+        return acc;
+      }, {});
+      setImageUrls(imageUrlsObject);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getCategroyColor = (category) => {
     switch (category) {
@@ -48,14 +89,20 @@ export default function CourseContainer() {
                 }}
               >
                 <div className="tp-courses__thumb w-img fix p-relative">
-                  <img src={courseimg} width={400} alt="coursethumb" />
+                  {imageUrls[course.courseId] &&
+                    imageUrls[course.courseId][0] && (
+                      <img
+                        src={imageUrls[course.courseId][0]}
+                        width={400}
+                        alt="coursethumb"
+                      />
+                    )}
                   <span
                     className="tp-courses__cat"
                     style={{
                       backgroundColor: getCategroyColor(course.category),
                     }}
                   >
-                    {/* Remove the anchor tag from the category */}
                     {course.category}
                   </span>
                 </div>
@@ -65,7 +112,6 @@ export default function CourseContainer() {
                       <i className="icon_star_alt"></i> {course.rating}
                     </span>
                   </div>
-                  {/* Change the anchor tag to navigate to "/coursecontent" */}
                   <h3
                     className="tp-courses__title"
                     onClick={() =>

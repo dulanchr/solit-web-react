@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./feedtab.css";
 import profilePicture from "./profile~1.jpg";
 
-export default function FeedTab() {
+export default function FeedTabStudent() {
   const { id } = useParams();
   const [tutorId, setTutorId] = useState();
   const [firstname, setFirstname] = useState();
@@ -55,17 +55,21 @@ export default function FeedTab() {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:3001/gettutorid/user/${id}`)
+    console.log(id);
+    fetch(`http://localhost:3001/getstudentid/user/${id}`)
       .then((response) => response.json())
+
       .then((data) => {
+        console.log(data);
         if (Array.isArray(data) && data.length > 0) {
           setFirstname(data[0].firstname);
           setlastname(data[0].lastname);
-          setTutorId(data[0].tutorId);
+          setTutorId(data[0].studentId);
         }
       })
       .catch((error) => console.error("Error fetching tutor data:", error));
-  }, [id]);
+    console.log("output", firstname);
+  }, []);
 
   useEffect(() => {
     fetch(`http://localhost:3001/gettutorid/assignment`)

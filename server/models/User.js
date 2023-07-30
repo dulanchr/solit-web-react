@@ -14,12 +14,23 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-
     validity: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
   });
+
+  User.associate = (models) => {
+    User.hasMany(models.Tutor, {
+      foreignKey: "userId",
+    });
+    User.hasMany(models.Student, {
+      foreignKey: "studentId",
+    });
+    User.hasMany(models.Admin, {
+      foreignKey: "adminId",
+    });
+  };
 
   return User;
 };

@@ -7,6 +7,7 @@ import ClassList from "./ClassList";
 
 export default function NewClasses() {
   const [imageUpload, setImageUpload] = useState(null);
+
   const uploadImage = (classId) => {
     if (imageUpload == null) return;
 

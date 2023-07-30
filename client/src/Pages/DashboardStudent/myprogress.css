@@ -1,0 +1,16 @@
+/* MyProgress.css */
+
+.myprog-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .myprog-title {
+    text-align: center;
+  }
+  
+  .myprog-charts {
+    margin-top: 20px;
+  }
+  

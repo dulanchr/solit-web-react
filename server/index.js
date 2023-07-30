@@ -51,6 +51,8 @@ app.use("/question", QuestionRouter);
 
 const StudentRouter = require('./routes/Students');
 app.use('/student', StudentRouter);
+const GetStudentIdRouter = require('./routes/GetStudentId');
+app.use('/getstudentid', GetStudentIdRouter);
 
 const StudentreviewRouter = require('./routes/StudentReviews');
 app.use('/studentreview', StudentreviewRouter);
@@ -66,6 +68,7 @@ app.use('/gettutorid', GetTutorIdRouter);
 
 const UserRouter = require('./routes/Users');
 app.use("/user", UserRouter);
+
 
 const LoginRouter = require('./routes/Login');
 app.use("/login", LoginRouter);

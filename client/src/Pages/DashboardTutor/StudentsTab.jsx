@@ -47,7 +47,7 @@ const StudentRowPDFDocument = ({ student }) => {
             <Text style={{ fontSize: "14px" }}>
               Parent Telephone: {student.telparent}
             </Text>
-            <Text style={{ fontSize: "14px" }}>Father: {student.father}</Text>
+            <Text style={{ fontSize: "14px" }}>Fether: {student.fether}</Text>
             <Text style={{ fontSize: "14px" }}>Rating: {student.rating}</Text>
             <Text style={styles.separator}>
               -----------------------------------
@@ -131,7 +131,7 @@ const StudentsTab = () => {
                   Parent Telephone: {student.telparent}
                 </Text>
                 <Text style={{ fontSize: "14px" }}>
-                  Father: {student.father}
+                  Fether: {student.fether}
                 </Text>
                 <Text style={{ fontSize: "14px" }}>
                   Rating: {student.rating}
@@ -182,7 +182,7 @@ const StudentsTab = () => {
               <td>{student.telparent}</td>
               <td>
                 <div className="submiss">
-                  <h1>{student.father}</h1>
+                  <h1>{student.fether}</h1>
                   <h2>
                     <i className="fi fi-rr-feather"></i>
                   </h2>
