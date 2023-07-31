@@ -73,15 +73,15 @@ export default function Head(props) {
       <div className="blokken">
         <h1>SOLIT institute of higher education</h1>
         <p>
-          "During the vibrant autumn season, the leaves transform into a
-          mesmerizing tapestry of colors. Shades of crimson, gold, and orange
-          paint the landscape, creating a breathtaking sight. The crisp air
-          carries the scent of fallen leaves, while the gentle breeze rustles
-          through the trees. It's a time of change and transition, as nature
-          prepares for the winter ahead. The days grow shorter, and the nights
-          become cooler, reminding us of the fleeting nature of time. As we
-          embrace this season of transformation, we find solace in the beauty of
-          nature and the cyclical rhythm of life.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus
+          libero a neque molestie, a aliquet dui pellentesque. Mauris ac metus
+          id est pharetra gravida... Fusce vestibulum sapien elit, et finibus
+          lectus bibendum in. Praesent sit amet nisi id arcu vehicula molestie.
+          Integer sagittis sem vitae semper aliquet. Vestibulum consectetur
+          justo et mauris blandit lacinia. Nulla tincidunt iaculis eros, nec
+          facilisis lacus tincidunt ut... Fusce vestibulum sapien elit, et
+          finibus lectus bibendum in. Praesent sit amet nisi id arcu vehicula
+          molestie.
         </p>
       </div>
       <ClassConntainerLink />

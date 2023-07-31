@@ -188,9 +188,8 @@ export default function NewTeachers() {
             <div className="popup-content">
               <p>Tutor Added Successfully!</p>
               <h1>
-                <i className="fi fi-rr-envelope-download"></i>
+                <i class="fi fi-br-check"></i>
               </h1>
-              <p>Thank you for adding the new teacher!</p>
               <button onClick={handleOkClick}>OK</button>
             </div>
           </div>

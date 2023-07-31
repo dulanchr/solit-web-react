@@ -66,7 +66,17 @@ const Login = () => {
         {/* Card Section */}
         <div className="blokkencore">
           <h1>What is CORE?</h1>
-          <p>"During the vibrant autumn season,"</p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+            luctus libero a neque molestie, a aliquet dui pellentesque. Mauris
+            ac metus id est pharetra gravida... Fusce vestibulum sapien elit, et
+            finibus lectus bibendum in. Praesent sit amet nisi id arcu vehicula
+            molestie. Integer sagittis sem vitae semper aliquet. Vestibulum
+            consectetur justo et mauris blandit lacinia. Nulla tincidunt iaculis
+            eros, nec facilisis lacus tincidunt ut... Fusce vestibulum sapien
+            elit, et finibus lectus bibendum in. Praesent sit amet nisi id arcu
+            vehicula molestie.
+          </p>
         </div>
 
         {/* Login Section */}

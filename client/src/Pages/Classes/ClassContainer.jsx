@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import classimage from "../images/signupbanner~1.jpg";
+import classimage from "../../Pages/images/defaultbg.jpg";
 import "./classcontainer.css";
 import { useNavigate } from "react-router-dom";
 

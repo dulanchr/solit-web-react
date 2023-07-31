@@ -11,6 +11,7 @@ export default function CourseTab() {
   const [imageUpload, setImageUpload] = useState(null);
   const [tutorIdFromUserId, setTutorIdFromUserId] = useState(null);
 
+  console.log("export tutorId here", { tutorId });
   const uploadImage = (courseId) => {
     if (imageUpload == null) return;
 
@@ -52,7 +53,7 @@ export default function CourseTab() {
   const [tutors, setTutors] = useState([]); // To store the tutor data fetched from the API
 
   useEffect(() => {
-    fetch(`http://localhost:3001/gettutorid/assignment/${id}`)
+    fetch(`http://localhost:3001/gettutorid/user/${id}`)
       .then((response) => response.json())
       .then((data) => {
         // Assuming data is an array and contains at least one object
@@ -62,8 +63,6 @@ export default function CourseTab() {
       })
       .catch((error) => console.error("Error fetching tutor data:", error));
   }, [id]);
-
-  console.log("export tutorId here", { tutorId });
 
   useEffect(() => {
     console.log("export tutorid here", { tutorId });
