@@ -29,10 +29,15 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "classId",
     });
 
-    // Add the one-to-many association with Tutor
     Assignment.belongsTo(models.Tutor, {
       foreignKey: "tutorId",
     });
+
+    // Add the one-to-many association with User (Author)
+    Assignment.belongsTo(models.User, {
+      foreignKey: "userId", // This refers to the user who created the assignment
+    });
+
     Assignment.hasMany(models.Answer, {
       foreignKey: "assignmentId",
     });

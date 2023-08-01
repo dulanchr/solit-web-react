@@ -1,12 +1,18 @@
 .poste-bin {
-  background-color: rgba(250, 235, 215, 0);
+  background-color: rgb(255, 255, 255);
   display: grid;
-  padding: 10vh;
+  padding: 5vh;
   grid-template-columns: repeat(8, 1fr);
   grid-gap: 35px;
+  border-radius: 20px;
   max-width: 90%;
-  height: 60vh;
+  height: 68vh;
   margin: 0 auto;
+  overflow: hidden;
+  overflow-y: auto;
+  margin-top: 3vh;
+  
+  grid-column-start: auto;
 }
 
 .poste {
@@ -25,12 +31,13 @@
   top: 50%;
   left: 58%;
   transform: translate(-50%, -50%);
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.093);
+  background-color: #dfdfdf;
+  box-shadow: 0 0px 14px rgba(0, 0, 0, 0.205);
   padding: 20px;
   max-width: 400px;
   width: 90%;
   border-radius:  20px 20px 20px 20px;
+  color: #000000;
 }
 
 .poste-popup h3 {
@@ -38,7 +45,6 @@
 }
 
 .poste-popup textarea {
-
   border-radius:15px;
   width: 96%;
   height: 100px;
@@ -66,3 +72,53 @@
   border-radius:15px;
   margin-bottom: 3vh;
 }
+
+.feedd-userinfo{
+  background-color: rgba(250, 235, 215, 0);
+  max-width: 98%;
+  display: flex;
+}
+
+.feedd-welcomenote{
+  display: flex;
+  background-color: rgba(182, 112, 20, 0);
+  width: 53vw;
+  justify-content: left;
+ 
+ 
+}
+.feedd-userinfo{
+  display: flex;
+  justify-content: left;
+  flex-direction: row;
+  width: auto;
+  
+}
+.feddprofilephoto{
+  background-color: aqua;
+  width: 70px;
+  height: 70px;
+  margin-top: 6px;
+  border-radius: 45px;
+  margin-right: 15px;
+  
+}
+
+.feedd-userinfo h2{
+  color: black;
+  font-size: 1.2rem;
+  margin-bottom: -1.2vh;
+}
+
+.feedd-userinfo h3{
+  color: rgb(25, 25, 25);
+  font-weight: 100;
+  font-size: 0.9rem;
+}
+
+.feedd-welcomenote{
+  margin-left: 3vw;
+  margin-right: 3vw;
+}
+
+

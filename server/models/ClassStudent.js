@@ -12,14 +12,14 @@ module.exports = (sequelize, DataTypes) => {
   
 
     ClassStudent.associate = (models) => {
-      ClassStudent.belongsTo(models.Class, {
-        foreignKey: "classId",
-      });
+      // ClassStudent.belongsTo(models.Class, {
+      //   foreignKey: "classId",
+      // });
   
 
-      ClassStudent.belongsTo(models.Student, {
-        foreignKey: "studentId",
-      });
+      // ClassStudent.belongsTo(models.Student, {
+      //   foreignKey: "studentId",
+      // });
     };
   
     return ClassStudent;

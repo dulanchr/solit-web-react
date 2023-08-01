@@ -5,6 +5,7 @@ import axios from "axios";
 import FeedTabStudent from "./FeedTabStudent";
 import StudentAssignmentsTab from "./StudentAssignmentsTab";
 import MyProgress from "./MyProgress";
+import QuestionsTab from "./QuestionsTab";
 
 export default function FeedStudent() {
   const { id } = useParams(); // Get the id parameter from the URL
@@ -33,6 +34,8 @@ export default function FeedStudent() {
         return <FeedTabStudent />;
       case "myprogress":
         return <MyProgress />;
+      case "questions":
+        return <QuestionsTab />;
       default:
         return null;
     }
@@ -72,6 +75,18 @@ export default function FeedStudent() {
                 onClick={() => handleTabClick("myprogress")}
               >
                 <i class="fi fi-rr-chart-histogram"></i>Myself
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#"
+                className={`dash-nav-item ${
+                  activeTab === "questions" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("questions")}
+              >
+                <i class="fi fi-rr-chart-histogram"></i>Questions
               </a>
             </li>
           </ul>

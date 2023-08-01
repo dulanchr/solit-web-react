@@ -10,8 +10,6 @@ export default function NewClasses() {
 
   const uploadImage = (classId) => {
     if (imageUpload == null) return;
-
-    // Use the class ID to rename the image file
     const imageRef = ref(storage, `ClassThumbs/${classId}/${imageUpload.name}`);
 
     uploadBytes(imageRef, imageUpload)

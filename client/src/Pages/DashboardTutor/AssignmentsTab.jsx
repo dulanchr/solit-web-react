@@ -14,7 +14,8 @@ export default function AssignmentsTab() {
     description: "",
     content: "",
     deadline: "",
-    tutorId: tutorId, // Initialize with null
+    tutorId: tutorId,
+    userId: id, // Initialize with null
   });
   const [formErrors, setFormErrors] = useState({
     classId: "",
@@ -22,7 +23,8 @@ export default function AssignmentsTab() {
     description: "",
     content: "",
     deadline: "",
-    tutorId: tutorId, // Initialize with null
+    tutorId: tutorId,
+    userId: id,
   });
 
   useEffect(() => {

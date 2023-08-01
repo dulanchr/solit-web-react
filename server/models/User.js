@@ -25,10 +25,15 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
     });
     User.hasMany(models.Student, {
-      foreignKey: "studentId",
+      foreignKey: "userId",
     });
     User.hasMany(models.Admin, {
-      foreignKey: "adminId",
+      foreignKey: "userId",
+    });
+
+    // Add the one-to-many association with Assignment (Created Assignments)
+    User.hasMany(models.Assignment, {
+      foreignKey: "userId",
     });
   };
 

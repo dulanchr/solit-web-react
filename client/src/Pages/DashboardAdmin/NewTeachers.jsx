@@ -4,7 +4,28 @@ import { storage } from "../../firebase";
 import { ref, uploadBytes } from "firebase/storage";
 
 export default function NewTeachers() {
-  const [teacherData, setTeacherData] = useState({
+  const [imageUpload, setImageUpload] = useState(null);
+
+  const [showAcceptPopup, setShowAcceptPopup] = useState(false);
+  const [submitting, setSubmitting] = useState(false); // State to track form submission
+
+  const uploadImage = (userId) => {
+    if (imageUpload == null) return;
+
+    const imageRef = ref(
+      storage,
+      `ProfilePictures/${userId}/${imageUpload.name}`
+    );
+
+    uploadBytes(imageRef, imageUpload)
+      .then(() => {
+        alert("Image Uploaded");
+      })
+      .catch((error) => {
+        console.error("Error uploading image:", error);
+      });
+  };
+  const [TutorData, setTutorData] = useState({
     firstname: "",
     lastname: "",
     tel: "",
@@ -14,14 +35,11 @@ export default function NewTeachers() {
     password: "",
     Validity: true,
   });
-  const [imageUpload, setImageUpload] = useState(null);
-  const [showAcceptPopup, setShowAcceptPopup] = useState(false);
-  const [submitting, setSubmitting] = useState(false); // State to track form submission
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setTeacherData({
-      ...teacherData,
+    setTutorData({
+      ...TutorData,
       [name]: value,
     });
   };
@@ -37,16 +55,18 @@ export default function NewTeachers() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(teacherData),
+      body: JSON.stringify(TutorData),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("New teacher added:", data);
         setShowAcceptPopup(true);
-        setSubmitting(false); // Reset submitting state after successful submission
-
-        // Reset the input fields to their initial empty values
-        setTeacherData({
+        setSubmitting(false);
+        if (data && data.userId) {
+          // Upload the image with the tutorId as part of the image file name
+          uploadImage(data.userId);
+        } // Reset submitting state after successful submission
+        setTutorData({
           firstname: "",
           lastname: "",
           tel: "",
@@ -56,8 +76,7 @@ export default function NewTeachers() {
           password: "",
         });
 
-        // Clear the image upload state after successful image upload
-        setImageUpload(null);
+        // setImageUpload(null);
       })
       .catch((error) => {
         console.error("Error adding new teacher:", error);
@@ -67,22 +86,6 @@ export default function NewTeachers() {
 
   const handleOkClick = () => {
     setShowAcceptPopup(false);
-  };
-
-  const uploadImage = (teacherId) => {
-    if (imageUpload == null) return;
-    const imageRef = ref(
-      storage,
-      `TeacherAvatars/${teacherId}/${imageUpload.name}`
-    );
-
-    uploadBytes(imageRef, imageUpload)
-      .then(() => {
-        // No need to show the popup here, as it's already shown after form submission
-      })
-      .catch((error) => {
-        console.error("Error uploading image:", error);
-      });
   };
 
   return (
@@ -95,7 +98,7 @@ export default function NewTeachers() {
             type="text"
             id="firstname"
             name="firstname"
-            value={teacherData.firstname}
+            value={TutorData.firstname}
             onChange={handleChange}
             required
           />
@@ -106,7 +109,7 @@ export default function NewTeachers() {
             type="text"
             id="lastname"
             name="lastname"
-            value={teacherData.lastname}
+            value={TutorData.lastname}
             onChange={handleChange}
             required
           />
@@ -117,7 +120,7 @@ export default function NewTeachers() {
             type="text"
             id="tel"
             name="tel"
-            value={teacherData.tel}
+            value={TutorData.tel}
             onChange={handleChange}
             required
           />
@@ -128,7 +131,7 @@ export default function NewTeachers() {
             type="text"
             id="address"
             name="address"
-            value={teacherData.address}
+            value={TutorData.address}
             onChange={handleChange}
             required
           />
@@ -139,7 +142,7 @@ export default function NewTeachers() {
             type="text"
             id="description"
             name="description"
-            value={teacherData.description}
+            value={TutorData.description}
             onChange={handleChange}
             required
           />
@@ -150,7 +153,7 @@ export default function NewTeachers() {
             type="email"
             id="email"
             name="email"
-            value={teacherData.email}
+            value={TutorData.email}
             onChange={handleChange}
             required
           />
@@ -161,7 +164,7 @@ export default function NewTeachers() {
             type="password"
             id="password"
             name="password"
-            value={teacherData.password}
+            value={TutorData.password}
             onChange={handleChange}
             required
           />
@@ -177,8 +180,8 @@ export default function NewTeachers() {
             }}
           />
         </div>
-        <button type="submit" className="newtutor-btn" disabled={submitting}>
-          {submitting ? "Adding Tutor..." : "Add Tutor"}
+        <button onClick={uploadImage} className="newclass-btn">
+          Add Teacher
         </button>
       </form>
 

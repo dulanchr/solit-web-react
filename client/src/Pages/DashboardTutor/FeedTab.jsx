@@ -2,57 +2,22 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./feedtab.css";
 import profilePicture from "./profile~1.jpg";
+import FeedGrid from "./FeedGrid";
+
+import { storage } from "../../firebase";
+import { ref, listAll, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid"; // Use destructuring to impor
 
 export default function FeedTab() {
   const { id } = useParams();
   const [tutorId, setTutorId] = useState();
+
   const [firstname, setFirstname] = useState();
   const [lastname, setlastname] = useState();
   const navigate = useNavigate();
-  const [showPopup, setShowPopup] = useState(false);
-  const [AssignmentData, setAssignmentData] = useState([]);
-  const [comment, setComment] = useState("");
-  const [currentPostIndex, setCurrentPostIndex] = useState(0);
 
-  const handleImageClick = (index) => {
-    setCurrentPostIndex(index);
-    setShowPopup(true);
-  };
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  };
-
-  const handleCommentChange = (event) => {
-    setComment(event.target.value);
-  };
-
-  const handleCommentSubmit = () => {
-    console.log("Submitted comment:", comment);
-
-    const postData = {
-      contentpdf: "path/to/content.pdf",
-      reply: comment,
-      agrees: "0",
-      poster: firstname,
-      assignmentId: id,
-      userId: id,
-    };
-
-    fetch("http://localhost:3001/answer", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Successfully posted data:", data);
-        handleClosePopup();
-      })
-      .catch((error) => console.error("Error posting data:", error));
-  };
+  const [imageurl, setImageUrl] = useState({});
+  const [UserData, setUserData] = useState([]);
 
   useEffect(() => {
     fetch(`http://localhost:3001/gettutorid/user/${id}`)
@@ -67,57 +32,66 @@ export default function FeedTab() {
       .catch((error) => console.error("Error fetching tutor data:", error));
   }, [id]);
 
-  useEffect(() => {
-    fetch(`http://localhost:3001/gettutorid/assignment`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setAssignmentData(data);
-        }
-      })
-      .catch((error) => console.error("Error fetching tutor data:", error));
-  }, [id]);
+  const retrieveImagesForAllUsers = async () => {
+    try {
+      const teacherIds = UserData.map((assignment) => assignment.userId);
+      const imageUrls = {};
+      await Promise.all(
+        teacherIds.map(async (id) => {
+          const storageRef = ref(storage, `ProfilePictures/${id}`);
+          try {
+            const res = await listAll(storageRef);
+            if (res.items.length > 0) {
+              // Fetch only the first image URL
+              const url = await getDownloadURL(res.items[0]);
+              imageUrls[id] = url;
+            } else {
+              imageUrls[id] = null; // No image found for this user
+            }
+          } catch (error) {
+            console.log(error);
+            imageUrls[id] = null; // Error fetching the image URL
+          }
+        })
+      );
 
+      setImageUrl(imageUrls);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    retrieveImagesForAllUsers();
+  }, [UserData]);
+  console.log("dfsdv", id);
   return (
     <div>
       <div>
-        <h1>Welcome back, {firstname}</h1>
-        <div className="poste-bin">
-          {AssignmentData.map((assignment, index) => (
-            <div
-              key={index}
-              className="poste"
-              style={{
-                backgroundImage: `url(${profilePicture})`,
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center center",
-                cursor: "pointer",
-                height: "70px",
-                width: "70px",
-              }}
-              onClick={() => handleImageClick(index)}
-            ></div>
-          ))}
-        </div>
-      </div>
-      {showPopup && (
-        <div className="poste-popup">
-          <h3>{AssignmentData[currentPostIndex].title}</h3>
-          {/* Render the content fetched from the API */}
-          <div className="poste-content">
-            <p>{AssignmentData[currentPostIndex].description}</p>
-            {AssignmentData[currentPostIndex].content}
+        <div className="feedd-userinfo">
+          <div className="feedd-welcomenote">
+            <h1>Welcome back, {firstname}</h1>
           </div>
-          <textarea
-            value={comment}
-            onChange={handleCommentChange}
-            placeholder="Enter your answer here..."
-          ></textarea>
-          <button onClick={handleClosePopup}>Close</button>
-          <button onClick={handleCommentSubmit}>Answer</button>
+
+          <div
+            className="feddprofilephoto"
+            style={{
+              backgroundImage: `url(${imageurl[id] || profilePicture})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center center",
+            }}
+          ></div>
+
+          <div className="feddprofileinfo">
+            <h2>
+              {firstname} {lastname}
+            </h2>
+            <h3>Teacher, SOLIT (Pvt) Ltd</h3>
+          </div>
         </div>
-      )}
+        <FeedGrid />
+      </div>
     </div>
   );
 }

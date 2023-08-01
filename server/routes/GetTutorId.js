@@ -13,7 +13,7 @@ router.get('/user/:userId', async (req, res) => {
       include:[
         {
           model:Tutor,
-          attributes:['firstname','lastname','tutorId']
+          attributes:['firstname','lastname','tutorId' ]
         },
        
       ]
@@ -29,6 +29,42 @@ router.get('/user/:userId', async (req, res) => {
  
 });
 
+router.get('/poste', async (req, res) => {
+  try {
+    const assignments = await Assignment.findAll();
+    const questions = await Question.findAll();
+    
+    const combinedData = [];
+    assignments.forEach((assignment) => {
+      combinedData.push({ type: "assignment", data: assignment });
+    });
+    questions.forEach((question) => {
+      combinedData.push({ type: "question", data: question });
+    });
+
+    const formattedData = combinedData.map(({ type, data }) => ({
+      type,
+      assignmentId: data.assignmentId,
+      title: data.title,
+      description: data.description,
+      content: data.content,
+      deadline: data.deadline,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      classId: data.classId,
+      tutorId: data.tutorId,
+      userId: data.userId,
+    }));
+
+    res.json(formattedData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
 
 router.get('/assignment', async (req, res) => {
   try {
@@ -41,5 +77,7 @@ router.get('/assignment', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+
 
 module.exports = router;

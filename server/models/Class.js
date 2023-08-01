@@ -39,10 +39,10 @@ module.exports = (sequelize, DataTypes) => {
     Class.hasMany(models.Assignment, {
       foreignKey: "classId",
     });
-    Class.belongsToMany(models.Student, {
-      through: models.ClassStudent,
-      foreignKey: "classId",
-    });
+    // Class.belongsToMany(models.Student, {
+    //   through: models.ClassStudent,
+    //   foreignKey: "classId",
+    // });
   };
 
   return Class;

@@ -46,6 +46,9 @@ app.use("/getcoursedata", GetCDataRouter);
 const CourseRouter = require('./routes/CourseCards');
 app.use("/coursecard", CourseRouter);
 
+
+const PosteContentRouter = require('./routes/PosteContent');
+app.use("/postecontent", PosteContentRouter);
 const QuestionRouter = require('./routes/Questions');
 app.use("/question", QuestionRouter);
 

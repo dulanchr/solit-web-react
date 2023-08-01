@@ -77,10 +77,10 @@ export default function Pay() {
   // Move the sendAcceptEmail function outside of the handleSubmit function
   const sendAcceptEmail = () => {
     const params = {
-      course_link: getCoursedata.courselink,
-      user_code: PaymentData.usercode,
+      course_link: "www.google.com",
+      user_code: "IeWyibw",
       user_email: formData.email,
-      signup_link: `http://localhost:3000/signup/${PaymentData.usercode}`, // Use PaymentData.usercode here
+      signup_link: `http://localhost:3000/signup`, // Use PaymentData.usercode here
     };
     emailjs
       .send("service_5695pgu", "template_sjxvtxk", params, "k3ZSYx6meJP6rONrM")

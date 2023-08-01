@@ -8,13 +8,6 @@ import FetchRequesters from "./NewStudentsTab";
 import axios from "axios";
 import FeedTabAdmin from "./FeedTabAdmin";
 
-const FeedTab = () => (
-  <div>
-    <h2>Welcome to the Feed!</h2>
-    <p>This is the Feed content.</p>
-  </div>
-);
-
 export default function FeedAdmin() {
   const [activeTab, setActiveTab] = useState("feed");
   const [userData, setUserData] = useState(null);
@@ -42,8 +35,8 @@ export default function FeedAdmin() {
     switch (activeTab) {
       case "feed":
         return <FeedTabAdmin />;
-      // case "newstudents":
-      //   return <FetchRequesters />;
+      case "newstudents":
+        return <NewStudentsTab />;
       case "newteachers":
         return <NewTeachers />;
       case "newclasses":
@@ -78,7 +71,7 @@ export default function FeedAdmin() {
               </a>
             </li>
 
-            {/* <li>
+            <li>
               <a
                 href="#"
                 className={`dash-nav-item ${
@@ -88,7 +81,7 @@ export default function FeedAdmin() {
               >
                 <i class="fi fi-rr-user-add"></i>New Stdudents
               </a>
-            </li> */}
+            </li>
 
             <li>
               <a
