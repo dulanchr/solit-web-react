@@ -48,5 +48,10 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+router.get("/classdown", async (req, res) =>{
+  const listofClasses = await Class.findAll();
+  res.json(listofClasses);
+}); 
+
 
 module.exports = router;

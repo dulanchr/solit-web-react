@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import profilePicture from "./defaultbg.jpg"; // Import profilePicture here
-import "./feedtab.css";
+import profilePicture from "../DashboardTutor/defaultbg.jpg"; // Import profilePicture here
+import "../DashboardTutor//feedtab.css";
 import { storage } from "../../firebase";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid"; // Use destructuring to impor
 
-export default function FeedGrid() {
+export default function FeedGridStudent() {
   const { id } = useParams();
   const [imageurl, setImageUrl] = useState({});
   const [AssignmentData, setAssignmentData] = useState([]);
@@ -41,16 +41,15 @@ export default function FeedGrid() {
   const handleCommentChange = (event) => {
     setComment(event.target.value);
   };
-  const currentAssignment = AssignmentData[currentPostIndex];
 
   const handleCommentSubmit = () => {
     console.log("Submitted comment:", comment);
 
-    const postData = {
+    const currentAssignment = AssignmentData[currentPostIndex];
+    const postAnswer = {
       contentpdf: "path/to/content.pdf",
       reply: comment,
       agrees: "0",
-      poster: "firstname",
       questionId: currentAssignment.questionId,
       assignmentId: currentAssignment.assignmentId,
       userId: id,
@@ -61,7 +60,7 @@ export default function FeedGrid() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(postData),
+      body: JSON.stringify(postAnswer),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -124,9 +123,9 @@ export default function FeedGrid() {
               height: "70px",
               width: "70px",
               border:
-                assignment.type === "assignment"
+                AssignmentData[currentPostIndex].type === "assignment"
                   ? "3px solid yellow"
-                  : "3px solid white",
+                  : "none",
             }}
             onClick={() => handleImageClick(index)}
           ></div>

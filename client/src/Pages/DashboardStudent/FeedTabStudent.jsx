@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../DashboardTutor/feedtab.css";
 import profilePicture from "./profile~1.jpg";
-import FeedGrid from "../DashboardTutor/FeedGrid";
 
 import { storage } from "../../firebase";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid"; // Use destructuring to impor
+import FeedGridStudent from "./FeedGridStudent";
 
 export default function FeedTabStudent() {
   const { id } = useParams();
@@ -90,7 +90,7 @@ export default function FeedTabStudent() {
             <h3>Student, SOLIT (Pvt) Ltd</h3>
           </div>
         </div>
-        <FeedGrid />
+        <FeedGridStudent />
       </div>
     </div>
   );

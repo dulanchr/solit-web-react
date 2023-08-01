@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import "./coursestab.css";
-import "./assignmentstab.css";
+import "../DashboardTutor/coursestab.css";
+import "../DashboardTutor/assignmentstab.css";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function AssignmentsTab() {
+export default function QuestionsTab() {
   const { id } = useParams();
   const [tutorId, setTutorId] = useState();
-  const navigate = useNavigate();
+  const [classOptions, setClassOptions] = useState([]);
+
   const [formData, setFormData] = useState({
     classId: "",
     title: "",
@@ -15,8 +16,9 @@ export default function AssignmentsTab() {
     content: "",
     deadline: "",
     tutorId: tutorId,
-    userId: id, // Initialize with null
+    userId: id,
   });
+
   const [formErrors, setFormErrors] = useState({
     classId: "",
     title: "",
@@ -27,128 +29,83 @@ export default function AssignmentsTab() {
     userId: id,
   });
 
-  useEffect(() => {
-    fetch(`http://localhost:3001/gettutorid/user/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // Assuming data is an array and contains at least one object
-        if (Array.isArray(data) && data.length > 0) {
-          setTutorId(data[0].tutorId); // Access tutorId from the first object in the array
+  const [confirmRemove, setConfirmRemove] = useState(false);
+  const [removingassignmentId, setRemovingassignmentId] = useState(null);
+
+  const handleRemoveQuestionClick = (assignmentId) => {
+    setConfirmRemove(true);
+    setRemovingassignmentId(assignmentId);
+  };
+
+  const handleCancelClick = () => {
+    setConfirmRemove(false);
+    setRemovingassignmentId(null);
+  };
+
+  const [myQuestions, setMyQuestions] = useState([]);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+  };
+  const fetchClassOptions = () => {
+    axios
+      .get("http://localhost:3001/class/classdown")
+      .then((response) => {
+        if (Array.isArray(response.data)) {
+          setClassOptions(response.data);
+        } else {
+          console.error("Response data is not an array:", response.data);
         }
       })
-      .catch((error) => console.error("Error fetching tutor data:", error));
-  }, [id]);
-
-  console.log("export tutorId here", { tutorId });
-
-  useEffect(() => {
-    console.log("export tutorid here", { tutorId });
-    setFormData((prevCourseData) => ({
-      ...prevCourseData,
-      tutorId: tutorId,
-    }));
-    setFormErrors((prevFormErrors) => ({
-      ...prevFormErrors,
-      tutorId: tutorId,
-    }));
-  }, [tutorId]);
-
-  const [classOptions, setClassOptions] = useState([]);
-
-  const [classAssignments, setClassAssignments] = useState({});
-
-  const isLoggedIn = () => {
-    return !!getAccessToken();
+      .catch((error) => {
+        console.error("Error fetching class options:", error);
+      });
   };
 
   const fetchData = () => {
     axios
-      .get("http://localhost:3001/class")
+      .get(`http://localhost:3001/assignment/${id}`)
       .then((response) => {
-        setClassAssignments(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching class options:", error);
-      });
-
-    fetch("http://localhost:3001/class")
-      .then((response) => response.json())
-      .then((data) => {
-        setClassAssignments(data);
-        setClassOptions(data);
+        // Check if response.data is an array before setting it
+        if (Array.isArray(response.data)) {
+          setMyQuestions(response.data);
+        } else {
+          console.error("Response data is not an array:", response.data);
+        }
       })
       .catch((error) => {
         console.error("Error fetching class options:", error);
       });
   };
-
   useEffect(() => {
+    fetchClassOptions();
     fetchData();
   }, []);
-  const getAccessToken = () => {
-    return localStorage.getItem("accessToken");
+
+  const handleRemoveAssignment = async (assignmentId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3001/assignment/${assignmentId}`,
+        {}
+      );
+      if (response.status === 200) {
+        fetchData();
+      }
+    } catch (error) {
+      console.error("Error deleting assignment:", error);
+    }
   };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-    setFormErrors((prevState) => ({
-      ...prevState,
-      [name]: "",
-    }));
+  const handleRemoveAssignmentConfirm = async () => {
+    if (removingassignmentId) {
+      await handleRemoveAssignment(removingassignmentId);
+      setConfirmRemove(false);
+      setRemovingassignmentId(null);
+    }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!isLoggedIn()) {
-      console.log("User not logged in. Please log in to create assignments.");
-      return;
-    }
-    let hasErrors = false;
-    const newFormErrors = {
-      classId: "",
-      title: "",
-      description: "",
-      content: "",
-      deadline: "",
-    };
-
-    if (formData.classId === "") {
-      newFormErrors.classId = "Required.";
-      hasErrors = true;
-    }
-
-    if (formData.title.trim() === "") {
-      newFormErrors.title = "Required.";
-      hasErrors = true;
-    }
-
-    if (formData.description.trim() === "") {
-      newFormErrors.description = "Required.";
-      hasErrors = true;
-    }
-
-    if (formData.content.trim() === "") {
-      newFormErrors.content = "Required.";
-      hasErrors = true;
-    } else if (!isValidUrl(formData.content.trim())) {
-      newFormErrors.content = "Enter a valid link.";
-      hasErrors = true;
-    }
-
-    if (formData.deadline && formData.deadline.trim() === "") {
-      newFormErrors.deadline = "Required";
-      hasErrors = true;
-    }
-
-    if (hasErrors) {
-      setFormErrors(newFormErrors);
-      return;
-    }
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post(
         "http://localhost:3001/assignment",
@@ -177,71 +134,12 @@ export default function AssignmentsTab() {
     }
   };
 
-  const isValidUrl = (url) => {
-    try {
-      new URL(url);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-  const handleRemoveAssignment = async (assignmentId) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:3001/assignment/${assignmentId}`,
-        {
-          // headers: {
-          //   Authorization: `Bearer ${getAccessToken()}`,
-          // },
-        }
-      );
-      if (response.status === 200) {
-        // Assignment was deleted successfully, so you may want to update the state
-        // and refresh the assignment list to reflect the changes.
-        // For example, you can refetch the assignments data after deletion.
-        fetchData(); // Refetch the assignments data after deletion
-      }
-    } catch (error) {
-      console.error("Error deleting assignment:", error);
-    }
-  };
-
-  const handleEditAssignment = async (assignmentId) => {
-    axios
-      .put(`http://localhost:3001/assignment/${assignmentId}`)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const [confirmRemove, setConfirmRemove] = useState(false);
-  const [removingAssignmentId, setRemovingAssignmentId] = useState(null);
-
-  const handleRemoveAssignmentClick = (assignmentId) => {
-    setConfirmRemove(true);
-    setRemovingAssignmentId(assignmentId);
-  };
-
-  const handleCancelClick = () => {
-    setConfirmRemove(false);
-    setRemovingAssignmentId(null);
-  };
-
-  const handleRemoveAssignmentConfirm = async () => {
-    if (removingAssignmentId) {
-      await handleRemoveAssignment(removingAssignmentId);
-      setConfirmRemove(false);
-      setRemovingAssignmentId(null);
-    }
-  };
+  console.log("dsfsdv", myQuestions);
   return (
     <div className="coursecontorls">
       <div className="addcourses">
         <h2 style={{ marginTop: "0vh", fontSize: "1.5rem", color: "#232323" }}>
-          Add Assignments:
+          Post an Assignment
         </h2>
         <form className="addc-form" onSubmit={handleSubmit}>
           <div className="addc-form-group">
@@ -259,10 +157,11 @@ export default function AssignmentsTab() {
                 </option>
               ))}
             </select>
-            {formErrors.classId && (
-              <span className="error">{formErrors.classId}</span>
+            {formErrors.assignmentId && (
+              <span className="error">{formErrors.assignmentId}</span>
             )}
           </div>
+
           <div className="addc-form-group">
             <label htmlFor="title">Title:</label>
             <input
@@ -304,6 +203,7 @@ export default function AssignmentsTab() {
               <span className="error">{formErrors.content}</span>
             )}
           </div>
+
           <div className="addc-form-group">
             <label htmlFor="deadline">Deadline:</label>
             <input
@@ -317,14 +217,16 @@ export default function AssignmentsTab() {
               <span className="error">{formErrors.deadline}</span>
             )}
           </div>
+
           <button type="submit" className="addc-btn">
             Add
           </button>
         </form>
       </div>
+
       <div className="class-contentext">
-        {classOptions.map((classOption) => (
-          <div key={classOption.classId} className="class-folder">
+        {myQuestions.map((classOption) => (
+          <div key={classOption.assignmentId} className="class-folder">
             <h2
               style={{
                 marginTop: "2vh",
@@ -333,11 +235,64 @@ export default function AssignmentsTab() {
                 opacity: "0.5",
               }}
             >
-              {classOption.className}
-              {"."}
+              {classOption.title}
             </h2>
-            {classOption.Assignments.map((assigndata) => (
-              <div key={assigndata.assignmentId}>
+            {classOption.Answers.length === 0 ? (
+              <div className="myqueanswelist">
+                <h1
+                  style={{
+                    marginTop: "0vh",
+                    fontSize: "1rem",
+                    color: "#00000020",
+                  }}
+                >
+                  No Answers Here Yet <i class="fi fi-rs-sad-tear"></i>
+                </h1>
+              </div>
+            ) : (
+              <div className="myqueanswelist">
+                <h1
+                  style={{
+                    marginTop: "0vh",
+                    fontSize: "1.2rem",
+                    color: "#00000060",
+                  }}
+                >
+                  Answers :
+                </h1>
+                {classOption.Answers.map((answer) => (
+                  <>
+                    {" "}
+                    <div key={answer.answerId} className="answermyques">
+                      <h1
+                        style={{
+                          marginTop: "0vh",
+                          fontSize: "1.2rem",
+                          color: "#00000080",
+                        }}
+                      >
+                        <i class="fi fi-bs-bullet"></i>
+                        {answer.reply}
+                      </h1>
+                      {answer.User && (
+                        <h1
+                          style={{
+                            marginTop: "0vh",
+                            fontSize: "0.7rem",
+                            color: "#00000080",
+                            fontWeight: "100",
+                          }}
+                        >
+                          posted by, {answer.User.email}
+                        </h1>
+                      )}
+                    </div>
+                  </>
+                ))}
+              </div>
+            )}
+            {/* {classOption.Answer.map((answeData) => (
+              <div key={answeData.answerId}>
                 <div className="asssignment-item">
                   <p
                     style={{
@@ -347,7 +302,7 @@ export default function AssignmentsTab() {
                       opacity: "0.5",
                     }}
                   >
-                    {assigndata.title}
+                    {answeData.reply}
                   </p>
                   <p
                     style={{
@@ -357,22 +312,24 @@ export default function AssignmentsTab() {
                       opacity: "0.5",
                     }}
                   >
-                    {assigndata.content}
+                    {answeData.contentpdf}
                   </p>
-                  <div className="classli-buttons">
-                    <div className="classli-removebtn">
-                      <button
-                        onClick={() =>
-                          handleRemoveAssignmentClick(assigndata.assignmentId)
-                        }
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </div>
-            ))}
+            ))} */}
+            {classOption.Answers.length > 0 ? null : ( // If there are answers, do not render the "Remove Question" button
+              <div className="classli-buttons">
+                <div className="classli-removebtn">
+                  <button
+                    onClick={() =>
+                      handleRemoveQuestionClick(classOption.assignmentId)
+                    }
+                  >
+                    Remove Question
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -382,9 +339,9 @@ export default function AssignmentsTab() {
         <div className="popup-container">
           <div className="popup">
             <div className="popup-content">
-              <p>Delete the assignment!</p>
+              <p>Delete the Question</p>
               <h1>
-                <i class="fi fi-rr-envelope-download"></i>
+                <i className="fi fi-rr-envelope-download"></i>
               </h1>
               <p>Please note that this action can't be reversed!</p>
               <button onClick={handleRemoveAssignmentConfirm}>Ok</button>

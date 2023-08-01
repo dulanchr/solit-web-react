@@ -1,125 +1,452 @@
 import React, { useState, useEffect } from "react";
+import "./coursestab.css";
+import "./assignmentstab.css";
 import { useParams, useNavigate } from "react-router-dom";
-import "../DashboardTutor/feedtab.css";
-import profilePicture from "./profile~1.jpg";
+import axios from "axios";
 
-export default function FeedTabStudent() {
+export default function AssignmentsTab() {
   const { id } = useParams();
   const [tutorId, setTutorId] = useState();
-  const [firstname, setFirstname] = useState();
-  const [lastname, setlastname] = useState();
   const navigate = useNavigate();
-  const [showPopup, setShowPopup] = useState(false);
-  const [AssignmentData, setAssignmentData] = useState([]);
-  const [comment, setComment] = useState("");
-  const [currentPostIndex, setCurrentPostIndex] = useState(0);
-
-  const handleImageClick = (index) => {
-    setCurrentPostIndex(index);
-    setShowPopup(true);
-  };
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  };
-
-  const handleCommentChange = (event) => {
-    setComment(event.target.value);
-  };
-
-  const handleCommentSubmit = () => {
-    console.log("Submitted comment:", comment);
-
-    const postData = {
-      contentpdf: "path/to/content.pdf",
-      reply: comment,
-      agrees: "0",
-      poster: firstname,
-      assignmentId: id,
-      userId: id,
-    };
-
-    fetch("http://localhost:3001/answer", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Successfully posted data:", data);
-        handleClosePopup();
-      })
-      .catch((error) => console.error("Error posting data:", error));
-  };
+  const [formData, setFormData] = useState({
+    classId: "",
+    title: "",
+    description: "",
+    content: "",
+    deadline: "",
+    tutorId: tutorId,
+    userId: id, // Initialize with null
+  });
+  const [formErrors, setFormErrors] = useState({
+    classId: "",
+    title: "",
+    description: "",
+    content: "",
+    deadline: "",
+    tutorId: tutorId,
+    userId: id,
+  });
 
   useEffect(() => {
-    console.log(id);
-    fetch(`http://localhost:3001/getstudentid/user/${id}`)
-      .then((response) => response.json())
-
-      .then((data) => {
-        console.log(data);
-        if (Array.isArray(data) && data.length > 0) {
-          setFirstname(data[0].firstname);
-          setlastname(data[0].lastname);
-          setTutorId(data[0].studentId);
-        }
-      })
-      .catch((error) => console.error("Error fetching tutor data:", error));
-    console.log("output", firstname);
-  }, []);
-
-  useEffect(() => {
-    fetch(`http://localhost:3001/gettutorid/assignment`)
+    fetch(`http://localhost:3001/gettutorid/user/${id}`)
       .then((response) => response.json())
       .then((data) => {
+        // Assuming data is an array and contains at least one object
         if (Array.isArray(data) && data.length > 0) {
-          setAssignmentData(data);
+          setTutorId(data[0].tutorId); // Access tutorId from the first object in the array
         }
       })
       .catch((error) => console.error("Error fetching tutor data:", error));
   }, [id]);
 
+  console.log("export tutorId here", { tutorId });
+
+  useEffect(() => {
+    console.log("export tutorid here", { tutorId });
+    setFormData((prevCourseData) => ({
+      ...prevCourseData,
+      tutorId: tutorId,
+    }));
+    setFormErrors((prevFormErrors) => ({
+      ...prevFormErrors,
+      tutorId: tutorId,
+    }));
+  }, [tutorId]);
+
+  const [classOptions, setClassOptions] = useState([]);
+  const isLoggedIn = () => {
+    return !!getAccessToken();
+  };
+
+  const fetchData = async () => {
+    axios
+      .get(`http://localhost:3001/assignment/${id}`)
+      .then((response) => {
+        // Check if response.data is an array before setting it
+        if (Array.isArray(response.data)) {
+          setClassOptions(response.data);
+        } else {
+          console.error("Response data is not an array:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching class options:", error);
+      });
+
+    await fetch("http://localhost:3001/class")
+      .then((response) => response.json())
+      .then((data) => {
+        setClassOptions(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching class options:", error);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const getAccessToken = () => {
+    return localStorage.getItem("accessToken");
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    setFormErrors((prevState) => ({
+      ...prevState,
+      [name]: "",
+    }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!isLoggedIn()) {
+      console.log("User not logged in. Please log in to create assignments.");
+      return;
+    }
+    let hasErrors = false;
+    const newFormErrors = {
+      classId: "",
+      title: "",
+      description: "",
+      content: "",
+      deadline: "",
+    };
+
+    if (formData.classId === "") {
+      newFormErrors.classId = "Required.";
+      hasErrors = true;
+    }
+
+    if (formData.title.trim() === "") {
+      newFormErrors.title = "Required.";
+      hasErrors = true;
+    }
+
+    if (formData.description.trim() === "") {
+      newFormErrors.description = "Required.";
+      hasErrors = true;
+    }
+
+    if (formData.content.trim() === "") {
+      newFormErrors.content = "Required.";
+      hasErrors = true;
+    } else if (!isValidUrl(formData.content.trim())) {
+      newFormErrors.content = "Enter a valid link.";
+      hasErrors = true;
+    }
+
+    if (formData.deadline && formData.deadline.trim() === "") {
+      newFormErrors.deadline = "Required";
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      setFormErrors(newFormErrors);
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/assignment",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const data = response.data;
+        console.log("Assignment created:", data);
+        setFormData({
+          classId: "",
+          title: "",
+          description: "",
+          content: "",
+          deadline: "",
+        });
+        fetchData(); // Refetch the assignments data after creating a new assignment
+      }
+    } catch (error) {
+      console.error("Error creating assignment:", error);
+    }
+  };
+
+  const isValidUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+  const handleRemoveAssignment = async (assignmentId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3001/assignment/${assignmentId}`,
+        {
+          // headers: {
+          //   Authorization: `Bearer ${getAccessToken()}`,
+          // },
+        }
+      );
+      if (response.status === 200) {
+        // Assignment was deleted successfully, so you may want to update the state
+        // and refresh the assignment list to reflect the changes.
+        // For example, you can refetch the assignments data after deletion.
+        fetchData(); // Refetch the assignments data after deletion
+      }
+    } catch (error) {
+      console.error("Error deleting assignment:", error);
+    }
+  };
+
+  const [confirmRemove, setConfirmRemove] = useState(false);
+  const [removingAssignmentId, setRemovingAssignmentId] = useState(null);
+
+  const handleRemoveAssignmentClick = (assignmentId) => {
+    setConfirmRemove(true);
+    setRemovingAssignmentId(assignmentId);
+  };
+
+  const handleCancelClick = () => {
+    setConfirmRemove(false);
+    setRemovingAssignmentId(null);
+  };
+
+  const handleRemoveAssignmentConfirm = async () => {
+    if (removingAssignmentId) {
+      await handleRemoveAssignment(removingAssignmentId);
+      setConfirmRemove(false);
+      setRemovingAssignmentId(null);
+    }
+  };
   return (
-    <div>
-      <div>
-        <h1>Welcome back, {firstname}</h1>
-        <div className="poste-bin">
-          {AssignmentData.map((assignment, index) => (
-            <div
-              key={index}
-              className="poste"
-              style={{
-                backgroundImage: `url(${profilePicture})`,
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center center",
-                cursor: "pointer",
-                height: "70px",
-                width: "70px",
-              }}
-              onClick={() => handleImageClick(index)}
-            ></div>
-          ))}
-        </div>
-      </div>
-      {showPopup && (
-        <div className="poste-popup">
-          <h3>{AssignmentData[currentPostIndex].title}</h3>
-          {/* Render the content fetched from the API */}
-          <div className="poste-content">
-            <p>{AssignmentData[currentPostIndex].description}</p>
-            {AssignmentData[currentPostIndex].content}
+    <div className="coursecontorls">
+      <div className="addcourses">
+        <h2 style={{ marginTop: "0vh", fontSize: "1.5rem", color: "#232323" }}>
+          Add Assignments:
+        </h2>
+        <form className="addc-form" onSubmit={handleSubmit}>
+          <div className="addc-form-group">
+            <label htmlFor="classId">Class:</label>
+            <select
+              id="classId"
+              name="classId"
+              value={formData.classId}
+              onChange={handleChange}
+            >
+              <option value="">-- Select Class --</option>
+              {classOptions.map((option) => (
+                <option key={option.assignmentId} value={option.assignmentId}>
+                  {option.title}
+                </option>
+              ))}
+            </select>
+            {formErrors.assignmentId && (
+              <span className="error">{formErrors.assignmentId}</span>
+            )}
           </div>
-          <textarea
-            value={comment}
-            onChange={handleCommentChange}
-            placeholder="Enter your answer here..."
-          ></textarea>
-          <button onClick={handleClosePopup}>Close</button>
-          <button onClick={handleCommentSubmit}>Answer</button>
+          <div className="addc-form-group">
+            <label htmlFor="title">Title:</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="Enter the title"
+            />
+            {formErrors.title && (
+              <span className="error">{formErrors.title}</span>
+            )}
+          </div>
+          <div className="addc-form-group">
+            <label htmlFor="description">Description:</label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Enter the description"
+            ></textarea>
+            {formErrors.description && (
+              <span className="error">{formErrors.description}</span>
+            )}
+          </div>
+          <div className="addc-form-group">
+            <label htmlFor="content">Content:</label>
+            <input
+              type="text"
+              id="content"
+              name="content"
+              value={formData.content}
+              onChange={handleChange}
+              placeholder="Enter the drive link (URL)"
+            />
+            {formErrors.content && (
+              <span className="error">{formErrors.content}</span>
+            )}
+          </div>
+          <div className="addc-form-group">
+            <label htmlFor="deadline">Deadline:</label>
+            <input
+              type="date"
+              id="deadline"
+              name="deadline"
+              value={formData.deadline}
+              onChange={handleChange}
+            />
+            {formErrors.deadline && (
+              <span className="error">{formErrors.deadline}</span>
+            )}
+          </div>
+          <button type="submit" className="addc-btn">
+            Add
+          </button>
+        </form>
+      </div>
+
+      
+      <div className="class-contentext">
+        {classOptions.map((classOption) => (
+          <div key={classOption.assignmentId} className="class-folder">
+            <h2
+              style={{
+                marginTop: "2vh",
+                fontSize: "1.5rem",
+                color: "#232323",
+                opacity: "0.5",
+              }}
+            >
+              {classOption.title}
+            </h2>
+            <p
+              style={{
+                marginTop: "2vh",
+                fontSize: "1.5rem",
+                color: "#232323",
+                opacity: "0.5",
+              }}
+            >
+              {classOption.description}
+            </p>
+            {classOption.Answers && classOption.Answers.length === 0 ? (
+              <div className="myqueanswelist">
+                <h1
+                  style={{
+                    marginTop: "0vh",
+                    fontSize: "1rem",
+                    color: "#00000020",
+                  }}
+                >
+                  No Answers Here Yet <i class="fi fi-rs-sad-tear"></i>
+                </h1>
+              </div>
+            ) : (
+              <div className="myqueanswelist">
+                <h1
+                  style={{
+                    marginTop: "0vh",
+                    fontSize: "1.2rem",
+                    color: "#00000060",
+                  }}
+                >
+                  Answers :
+                </h1>
+                {classOption.Answers &&
+                  classOption.Answers.map((answer) => (
+                    <>
+                      {" "}
+                      <div key={answer.answerId} className="answermyques">
+                        <h1
+                          style={{
+                            marginTop: "0vh",
+                            fontSize: "1.2rem",
+                            color: "#00000080",
+                          }}
+                        >
+                          <i class="fi fi-bs-bullet"></i>
+                          {answer.reply}
+                        </h1>
+                        {answer.User && (
+                          <h1
+                            style={{
+                              marginTop: "0vh",
+                              fontSize: "0.7rem",
+                              color: "#00000080",
+                              fontWeight: "100",
+                            }}
+                          >
+                            posted by, {answer.User.email}
+                          </h1>
+                        )}
+                      </div>
+                    </>
+                  ))}
+              </div>
+            )}
+            {/* {classOption.Answer.map((answeData) => (
+              <div key={answeData.answerId}>
+                <div className="asssignment-item">
+                  <p
+                    style={{
+                      marginTop: "2vh",
+                      fontSize: "1.5rem",
+                      color: "#000",
+                      opacity: "0.5",
+                    }}
+                  >
+                    {answeData.reply}
+                  </p>
+                  <p
+                    style={{
+                      marginTop: "2vh",
+                      fontSize: "1rem",
+                      color: "#000",
+                      opacity: "0.5",
+                    }}
+                  >
+                    {answeData.contentpdf}
+                  </p>
+                </div>
+              </div>
+            ))} */}
+            <div className="classli-buttons">
+              <div className="classli-removebtn">
+                <button
+                  onClick={() =>
+                    handleRemoveAssignmentClick(classOption.assignmentId)
+                  }
+                >
+                  Remove Assignment
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Confirmation popup */}
+      {confirmRemove && (
+        <div className="popup-container">
+          <div className="popup">
+            <div className="popup-content">
+              <p>Delete the assignment!</p>
+              <h1>
+                <i class="fi fi-rr-envelope-download"></i>
+              </h1>
+              <p>Please note that this action can't be reversed!</p>
+              <button onClick={handleRemoveAssignmentConfirm}>Ok</button>
+              <button onClick={handleCancelClick}>Cancel</button>
+            </div>
+          </div>
         </div>
       )}
     </div>

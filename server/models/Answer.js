@@ -18,10 +18,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      poster: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
 
     });
   
@@ -32,8 +28,13 @@ module.exports = (sequelize, DataTypes) => {
 
       Answer.belongsTo(models.Assignment, {
         foreignKey: "assignmentId",
+        allowNull: "true"
       });
 
+      Answer.belongsTo(models.Question, {
+        foreignKey: "questionId",
+        allowNull: "true"
+      });
 
     };
 

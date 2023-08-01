@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Class, Assignment, Student, Tutor } = require('../models');
+const { Class,Answer, Assignment, Student, Tutor,User } = require('../models');
 
 
 const validToken = require('../middlewares/AuthMiddleware');
@@ -68,6 +68,32 @@ router.put('/:id', async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 });
+
+router.get('/:userId', async (req, res) => {
+  try {
+    const  userId  = req.params.userId;
+    const myassignments = await Assignment.findAll({
+      where:  {userId: userId},
+      include: [
+        {
+        model: Answer,
+        attributes: ['answerId', 'contentpdf', 'reply', 'userId'],
+        include: [
+          {
+          model: User,
+          attributes: ['email']
+        }
+        ],
+      }
+      ],
+    });
+    res.json(myassignments);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 
 
 module.exports = router;

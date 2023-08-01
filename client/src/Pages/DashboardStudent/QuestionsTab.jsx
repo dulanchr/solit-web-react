@@ -19,17 +19,67 @@ export default function QuestionsTab() {
     userId: id,
     likes: "0",
   });
-  const [confirmRemove, setConfirmRemove] = useState(false);
 
-  const handleRemoveAssignmentClick = () => {};
-  const [classOptions, setclassOptions] = useState([]);
+  const [confirmRemove, setConfirmRemove] = useState(false);
+  const [removingQuestionId, setRemovingQuestionId] = useState(null);
+
+  const handleRemoveQuestionClick = (questionId) => {
+    setConfirmRemove(true);
+    setRemovingQuestionId(questionId);
+  };
+
+  const handleCancelClick = () => {
+    setConfirmRemove(false);
+    setRemovingQuestionId(null);
+  };
+
+  const [myQuestions, setMyQuestions] = useState([]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
-  const handleCancelClick = () => {};
 
-  const handleRemoveAssignmentConfirm = async () => {};
+  const fetchData = () => {
+    axios
+      .get(`http://localhost:3001/question/${id}`)
+      .then((response) => {
+        // Check if response.data is an array before setting it
+        if (Array.isArray(response.data)) {
+          setMyQuestions(response.data);
+        } else {
+          console.error("Response data is not an array:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching class options:", error);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleRemoveAssignment = async (questionId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3001/question/remove/${questionId}`,
+        {}
+      );
+      if (response.status === 200) {
+        fetchData();
+      }
+    } catch (error) {
+      console.error("Error deleting assignment:", error);
+    }
+  };
+
+  const handleRemoveAssignmentConfirm = async () => {
+    if (removingQuestionId) {
+      await handleRemoveAssignment(removingQuestionId);
+      setConfirmRemove(false);
+      setRemovingQuestionId(null);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,7 +134,7 @@ export default function QuestionsTab() {
               type="text"
               id="content"
               name="content"
-              value={formData.content}
+              value={formData.contentpdf}
               onChange={handleChange}
               placeholder="Enter the drive link (URL)"
             />
@@ -99,8 +149,8 @@ export default function QuestionsTab() {
         </form>
       </div>
       <div className="class-contentext">
-        {classOptions.map((classOption) => (
-          <div key={classOption.classId} className="class-folder">
+        {myQuestions.map((classOption) => (
+          <div key={classOption.questionId} className="class-folder">
             <h2
               style={{
                 marginTop: "2vh",
@@ -109,10 +159,64 @@ export default function QuestionsTab() {
                 opacity: "0.5",
               }}
             >
-              My Questions
+              {classOption.description}
             </h2>
-            {classOption.Assignments.map((assigndata) => (
-              <div key={assigndata.assignmentId}>
+            {classOption.Answers.length === 0 ? (
+              <div className="myqueanswelist">
+                <h1
+                  style={{
+                    marginTop: "0vh",
+                    fontSize: "1rem",
+                    color: "#00000020",
+                  }}
+                >
+                  No Answers Here Yet <i class="fi fi-rs-sad-tear"></i>
+                </h1>
+              </div>
+            ) : (
+              <div className="myqueanswelist">
+                <h1
+                  style={{
+                    marginTop: "0vh",
+                    fontSize: "1.2rem",
+                    color: "#00000060",
+                  }}
+                >
+                  Answers :
+                </h1>
+                {classOption.Answers.map((answer) => (
+                  <>
+                    {" "}
+                    <div key={answer.answerId} className="answermyques">
+                      <h1
+                        style={{
+                          marginTop: "0vh",
+                          fontSize: "1.2rem",
+                          color: "#00000080",
+                        }}
+                      >
+                        <i class="fi fi-bs-bullet"></i>
+                        {answer.reply}
+                      </h1>
+                      {answer.User && (
+                        <h1
+                          style={{
+                            marginTop: "0vh",
+                            fontSize: "0.7rem",
+                            color: "#00000080",
+                            fontWeight: "100",
+                          }}
+                        >
+                          posted by, {answer.User.email}
+                        </h1>
+                      )}
+                    </div>
+                  </>
+                ))}
+              </div>
+            )}
+            {/* {classOption.Answer.map((answeData) => (
+              <div key={answeData.answerId}>
                 <div className="asssignment-item">
                   <p
                     style={{
@@ -122,7 +226,7 @@ export default function QuestionsTab() {
                       opacity: "0.5",
                     }}
                   >
-                    {assigndata.title}
+                    {answeData.reply}
                   </p>
                   <p
                     style={{
@@ -132,22 +236,22 @@ export default function QuestionsTab() {
                       opacity: "0.5",
                     }}
                   >
-                    {assigndata.content}
+                    {answeData.contentpdf}
                   </p>
-                  <div className="classli-buttons">
-                    <div className="classli-removebtn">
-                      <button
-                        onClick={() =>
-                          handleRemoveAssignmentClick(assigndata.assignmentId)
-                        }
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </div>
-            ))}
+            ))} */}
+            <div className="classli-buttons">
+              <div className="classli-removebtn">
+                <button
+                  onClick={() =>
+                    handleRemoveQuestionClick(classOption.questionId)
+                  }
+                >
+                  Remove Question
+                </button>
+              </div>
+            </div>
           </div>
         ))}
       </div>
@@ -159,7 +263,7 @@ export default function QuestionsTab() {
             <div className="popup-content">
               <p>Delete the Question</p>
               <h1>
-                <i class="fi fi-rr-envelope-download"></i>
+                <i className="fi fi-rr-envelope-download"></i>
               </h1>
               <p>Please note that this action can't be reversed!</p>
               <button onClick={handleRemoveAssignmentConfirm}>Ok</button>

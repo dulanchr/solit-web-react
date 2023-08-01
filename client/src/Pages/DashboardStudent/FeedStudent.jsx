@@ -66,7 +66,7 @@ export default function FeedStudent() {
               </a>
             </li>
 
-            <li>
+            {/* <li>
               <a
                 href="#"
                 className={`dash-nav-item ${
@@ -76,7 +76,7 @@ export default function FeedStudent() {
               >
                 <i class="fi fi-rr-chart-histogram"></i>Myself
               </a>
-            </li>
+            </li> */}
 
             <li>
               <a

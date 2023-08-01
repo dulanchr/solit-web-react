@@ -22,7 +22,9 @@
   height: auto;
   min-width: 30vw;
   max-width:30vw;
+  max-height:30vh ;
   overflow: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -102,7 +104,9 @@
   padding-top: 30px;
   padding-left: 30px;
   overflow: hidden;
+  overflow-x: auto;
   flex-wrap: wrap;
+
   width: 90%;
 
 

@@ -38,10 +38,14 @@
   width: 90%;
   border-radius:  20px 20px 20px 20px;
   color: #000000;
+  
+  overflow: hidden;
+  overflow-x: auto;
 }
 
 .poste-popup h3 {
   margin-top: 0;
+
 }
 
 .poste-popup textarea {

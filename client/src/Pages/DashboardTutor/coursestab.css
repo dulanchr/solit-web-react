@@ -122,3 +122,17 @@
   .mycourses::-webkit-scrollbar-track {
     background-color: #fafafa00;
   }
+  .myqueanswelist{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .answermyques{
+    padding: 10px;
+    background-color: #7979792d;
+    border-radius: 10px;
+    overflow: hidden;
+    overflow-x: auto;
+    gap: 10vh;
+  }

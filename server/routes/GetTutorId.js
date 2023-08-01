@@ -44,6 +44,7 @@ router.get('/poste', async (req, res) => {
 
     const formattedData = combinedData.map(({ type, data }) => ({
       type,
+      questionId: data.questionId,
       assignmentId: data.assignmentId,
       title: data.title,
       description: data.description,
@@ -77,6 +78,8 @@ router.get('/assignment', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+
 
 
 
