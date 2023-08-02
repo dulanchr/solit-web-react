@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./teachercontainer.css";
 import PropTypes from "prop-types";
 import axios from "axios";
-import mainprofile from "../images/profilemain.jpg";
+import mainprofile from "../images/defaultbg.jpg";
 import { useNavigate } from "react-router-dom";
 import { storage } from "../../firebase";
 import { ref, listAll, getDownloadURL } from "firebase/storage";

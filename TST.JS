@@ -1,452 +1,150 @@
 import React, { useState, useEffect } from "react";
-import "./coursestab.css";
-import "./assignmentstab.css";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useParams } from "react-router-dom";
+import profilePicture from "../DashboardTutor/defaultbg.jpg"; // Import profilePicture here
+import "../DashboardTutor//feedtab.css";
+import { storage } from "../../firebase";
+import { ref, listAll, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid"; // Use destructuring to impor
 
-export default function AssignmentsTab() {
+export default function FeedGridStudent() {
   const { id } = useParams();
-  const [tutorId, setTutorId] = useState();
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    classId: "",
-    title: "",
-    description: "",
-    content: "",
-    deadline: "",
-    tutorId: tutorId,
-    userId: id, // Initialize with null
-  });
-  const [formErrors, setFormErrors] = useState({
-    classId: "",
-    title: "",
-    description: "",
-    content: "",
-    deadline: "",
-    tutorId: tutorId,
-    userId: id,
-  });
+  const [imageurl, setImageUrl] = useState({});
+  const [AssignmentData, setAssignmentData] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [comment, setComment] = useState("");
+  const [currentPostIndex, setCurrentPostIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/gettutorid/user/${id}`)
+    fetch(`http://localhost:3001/gettutorid/poste`)
       .then((response) => response.json())
       .then((data) => {
-        // Assuming data is an array and contains at least one object
         if (Array.isArray(data) && data.length > 0) {
-          setTutorId(data[0].tutorId); // Access tutorId from the first object in the array
+          setAssignmentData(data);
         }
       })
       .catch((error) => console.error("Error fetching tutor data:", error));
   }, [id]);
 
-  console.log("export tutorId here", { tutorId });
+  const handleImageClick = (index) => {
+    setCurrentPostIndex(index);
+    setShowPopup(true);
+  };
+  const handleClosePopup = () => {
+    const popupElement = document.querySelector(".poste-popup");
+    popupElement.style.opacity = 0;
 
-  useEffect(() => {
-    console.log("export tutorid here", { tutorId });
-    setFormData((prevCourseData) => ({
-      ...prevCourseData,
-      tutorId: tutorId,
-    }));
-    setFormErrors((prevFormErrors) => ({
-      ...prevFormErrors,
-      tutorId: tutorId,
-    }));
-  }, [tutorId]);
-
-  const [classOptions, setClassOptions] = useState([]);
-  const isLoggedIn = () => {
-    return !!getAccessToken();
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 300);
   };
 
-  const fetchData = async () => {
-    axios
-      .get(`http://localhost:3001/assignment/${id}`)
-      .then((response) => {
-        // Check if response.data is an array before setting it
-        if (Array.isArray(response.data)) {
-          setClassOptions(response.data);
-        } else {
-          console.error("Response data is not an array:", response.data);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching class options:", error);
-      });
-
-    await fetch("http://localhost:3001/class")
-      .then((response) => response.json())
-      .then((data) => {
-        setClassOptions(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching class options:", error);
-      });
+  const handleCommentChange = (event) => {
+    setComment(event.target.value);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-  const getAccessToken = () => {
-    return localStorage.getItem("accessToken");
-  };
+  const handleCommentSubmit = () => {
+    console.log("Submitted comment:", comment);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-    setFormErrors((prevState) => ({
-      ...prevState,
-      [name]: "",
-    }));
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!isLoggedIn()) {
-      console.log("User not logged in. Please log in to create assignments.");
-      return;
-    }
-    let hasErrors = false;
-    const newFormErrors = {
-      classId: "",
-      title: "",
-      description: "",
-      content: "",
-      deadline: "",
+    const currentAssignment = AssignmentData[currentPostIndex];
+    const postAnswer = {
+      contentpdf: "path/to/content.pdf",
+      reply: comment,
+      agrees: "0",
+      questionId: currentAssignment.questionId,
+      assignmentId: currentAssignment.assignmentId,
+      userId: id,
     };
 
-    if (formData.classId === "") {
-      newFormErrors.classId = "Required.";
-      hasErrors = true;
-    }
+    fetch("http://localhost:3001/answer", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postAnswer),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Successfully posted data:", data);
+        handleClosePopup();
+      })
+      .catch((error) => console.error("Error posting data:", error));
+  };
 
-    if (formData.title.trim() === "") {
-      newFormErrors.title = "Required.";
-      hasErrors = true;
-    }
-
-    if (formData.description.trim() === "") {
-      newFormErrors.description = "Required.";
-      hasErrors = true;
-    }
-
-    if (formData.content.trim() === "") {
-      newFormErrors.content = "Required.";
-      hasErrors = true;
-    } else if (!isValidUrl(formData.content.trim())) {
-      newFormErrors.content = "Enter a valid link.";
-      hasErrors = true;
-    }
-
-    if (formData.deadline && formData.deadline.trim() === "") {
-      newFormErrors.deadline = "Required";
-      hasErrors = true;
-    }
-
-    if (hasErrors) {
-      setFormErrors(newFormErrors);
-      return;
-    }
-
+  const retrieveImagesForAllUsers = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:3001/assignment",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const teacherIds = AssignmentData.map((assignment) => assignment.userId);
+      const imageUrls = {};
+
+      await Promise.all(
+        teacherIds.map(async (id) => {
+          const storageRef = ref(storage, `ProfilePictures/${id}`);
+          try {
+            const res = await listAll(storageRef);
+            if (res.items.length > 0) {
+              // Fetch only the first image URL
+              const url = await getDownloadURL(res.items[0]);
+              imageUrls[id] = url;
+            } else {
+              imageUrls[id] = null; // No image found for this user
+            }
+          } catch (error) {
+            console.log(error);
+            imageUrls[id] = null; // Error fetching the image URL
+          }
+        })
       );
 
-      if (response.status === 200) {
-        const data = response.data;
-        console.log("Assignment created:", data);
-        setFormData({
-          classId: "",
-          title: "",
-          description: "",
-          content: "",
-          deadline: "",
-        });
-        fetchData(); // Refetch the assignments data after creating a new assignment
-      }
+      setImageUrl(imageUrls);
+      console.log(imageUrls);
     } catch (error) {
-      console.error("Error creating assignment:", error);
+      console.log(error);
     }
   };
 
-  const isValidUrl = (url) => {
-    try {
-      new URL(url);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-  const handleRemoveAssignment = async (assignmentId) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:3001/assignment/${assignmentId}`,
-        {
-          // headers: {
-          //   Authorization: `Bearer ${getAccessToken()}`,
-          // },
-        }
-      );
-      if (response.status === 200) {
-        // Assignment was deleted successfully, so you may want to update the state
-        // and refresh the assignment list to reflect the changes.
-        // For example, you can refetch the assignments data after deletion.
-        fetchData(); // Refetch the assignments data after deletion
-      }
-    } catch (error) {
-      console.error("Error deleting assignment:", error);
-    }
-  };
+  useEffect(() => {
+    retrieveImagesForAllUsers();
+  }, [AssignmentData]);
 
-  const [confirmRemove, setConfirmRemove] = useState(false);
-  const [removingAssignmentId, setRemovingAssignmentId] = useState(null);
-
-  const handleRemoveAssignmentClick = (assignmentId) => {
-    setConfirmRemove(true);
-    setRemovingAssignmentId(assignmentId);
-  };
-
-  const handleCancelClick = () => {
-    setConfirmRemove(false);
-    setRemovingAssignmentId(null);
-  };
-
-  const handleRemoveAssignmentConfirm = async () => {
-    if (removingAssignmentId) {
-      await handleRemoveAssignment(removingAssignmentId);
-      setConfirmRemove(false);
-      setRemovingAssignmentId(null);
-    }
-  };
   return (
-    <div className="coursecontorls">
-      <div className="addcourses">
-        <h2 style={{ marginTop: "0vh", fontSize: "1.5rem", color: "#232323" }}>
-          Add Assignments:
-        </h2>
-        <form className="addc-form" onSubmit={handleSubmit}>
-          <div className="addc-form-group">
-            <label htmlFor="classId">Class:</label>
-            <select
-              id="classId"
-              name="classId"
-              value={formData.classId}
-              onChange={handleChange}
-            >
-              <option value="">-- Select Class --</option>
-              {classOptions.map((option) => (
-                <option key={option.assignmentId} value={option.assignmentId}>
-                  {option.title}
-                </option>
-              ))}
-            </select>
-            {formErrors.assignmentId && (
-              <span className="error">{formErrors.assignmentId}</span>
-            )}
-          </div>
-          <div className="addc-form-group">
-            <label htmlFor="title">Title:</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="Enter the title"
-            />
-            {formErrors.title && (
-              <span className="error">{formErrors.title}</span>
-            )}
-          </div>
-          <div className="addc-form-group">
-            <label htmlFor="description">Description:</label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Enter the description"
-            ></textarea>
-            {formErrors.description && (
-              <span className="error">{formErrors.description}</span>
-            )}
-          </div>
-          <div className="addc-form-group">
-            <label htmlFor="content">Content:</label>
-            <input
-              type="text"
-              id="content"
-              name="content"
-              value={formData.content}
-              onChange={handleChange}
-              placeholder="Enter the drive link (URL)"
-            />
-            {formErrors.content && (
-              <span className="error">{formErrors.content}</span>
-            )}
-          </div>
-          <div className="addc-form-group">
-            <label htmlFor="deadline">Deadline:</label>
-            <input
-              type="date"
-              id="deadline"
-              name="deadline"
-              value={formData.deadline}
-              onChange={handleChange}
-            />
-            {formErrors.deadline && (
-              <span className="error">{formErrors.deadline}</span>
-            )}
-          </div>
-          <button type="submit" className="addc-btn">
-            Add
-          </button>
-        </form>
-      </div>
-
-      
-      <div className="class-contentext">
-        {classOptions.map((classOption) => (
-          <div key={classOption.assignmentId} className="class-folder">
-            <h2
-              style={{
-                marginTop: "2vh",
-                fontSize: "1.5rem",
-                color: "#232323",
-                opacity: "0.5",
-              }}
-            >
-              {classOption.title}
-            </h2>
-            <p
-              style={{
-                marginTop: "2vh",
-                fontSize: "1.5rem",
-                color: "#232323",
-                opacity: "0.5",
-              }}
-            >
-              {classOption.description}
-            </p>
-            {classOption.Answers && classOption.Answers.length === 0 ? (
-              <div className="myqueanswelist">
-                <h1
-                  style={{
-                    marginTop: "0vh",
-                    fontSize: "1rem",
-                    color: "#00000020",
-                  }}
-                >
-                  No Answers Here Yet <i class="fi fi-rs-sad-tear"></i>
-                </h1>
-              </div>
-            ) : (
-              <div className="myqueanswelist">
-                <h1
-                  style={{
-                    marginTop: "0vh",
-                    fontSize: "1.2rem",
-                    color: "#00000060",
-                  }}
-                >
-                  Answers :
-                </h1>
-                {classOption.Answers &&
-                  classOption.Answers.map((answer) => (
-                    <>
-                      {" "}
-                      <div key={answer.answerId} className="answermyques">
-                        <h1
-                          style={{
-                            marginTop: "0vh",
-                            fontSize: "1.2rem",
-                            color: "#00000080",
-                          }}
-                        >
-                          <i class="fi fi-bs-bullet"></i>
-                          {answer.reply}
-                        </h1>
-                        {answer.User && (
-                          <h1
-                            style={{
-                              marginTop: "0vh",
-                              fontSize: "0.7rem",
-                              color: "#00000080",
-                              fontWeight: "100",
-                            }}
-                          >
-                            posted by, {answer.User.email}
-                          </h1>
-                        )}
-                      </div>
-                    </>
-                  ))}
-              </div>
-            )}
-            {/* {classOption.Answer.map((answeData) => (
-              <div key={answeData.answerId}>
-                <div className="asssignment-item">
-                  <p
-                    style={{
-                      marginTop: "2vh",
-                      fontSize: "1.5rem",
-                      color: "#000",
-                      opacity: "0.5",
-                    }}
-                  >
-                    {answeData.reply}
-                  </p>
-                  <p
-                    style={{
-                      marginTop: "2vh",
-                      fontSize: "1rem",
-                      color: "#000",
-                      opacity: "0.5",
-                    }}
-                  >
-                    {answeData.contentpdf}
-                  </p>
-                </div>
-              </div>
-            ))} */}
-            <div className="classli-buttons">
-              <div className="classli-removebtn">
-                <button
-                  onClick={() =>
-                    handleRemoveAssignmentClick(classOption.assignmentId)
-                  }
-                >
-                  Remove Assignment
-                </button>
-              </div>
-            </div>
-          </div>
+    <div>
+      <div className="poste-bin">
+        {AssignmentData.map((assignment, index) => (
+          <div
+            key={index}
+            className="poste"
+            style={{
+              backgroundImage: `url(${
+                imageurl[assignment.userId] || profilePicture
+              })`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center center",
+              cursor: "pointer",
+              height: "70px",
+              width: "70px",
+              border:
+                assignment.type === "assignment"
+                  ? "4px solid #03C988"
+                  : "0px solid #00000010",
+            }}
+            onClick={() => handleImageClick(index)}
+          ></div>
         ))}
       </div>
-
-      {/* Confirmation popup */}
-      {confirmRemove && (
-        <div className="popup-container">
-          <div className="popup">
-            <div className="popup-content">
-              <p>Delete the assignment!</p>
-              <h1>
-                <i class="fi fi-rr-envelope-download"></i>
-              </h1>
-              <p>Please note that this action can't be reversed!</p>
-              <button onClick={handleRemoveAssignmentConfirm}>Ok</button>
-              <button onClick={handleCancelClick}>Cancel</button>
-            </div>
+      {showPopup && (
+        <div className={`poste-popup ${showPopup ? "show" : ""}`}>
+          <h3>{AssignmentData[currentPostIndex].title} </h3>
+          <div className="poste-content">
+            <p>{AssignmentData[currentPostIndex].description}</p>
+            {AssignmentData[currentPostIndex].content}
           </div>
+          <textarea
+            value={comment}
+            onChange={handleCommentChange}
+            placeholder="Enter your answer here..."
+          ></textarea>
+          <button onClick={handleClosePopup}>Close</button>
+          <button onClick={handleCommentSubmit}>Answer</button>
         </div>
       )}
     </div>

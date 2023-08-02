@@ -4,7 +4,7 @@ import profilePicture from "../DashboardTutor/defaultbg.jpg"; // Import profileP
 import "../DashboardTutor//feedtab.css";
 import { storage } from "../../firebase";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
-import { v4 as uuidv4 } from "uuid"; // Use destructuring to impor
+import { v4 as uuidv4 } from "uuid"; // Use destructuring to import
 
 export default function FeedGridStudent() {
   const { id } = useParams();
@@ -13,13 +13,19 @@ export default function FeedGridStudent() {
   const [showPopup, setShowPopup] = useState(false);
   const [comment, setComment] = useState("");
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
-
   useEffect(() => {
     fetch(`http://localhost:3001/gettutorid/poste`)
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          setAssignmentData(data);
+          // Sort AssignmentData based on the updatedAt property in descending order
+          const sortedData = data.slice().sort((a, b) => {
+            const dateA = new Date(a.updatedAt);
+            const dateB = new Date(b.updatedAt);
+            return dateB - dateA;
+          });
+
+          setAssignmentData(sortedData);
         }
       })
       .catch((error) => console.error("Error fetching tutor data:", error));
@@ -29,27 +35,25 @@ export default function FeedGridStudent() {
     setCurrentPostIndex(index);
     setShowPopup(true);
   };
-  const handleClosePopup = () => {
-    const popupElement = document.querySelector(".poste-popup");
-    popupElement.style.opacity = 0;
 
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 300);
+  const handleClosePopup = () => {
+    setShowPopup(false);
   };
 
   const handleCommentChange = (event) => {
     setComment(event.target.value);
   };
 
+  const currentAssignment = AssignmentData[currentPostIndex];
+
   const handleCommentSubmit = () => {
     console.log("Submitted comment:", comment);
 
-    const currentAssignment = AssignmentData[currentPostIndex];
-    const postAnswer = {
+    const postData = {
       contentpdf: "path/to/content.pdf",
       reply: comment,
       agrees: "0",
+      poster: "firstname",
       questionId: currentAssignment.questionId,
       assignmentId: currentAssignment.assignmentId,
       userId: id,
@@ -60,7 +64,7 @@ export default function FeedGridStudent() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(postAnswer),
+      body: JSON.stringify(postData),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -85,17 +89,16 @@ export default function FeedGridStudent() {
               const url = await getDownloadURL(res.items[0]);
               imageUrls[id] = url;
             } else {
-              imageUrls[id] = null; // No image found for this user
+              imageUrls[id] = profilePicture; // Set default image if no image found for this user
             }
           } catch (error) {
             console.log(error);
-            imageUrls[id] = null; // Error fetching the image URL
+            imageUrls[id] = profilePicture; // Set default image in case of error fetching the image URL
           }
         })
       );
 
       setImageUrl(imageUrls);
-      console.log(imageUrls);
     } catch (error) {
       console.log(error);
     }
@@ -113,9 +116,7 @@ export default function FeedGridStudent() {
             key={index}
             className="poste"
             style={{
-              backgroundImage: `url(${
-                imageurl[assignment.userId] || profilePicture
-              })`,
+              backgroundImage: `url(${imageurl[assignment.userId]})`,
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center center",
@@ -123,9 +124,9 @@ export default function FeedGridStudent() {
               height: "70px",
               width: "70px",
               border:
-                AssignmentData[currentPostIndex].type === "assignment"
-                  ? "3px solid yellow"
-                  : "none",
+                assignment.type === "assignment"
+                  ? "3px solid #03C988"
+                  : "3px solid #ffffff",
             }}
             onClick={() => handleImageClick(index)}
           ></div>
@@ -133,10 +134,10 @@ export default function FeedGridStudent() {
       </div>
       {showPopup && (
         <div className={`poste-popup ${showPopup ? "show" : ""}`}>
-          <h3>{AssignmentData[currentPostIndex].title} </h3>
+          <h3>{currentAssignment.title}</h3>
           <div className="poste-content">
-            <p>{AssignmentData[currentPostIndex].description}</p>
-            {AssignmentData[currentPostIndex].content}
+            <p>{currentAssignment.description}</p>
+            {currentAssignment.content}
           </div>
           <textarea
             value={comment}

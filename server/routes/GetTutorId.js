@@ -13,7 +13,7 @@ router.get('/user/:userId', async (req, res) => {
       include:[
         {
           model:Tutor,
-          attributes:['firstname','lastname','tutorId' ]
+          attributes:['firstname','lastname','tutorId','description' ]
         },
        
       ]
@@ -22,6 +22,7 @@ router.get('/user/:userId', async (req, res) => {
     const filteredData = tutor.map((det) =>({
       firstname: det.Tutors[0]?.firstname,
       lastname: det.Tutors[0]?.lastname,
+      description: det.Tutors[0]?.description,
       tutorId: det.Tutors[0]?.tutorId
     }))
 
